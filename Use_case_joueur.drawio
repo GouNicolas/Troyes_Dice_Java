@@ -110,7 +110,7 @@
         <mxCell id="_vKOgibNYJb6RkX7hGH7-27" value="Verify email is unique" style="ellipse;whiteSpace=wrap;html=1;rounded=1;strokeWidth=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="_vKOgibNYJb6RkX7hGH7-1" vertex="1">
           <mxGeometry x="1580" y="1264.25" width="120" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-5" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="_vKOgibNYJb6RkX7hGH7-1" source="_vKOgibNYJb6RkX7hGH7-29" target="YlUTerM2iUDrsfmBJ7mQ-4">
+        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-5" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="_vKOgibNYJb6RkX7hGH7-1" source="_vKOgibNYJb6RkX7hGH7-29" target="YlUTerM2iUDrsfmBJ7mQ-4" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="_vKOgibNYJb6RkX7hGH7-29" value="Modifier le dé choisi" style="ellipse;whiteSpace=wrap;html=1;rounded=1;strokeWidth=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="_vKOgibNYJb6RkX7hGH7-1" vertex="1">
@@ -195,7 +195,7 @@
             <mxPoint x="32" y="-10" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-13" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="_vKOgibNYJb6RkX7hGH7-1" source="_vKOgibNYJb6RkX7hGH7-49" target="YlUTerM2iUDrsfmBJ7mQ-12">
+        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-13" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="_vKOgibNYJb6RkX7hGH7-1" source="_vKOgibNYJb6RkX7hGH7-49" target="YlUTerM2iUDrsfmBJ7mQ-12" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="_vKOgibNYJb6RkX7hGH7-49" value="choisir un dé" style="ellipse;whiteSpace=wrap;html=1;rounded=1;strokeWidth=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;" parent="_vKOgibNYJb6RkX7hGH7-1" vertex="1">
@@ -294,17 +294,17 @@
         <mxCell id="_vKOgibNYJb6RkX7hGH7-119" value="Use case example - Customer updates account" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=2" parent="_vKOgibNYJb6RkX7hGH7-1" vertex="1">
           <mxGeometry x="1190" y="1684.25" width="390" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-4" value="Change email address (username)" style="ellipse;whiteSpace=wrap;html=1;rounded=1;strokeWidth=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="_vKOgibNYJb6RkX7hGH7-1">
+        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-4" value="Change email address (username)" style="ellipse;whiteSpace=wrap;html=1;rounded=1;strokeWidth=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;" parent="_vKOgibNYJb6RkX7hGH7-1" vertex="1">
           <mxGeometry x="1280" y="430" width="120" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-6" value="Gollum" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="_vKOgibNYJb6RkX7hGH7-1">
+        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-6" value="Gollum" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="_vKOgibNYJb6RkX7hGH7-1" vertex="1">
           <mxGeometry x="830" y="430" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-11" value="Arbitre/&lt;span style=&quot;background-color: initial;&quot;&gt;Sytème&lt;/span&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="_vKOgibNYJb6RkX7hGH7-1">
+        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-11" value="Arbitre/&lt;span style=&quot;background-color: initial;&quot;&gt;Sytème&lt;/span&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="_vKOgibNYJb6RkX7hGH7-1" vertex="1">
           <mxGeometry x="880" y="290" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-12" value="Vérification: ressources du joueurs suffisantes pour choisir ce dé" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="_vKOgibNYJb6RkX7hGH7-1">
-          <mxGeometry x="940" y="350" width="100" height="100" as="geometry" />
+        <mxCell id="YlUTerM2iUDrsfmBJ7mQ-12" value="Vérification: ressources du joueurs suffisantes pour choisir ce dé" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="_vKOgibNYJb6RkX7hGH7-1" vertex="1">
+          <mxGeometry x="970" y="350" width="100" height="100" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
