@@ -301,7 +301,7 @@
           <mxGeometry x="830" y="430" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="YlUTerM2iUDrsfmBJ7mQ-11" value="Arbitre/&lt;span style=&quot;background-color: initial;&quot;&gt;Sytème&lt;/span&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="_vKOgibNYJb6RkX7hGH7-1">
-          <mxGeometry x="880" y="320" width="30" height="60" as="geometry" />
+          <mxGeometry x="880" y="290" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="YlUTerM2iUDrsfmBJ7mQ-12" value="Vérification: ressources du joueurs suffisantes pour choisir ce dé" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="_vKOgibNYJb6RkX7hGH7-1">
           <mxGeometry x="940" y="350" width="100" height="100" as="geometry" />
