@@ -15,4 +15,3 @@ abstract class Batiment {
         return construit;
     }
 }
-//OUIBON JOUR
