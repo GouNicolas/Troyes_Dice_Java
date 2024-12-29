@@ -34,4 +34,8 @@ class Joueur {
     public void ajouterRessource(Ressources ressource, int quantite) {
         inventaireRes.put(ressource, getInventaireRes().getOrDefault(ressource, 0) + quantite);
     }
+
+    public void retirerRessource(Ressources ressource, int quantite) {
+        inventaireRes.put(ressource, getInventaireRes().getOrDefault(ressource, 0) - quantite);
+    }
 }

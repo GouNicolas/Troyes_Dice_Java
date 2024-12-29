@@ -44,8 +44,29 @@ class Partie {
         while (true) {
             for (Joueur joueur : listeJoueurs) {
                 tourDeJeu(joueur);
-                ConstruireChoix(plateau.demanderChoixDe(), plateau, joueur);
-                prochainTour();
+                int choix = plateau.demanderChoixDe();
+
+                while (plateau.checkRessourcesAchat(joueur, choix) == 1){
+                    choix = plateau.demanderChoixDe();
+                }
+                if (plateau.checkRessourcesAchat(joueur, choix)==2){
+                    joueur.ajouterRessource(Ressources.DRAPEAUX, 1);
+                    joueur.ajouterRessource(Ressources.ARGENT, 1);
+                    joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
+                    prochainTour();
+                } else {
+                    if (choix == 2) {
+                        Ressources paiement = plateau.choixPaiementChoix2(joueur);
+                        joueur.retirerRessource(paiement, 1);
+                    } else if (choix == 3){
+                        joueur.retirerRessource(Ressources.ARGENT, 1);
+                    } else if (choix == 4){
+                        joueur.retirerRessource(Ressources.ARGENT, 2);
+                    }
+                    ConstruireChoix(choix, plateau, joueur);
+                    prochainTour();
+                }
+
             }
             try {
                 Thread.sleep(1000); // 1 second delay
@@ -54,6 +75,8 @@ class Partie {
             }
         }
     }
+
+
 
     public void ConstruireChoix(int choix, Plateau plateau, Joueur joueur) {
         De deChoisi = plateau.getListesDes().get(choix - 1);

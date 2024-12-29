@@ -42,6 +42,7 @@ class Plateau {
         System.out.println("                        Tuiles : ");
         int j = 0;
         int y = 0;
+        trierListeDes();
         for (int i = 0; i < listeTuiles.size(); i++) {
             System.out.println("Tuile " + (i + 1) + ": " + listeTuiles.get(i).getCouleur() + " (" + listeTuiles.get(i).getCouleurRetourner() + ")");
             int temp = 0;
@@ -93,6 +94,53 @@ class Plateau {
         }
     }
 
+    private void trierListeDes() {
+        listesDes.sort((de1, de2) -> {
+            if (de1.getValeur() == de2.getValeur()) {
+                if (de1.getCouleur() == CouleurDe.NOIR) {
+                    return -1;
+                } else if (de2.getCouleur() == CouleurDe.NOIR) {
+                    return 1;
+                }
+            }
+            return de1.getValeur() - de2.getValeur();
+        });
+    }
+
+    public int checkRessourcesAchat(Joueur joueur, int choix){
+        if (listesDes.get(0).getCouleur() == CouleurDe.NOIR && joueur.getInventaireRes().get(Ressources.ARGENT)==0 && joueur.getInventaireRes().get(Ressources.DRAPEAUX)==0 && joueur.getInventaireRes().get(Ressources.CONNAISSANCE)==0) {
+            System.out.println("Votre inventaire de ressources est vide et la case gratuite est occupee par le de noir. Application de la methode anti-softlock");
+            return 2;
+        } else if (choix == 2 && joueur.getInventaireRes().get(Ressources.ARGENT)==0 && joueur.getInventaireRes().get(Ressources.DRAPEAUX)==0 && joueur.getInventaireRes().get(Ressources.CONNAISSANCE)==0) {
+            System.out.println("Vous ne disposez pas des ressources necessaires. Meri de refaire un choix de de");
+            return 1;                    
+        } else if (choix == 3 && joueur.getInventaireRes().get(Ressources.ARGENT)==0) {
+            System.out.println("Vous ne disposez pas des ressources necessaires. Meri de refaire un choix de de");
+            return 1; 
+        } else if (choix == 4 && joueur.getInventaireRes().get(Ressources.ARGENT)<=1) {
+            System.out.println("Vous ne disposez pas des ressources necessaires. Meri de refaire un choix de de");
+            return 1;
+        }
+        return 0;
+    }
+
+    public Ressources choixPaiementChoix2(Joueur joueur){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Veuillez choisir la ressource a utiliser. 1 = Drapeaux, 2 = Argent et 3 = Connaissance");
+        int typeRess = scanner.nextInt();
+        if (typeRess == 1 && joueur.getInventaireRes().get(Ressources.DRAPEAUX)>=1) {
+            return Ressources.DRAPEAUX;
+        } else if (typeRess == 2 && joueur.getInventaireRes().get(Ressources.ARGENT)>=1) {
+            return Ressources.ARGENT;
+        } else if (typeRess == 3 && joueur.getInventaireRes().get(Ressources.CONNAISSANCE)>=1) {
+            return Ressources.CONNAISSANCE;
+        } else {
+            System.out.println("Ressource insuffisante pour l'achat. Merci de changer de choix");
+            return choixPaiementChoix2(joueur);
+        }
+
+    }
+
     public String showCout(int index) {
         if (index < 0 || index >= listeCout.size()) {
             return "Invalid index";
@@ -122,11 +170,14 @@ class Plateau {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Veuillez choisir un dé (1-" + MAX_DES + "): ");
         int choix = scanner.nextInt();
-        if (choix >= 1 && choix <= MAX_DES) {
+        if (choix >= 1 && choix <= MAX_DES && listesDes.get(choix - 1).getCouleur() != CouleurDe.NOIR) {
             De deChoisi = listesDes.get(choix - 1);
             System.out.println("Vous avez choisi le dé " + choix + ": " + deChoisi.getValeur() + " (" + deChoisi.getCouleur() + ")");
             demanderModifierDe();
             return choix;
+        } else if (listesDes.get(choix - 1).getCouleur() == CouleurDe.NOIR) {
+            System.out.println("Le dé choisi est noir. Veuillez choisir un autre dé.");
+            return demanderChoixDe();
         } else {
             System.out.println("Choix invalide. Veuillez choisir un numéro entre 1 et " + MAX_DES + ".");
             return demanderChoixDe();
