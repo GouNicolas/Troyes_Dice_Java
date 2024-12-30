@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 class Partie {
     private ArrayList<Joueur> listeJoueurs = new ArrayList<>();
@@ -10,7 +11,7 @@ class Partie {
     public Partie() {
         this.plateau = new Plateau();
         this.jours = 1;
-        this.currentCycle = "Nuit";
+        this.currentCycle = "Jour";
     }
 
     public void ajouterJoueur(Joueur joueur) {
@@ -63,6 +64,7 @@ class Partie {
                     } else if (choix == 4){
                         joueur.retirerRessource(Ressources.ARGENT, 2);
                     }
+                    demanderModifierDe(joueur, plateau.getListesDes().get(choix - 1));
                     ConstruireChoix(choix, plateau, joueur);
                     prochainTour();
                 }
@@ -74,6 +76,74 @@ class Partie {
                 e.printStackTrace();
             }
         }
+    }
+
+    
+
+    public void demanderModifierDe(Joueur joueur, De de) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Voulez-vous modifier un dé ? (O/N)");
+        String choix = scanner.nextLine();
+        if (choix.equalsIgnoreCase("O")) {
+            System.out.println("Voulez-vous modifier la couleur (C) ou la valeur (V) ou annuler (N) ?");
+            choix = scanner.nextLine();
+            if (choix.equalsIgnoreCase("C") && joueur.getInventaireRes().get(Ressources.CONNAISSANCE)>0) {
+                demanderModifierCouleur(joueur, de);
+            } else if (choix.equalsIgnoreCase("V") && joueur.getInventaireRes().get(Ressources.DRAPEAUX)>0) {
+                demanderModifierValeur(joueur, de);
+            } else if (choix.equalsIgnoreCase("N")) {
+                demanderModifierDe(joueur, de);
+            } else {
+                System.out.println("Choix invalide. Veuillez choisir entre C, V et N.");
+                demanderModifierDe(joueur, de);
+            }
+        }
+    }
+
+    private void demanderModifierCouleur(Joueur joueur, De de) {
+        Scanner scanner2 = new Scanner(System.in);
+        System.out.println("Modifier la couleur du De ? (B, J, R) ou anuler (A)");
+        String couleur = scanner2.nextLine();
+        if (couleur.equalsIgnoreCase("B")) {
+            // Modifier la couleur du dé en blanc
+            System.out.println("Couleur modifiée en Blanc");
+            de.setCouleur(CouleurDe.BLANC);
+            joueur.retirerRessource(Ressources.CONNAISSANCE, 1);
+        } else if (couleur.equalsIgnoreCase("J")) {
+            // Modifier la couleur du dé en jaune
+            System.out.println("Couleur modifiée en Jaune");
+            de.setCouleur(CouleurDe.JAUNE);
+            joueur.retirerRessource(Ressources.CONNAISSANCE, 1);
+        } else if (couleur.equalsIgnoreCase("R")) {
+            // Modifier la couleur du dé en rouge
+            System.out.println("Couleur modifiée en Rouge");
+            de.setCouleur(CouleurDe.ROUGE);
+            joueur.retirerRessource(Ressources.CONNAISSANCE, 1);
+        } else if (couleur.equalsIgnoreCase("A")) {
+            demanderModifierDe(joueur, de);
+        } else {
+            System.out.println("Couleur invalide. Veuillez choisir une couleur entre B, J, R et N.");
+            demanderModifierCouleur(joueur, de);
+        }
+        demanderModifierCouleur(joueur, de);
+    }
+
+    private void demanderModifierValeur(Joueur joueur, De de) {
+        Scanner scanner3 = new Scanner(System.in);
+        System.out.println("Modifier la valeur du De ? (1-6)");
+        int valeur = scanner3.nextInt();
+        if (valeur >= 1 && valeur <= 6 && valeur != de.getValeur()) {
+            // Modifier la valeur du dé
+            System.out.println("Valeur modifiée en " + valeur);
+            de.setVal(valeur);
+            joueur.retirerRessource(Ressources.DRAPEAUX, 1);
+        } else if (valeur == de.getValeur()) {
+            System.out.println("La valeur est déjà la même. Veuillez choisir une autre valeur.");
+        } else {
+            System.out.println("Valeur invalide. Veuillez choisir un numéro entre 1 et 6.");
+            demanderModifierValeur(joueur, de);
+        }
+        demanderModifierDe(joueur, de);
     }
 
 

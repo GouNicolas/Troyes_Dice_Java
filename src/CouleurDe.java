@@ -1,4 +1,7 @@
 enum CouleurDe {
-    TRANSPARENT,
-    NOIR
+    ROUGE,
+    BLANC,
+    JAUNE,
+    NOIR,
+    TRANSPARENT
 }

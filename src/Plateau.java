@@ -174,7 +174,6 @@ class Plateau {
         if (choix >= 1 && choix <= MAX_DES && listesDes.get(choix - 1).getCouleur() != CouleurDe.NOIR) {
             De deChoisi = listesDes.get(choix - 1);
             System.out.println("Vous avez choisi le dé " + choix + ": " + deChoisi.getValeur() + " (" + deChoisi.getCouleur() + ")");
-            demanderModifierDe(deChoisi);
             return choix;
         } else if (listesDes.get(choix - 1).getCouleur() == CouleurDe.NOIR) {
             System.out.println("Le dé choisi est noir. Veuillez choisir un autre dé.");
@@ -182,66 +181,6 @@ class Plateau {
         } else {
             System.out.println("Choix invalide. Veuillez choisir un numéro entre 1 et " + MAX_DES + ".");
             return demanderChoixDe();
-        }
-    }
-
-    public void demanderModifierDe(De de) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Voulez-vous modifier un dé ? (O/N)");
-        String choix = scanner.nextLine();
-        if (choix.equalsIgnoreCase("O")) {
-            System.out.println("Voulez-vous modifier la couleur (C) ou la valeur (V) ou annuler (N) ?");
-            choix = scanner.nextLine();
-            if (choix.equalsIgnoreCase("C")) {
-                demanderModifierCouleur(de);
-            } else if (choix.equalsIgnoreCase("V")) {
-                demanderModifierValeur(de);
-            } else if (choix.equalsIgnoreCase("N")) {
-                demanderModifierDe(de);
-            } else {
-                System.out.println("Choix invalide. Veuillez choisir entre C, V et N.");
-                demanderModifierDe(de);
-            }
-        }
-    }
-
-    private void demanderModifierCouleur(De de) {
-        Scanner scanner2 = new Scanner(System.in);
-        System.out.println("Modifier la couleur du De ? (B, J, R, N) ou anuler (A)");
-        String couleur = scanner2.nextLine();
-        if (couleur.equalsIgnoreCase("B")) {
-            // Modifier la couleur du dé en blanc
-            System.out.println("Couleur modifiée en Blanc");
-        } else if (couleur.equalsIgnoreCase("J")) {
-            // Modifier la couleur du dé en jaune
-            System.out.println("Couleur modifiée en Jaune");
-        } else if (couleur.equalsIgnoreCase("R")) {
-            // Modifier la couleur du dé en rouge
-            System.out.println("Couleur modifiée en Rouge");
-        } else if (couleur.equalsIgnoreCase("N")) {
-            // Modifier la couleur du dé en noir
-            System.out.println("Couleur modifiée en Noir");
-        } else if (couleur.equalsIgnoreCase("A")) {
-            demanderModifierDe(de);
-        } else {
-            System.out.println("Couleur invalide. Veuillez choisir une couleur entre B, J, R et N.");
-            demanderModifierCouleur(de);
-        }
-    }
-
-    private void demanderModifierValeur(De de) {
-        Scanner scanner3 = new Scanner(System.in);
-        System.out.println("Modifier la valeur du De ? (1-6)");
-        int valeur = scanner3.nextInt();
-        if (valeur >= 1 && valeur <= 6 && valeur != de.getValeur()) {
-            // Modifier la valeur du dé
-            System.out.println("Valeur modifiée en " + valeur);
-            modifierDe(de, valeur);
-        } else if (valeur == de.getValeur()) {
-            System.out.println("La valeur est déjà la même. Veuillez choisir une autre valeur.");
-        } else {
-            System.out.println("Valeur invalide. Veuillez choisir un numéro entre 1 et 6.");
-            demanderModifierValeur(de);
         }
     }
 }
