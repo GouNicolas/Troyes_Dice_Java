@@ -24,4 +24,8 @@ class De {
     public CouleurDe getCouleur() {
         return couleur;
     }
+
+    public void afficherDe() {
+        System.out.println("De : " + valeur + " (" + couleur + ")");
+    }
 }

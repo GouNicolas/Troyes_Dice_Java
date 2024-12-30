@@ -173,13 +173,15 @@ class Plateau {
         int choix = scanner.nextInt();
         if (choix >= 1 && choix <= MAX_DES && listesDes.get(choix - 1).getCouleur() != CouleurDe.NOIR) {
             De deChoisi = listesDes.get(choix - 1);
-            System.out.println("Vous avez choisi le dé " + choix + ": " + deChoisi.getValeur() + " (" + deChoisi.getCouleur() + ")");
+            deChoisi.afficherDe();
             return choix;
+        } else  if (choix < 1 || choix > MAX_DES) {
+            System.out.println("Choix invalide. Veuillez choisir un numéro entre 1 et " + MAX_DES + ".");
+            return demanderChoixDe();
         } else if (listesDes.get(choix - 1).getCouleur() == CouleurDe.NOIR) {
             System.out.println("Le dé choisi est noir. Veuillez choisir un autre dé.");
             return demanderChoixDe();
         } else {
-            System.out.println("Choix invalide. Veuillez choisir un numéro entre 1 et " + MAX_DES + ".");
             return demanderChoixDe();
         }
     }
