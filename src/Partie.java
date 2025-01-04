@@ -45,8 +45,20 @@ class Partie {
     public void startGame() {
         while (true) {
             for (Joueur joueur : listeJoueurs) {
-                tourDeJeu(joueur);
+                if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 3 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 3 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 3 && joueur.getNbBonusHabObtenus() < 1) {
+                    joueur.ajouterRessource(Ressources.DRAPEAUX, 1);
+                    joueur.ajouterRessource(Ressources.ARGENT, 1);
+                    joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
+                    joueur.setNbBonusHabObtenus(1);
+                } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 6 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 6 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 6 && joueur.getNbBonusHabObtenus() < 2) {
+                    //Construire un batiment classque au choix
+                    joueur.setNbBonusHabObtenus(2);
+                } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 11 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 11 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 11 && joueur.getNbBonusHabObtenus() < 3) {
+                    //Construire un batiment classque au choix
+                    joueur.setNbBonusHabObtenus(3);
+                }
                 plateau.lancerDe();
+                tourDeJeu(joueur);
                 int choix = plateau.demanderChoixDe();
 
                 while (plateau.checkRessourcesAchat(joueur, choix) == 1){
@@ -67,7 +79,18 @@ class Partie {
                         joueur.retirerRessource(Ressources.ARGENT, 2);
                     }
                     demanderModifierDe(joueur, plateau.getListesDes().get(choix - 1));
-                    ConstruireChoix(choix, plateau, joueur);
+                    int ChoixUtilisationDe = ChoixUtilisationDe();
+                    if (ChoixUtilisationDe == 0) {
+                        if (plateau.getListesDes().get(choix - 1).getCouleur()==CouleurDe.JAUNE){
+                            joueur.ajouterRessource(Ressources.ARGENT, plateau.getListesDes().get(choix - 1).getValeur());
+                        } else if (plateau.getListesDes().get(choix - 1).getCouleur()==CouleurDe.BLANC){
+                            joueur.ajouterRessource(Ressources.CONNAISSANCE, plateau.getListesDes().get(choix - 1).getValeur());
+                        } else if (plateau.getListesDes().get(choix - 1).getCouleur()==CouleurDe.ROUGE){
+                            joueur.ajouterRessource(Ressources.DRAPEAUX, plateau.getListesDes().get(choix - 1).getValeur());
+                        }
+                    } else {
+                        ConstruireChoix(choix, plateau, joueur);
+                    }
                     prochainTour();
                 }
 
@@ -182,7 +205,6 @@ class Partie {
                 break;
             }
         }
-
         ajouterHabConstruction( joueur, couleurDe, index, typeBatiment);
     }
 
@@ -195,19 +217,37 @@ class Partie {
 
     private int DemanderChoixTypeBatiment() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Choisissez le type de batiment que vous voulez construire : (P/C)");
+        System.out.println("Choisissez le type de batiment que vous voulez construire : \nPrestige P, Classique C");
         String choix = scanner.nextLine();
         if (choix.equals("P")) {
             System.out.println("Vous avez choisi un batiment prestige.");
+            
             return 1;
         } else if (choix.equals("C")) {
-            System.out.println("Vous avez choisi un batiment classque ou peon.");
+            System.out.println("Vous avez choisi un batiment classique ou peon.");
+            
             return 0;
         } else {
             System.out.println("Choix invalide.");
             DemanderChoixTypeBatiment();
         }
         return -1;
+    }
+
+    public int ChoixUtilisationDe() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Voulez-vous utiliser un de pour construire un batiment ou obtenir des ressources? (B/R)");
+        String choix = scanner.nextLine();
+        if (choix.equals("B")) {
+            System.out.println("Vous choisissez de construire un batiment.");
+            return 1;
+        } else if (choix.equals("R")) {
+            System.out.println("Vous choisissez d'obtenir des ressources.");
+            return 0;
+        } else {
+            System.out.println("Choix invalide. Veuillez choisir entre B et R.");
+            return ChoixUtilisationDe();
+        }
     }
 
     public void ajouterHabConstruction(Joueur joueur, CouleurDe couleurDe, int index, int typeBatiment) {
