@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 class Partie {
@@ -125,7 +126,7 @@ class Partie {
             System.out.println("Couleur invalide. Veuillez choisir une couleur entre B, J, R et N.");
             demanderModifierCouleur(joueur, de);
         }
-        demanderModifierCouleur(joueur, de);
+        demanderModifierDe(joueur, de);
     }
 
     private void demanderModifierValeur(Joueur joueur, De de) {
@@ -146,26 +147,146 @@ class Partie {
         demanderModifierDe(joueur, de);
     }
 
-
-
     public void ConstruireChoix(int choix, Plateau plateau, Joueur joueur) {
-        De deChoisi = plateau.getListesDes().get(choix - 1);
-        System.out.println(choix + ": " + deChoisi.getValeur() + " (" + deChoisi.getCouleur() + ")");
-        Couleur couleurDe = plateau.getListeTuiles().get(choix - 1).getCouleur();
+        De deChoisi = TransformationChoixToIndex(choix);
+        int index = deChoisi.getValeur();
+        CouleurDe couleurDe = deChoisi.getCouleur();
         Fiche fiche = joueur.getFiche();
 
+        int typeBatiment = DemanderChoixTypeBatiment();
+
+        System.out.println(choix + ": " + deChoisi.getValeur() + " (" + couleurDe + ")");
+        
+        int place = 1;
         for (Batiment batiment : fiche.getListeBatiments()) {
-            if (batiment.getCouleur() == couleurDe && !batiment.isConstruit()) {
+            CouleurDe batimentCouleurDe = CouleurDe.fromCouleur(batiment.getCouleur());
+            if (batimentCouleurDe == couleurDe) {
+                place++;
+            }
+            if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment)) && !batiment.isConstruit()) {
                 batiment.construire();
-                System.out.println("Batiment de couleur " + couleurDe + " construit." + choix);
+                System.out.println("Batiment de couleur " + couleurDe + " construit." + index + " ou " + ((index - 1) * 2 + typeBatiment));
                 break;
             }
         }
+
+        ajouterHabConstruction( joueur, couleurDe, index, typeBatiment);
     }
 
-    public int TransformationChoixToIndex(int choix) {
-        
+    public De TransformationChoixToIndex(int choix) {
+        System.out.println(choix);
+        ArrayList<De> listesDes = plateau.getListesDes();
+        System.out.println(listesDes.get(choix - 1).getValeur() + " " + listesDes.get(choix - 1).getCouleur());
+        return listesDes.get(choix - 1);
+    }
 
-        return 0;
+    private int DemanderChoixTypeBatiment() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choisissez le type de batiment que vous voulez construire : (P/C)");
+        String choix = scanner.nextLine();
+        if (choix.equals("P")) {
+            System.out.println("Vous avez choisi un batiment prestige.");
+            return 1;
+        } else if (choix.equals("C")) {
+            System.out.println("Vous avez choisi un batiment classque ou peon.");
+            return 0;
+        } else {
+            System.out.println("Choix invalide.");
+            DemanderChoixTypeBatiment();
+        }
+        return -1;
+    }
+
+    public void ajouterHabConstruction(Joueur joueur, CouleurDe couleurDe, int index, int typeBatiment) {
+        Fiche fiche = joueur.getFiche();
+        int place = 1;
+        for (Map.Entry<Batiment, String> entry : fiche.getListeDesBonusBatiments().entrySet()) {
+            Batiment batiment = entry.getKey();
+            CouleurDe batimentCouleurDe = CouleurDe.fromCouleur(batiment.getCouleur());
+            if (batimentCouleurDe == couleurDe) {
+                place++;
+            }
+            if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment) - 1)) {
+                System.out.println("Bonus for batiment: " + entry.getValue());
+                if (entry.getValue().equals(" Cat ")) {
+                    // Ajouter une cathédrale pour les points
+                }
+                else if (entry.getValue().equals("  B  ")) {
+                    fiche.ajouterHab(Couleur.BLANC, 1);
+                }
+                else if (entry.getValue().equals(" B B ")) {
+                    fiche.ajouterHab(Couleur.BLANC, 2);
+                }
+
+                else if (entry.getValue().equals("  R  ")) {
+                    fiche.ajouterHab(Couleur.ROUGE, 1);
+                }
+                else if (entry.getValue().equals(" R R ")) {
+                    fiche.ajouterHab(Couleur.ROUGE, 2);
+                }
+
+                else if (entry.getValue().equals("  J  ")) {
+                    fiche.ajouterHab(Couleur.JAUNE, 1);
+                }
+                else if (entry.getValue().equals(" J J ")) {
+                    fiche.ajouterHab(Couleur.JAUNE, 2);
+                }
+
+                else if (entry.getValue().equals("DDD*R")) {
+                    ArrayList<De> listesDes = plateau.getListesDes();
+                    for (De de : listesDes) {
+                        if (de.getCouleur() == CouleurDe.ROUGE) {
+                            joueur.ajouterRessource(Ressources.DRAPEAUX, 3);
+                        }
+                    }
+                }
+                else if (entry.getValue().equals("OOO*J")) {
+                    ArrayList<De> listesDes = plateau.getListesDes();
+                    for (De de : listesDes) {
+                        if (de.getCouleur() == CouleurDe.JAUNE) {
+                            joueur.ajouterRessource(Ressources.ARGENT, 3);
+                        }
+                    }
+                }
+                else if (entry.getValue().equals("CCC*B")) {
+                    ArrayList<De> listesDes = plateau.getListesDes();
+                    for (De de : listesDes) {
+                        if (de.getCouleur() == CouleurDe.BLANC) {
+                            joueur.ajouterRessource(Ressources.CONNAISSANCE, 3);
+                        }
+                    }
+
+                }
+
+                else if (entry.getValue().equals("R R*R")) {
+                    ArrayList<De> listesDes = plateau.getListesDes();
+                    for (De de : listesDes) {
+                        if (de.getCouleur() == CouleurDe.ROUGE) {
+                            fiche.ajouterHab(Couleur.ROUGE, 2);
+                        }
+                    }
+                }
+
+                else if (entry.getValue().equals("J J*J")) {
+                    ArrayList<De> listesDes = plateau.getListesDes();
+                    for (De de : listesDes) {
+                        if (de.getCouleur() == CouleurDe.JAUNE) {
+                            fiche.ajouterHab(Couleur.JAUNE, 2);
+                        }
+                    }
+                }
+
+                else if (entry.getValue().equals("B B*B")) {
+                    ArrayList<De> listesDes = plateau.getListesDes();
+                    for (De de : listesDes) {
+                        if (de.getCouleur() == CouleurDe.BLANC) {
+                            fiche.ajouterHab(Couleur.BLANC, 2);
+                        }
+                    }
+                }
+
+                break;
+            }
+        }
     }
 }

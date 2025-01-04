@@ -1,13 +1,15 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.List;
 
 class Fiche {
     private HashMap<Couleur, Integer> listeHab = new HashMap<>();
     private ArrayList<Batiment> listeBatiments = new ArrayList<>();
-    private ArrayList<String> listeDesBonusBatiments = new ArrayList<>();
+    private LinkedHashMap<Batiment, String> listeDesBonusBatiments = new LinkedHashMap<>();
     private ArrayList<int[]> listeEmplacementsDetruit = new ArrayList<>();
+    private ArrayList<String> adjacentBonuses = new ArrayList<>();
 
     public Fiche() {
         listeHab.put(Couleur.ROUGE, 0);
@@ -29,12 +31,75 @@ class Fiche {
         listeHab.put(couleur, listeHab.getOrDefault(couleur, 0) + nombre);
     }
 
+    public LinkedHashMap<Batiment, String> getListeDesBonusBatiments() {
+        return listeDesBonusBatiments;
+    }
+
     private void initialiserBatiments() {
         Couleur[] couleurs = {Couleur.ROUGE, Couleur.JAUNE, Couleur.BLANC};
         for (Couleur couleur : couleurs) {
             for (int i = 0; i < 6; i++) {
-                listeBatiments.add(new BatimentPeon(couleur));
-                listeBatiments.add(new BatimentPrestige(couleur));
+                BatimentPeon peon = new BatimentPeon(couleur);
+                BatimentPrestige prestige = new BatimentPrestige(couleur);
+                listeBatiments.add(peon);
+                listeBatiments.add(prestige);
+
+                if (couleur == Couleur.ROUGE) {
+                    if (i == 0 || i == 1) {
+                        listeDesBonusBatiments.put(prestige, "  R  ");
+                    }
+                    else if (i == 2 || i == 3) {
+                        listeDesBonusBatiments.put(prestige, "  J  ");
+                    }
+                    else if (i == 4 || i == 5) {
+                        listeDesBonusBatiments.put(prestige, "  B  ");
+                    }
+                    listeDesBonusBatiments.put(peon, " R R ");
+                }
+
+                else if (couleur == Couleur.JAUNE) {
+                    if (i == 0) {
+                        listeDesBonusBatiments.put(prestige, "DDD*R");
+                    }
+                    else if (i == 1) {
+                        listeDesBonusBatiments.put(prestige, "R R*R");
+                    }
+                    else if (i == 2) {
+                        listeDesBonusBatiments.put(prestige, "OOO*J");
+                    }
+                    else if (i == 3) {
+                        listeDesBonusBatiments.put(prestige, "J J*J");
+                    }
+                    else if (i == 4) {
+                        listeDesBonusBatiments.put(prestige, "CCC*B");
+                    }
+                    else {
+                        listeDesBonusBatiments.put(prestige, "B B*B");
+                    }
+                    listeDesBonusBatiments.put(peon, " J J ");
+                }
+
+                else if (couleur == Couleur.BLANC) {
+                    if (i == 0) {
+                        listeDesBonusBatiments.put(prestige, " Cat ");
+                    }
+                    else if (i == 1) {
+                        listeDesBonusBatiments.put(prestige, " Cat ");
+                    }
+                    else if (i == 2) {
+                        listeDesBonusBatiments.put(prestige, " Cat ");
+                    }
+                    else if (i == 3) {
+                        listeDesBonusBatiments.put(prestige, " Cat ");
+                    }
+                    else if (i == 4) {
+                        listeDesBonusBatiments.put(prestige, " Cat ");
+                    }
+                    else {
+                        listeDesBonusBatiments.put(prestige, " Cat ");
+                    }
+                    listeDesBonusBatiments.put(peon, " B B ");
+                }
             }
         }
     }
@@ -76,6 +141,15 @@ class Fiche {
                     rang = rang + 2;
                 }
             }
+
+            System.out.println();
+            System.out.print("|");
+            for (Map.Entry<Batiment, String> entry : listeDesBonusBatiments.entrySet()) {
+                if (entry.getKey().couleur == couleur && entry.getKey() instanceof BatimentPrestige) {
+                    System.out.print(entry.getValue() + "|");
+                }
+            }
+
             System.out.println();
             
             System.out.println("------------------------------------------------");
@@ -83,25 +157,34 @@ class Fiche {
             // Second layer for BatimentPeon
             System.out.print("|");
             for (Batiment batiment : listeBatiments) {
-                rang++;
                 if (batiment instanceof BatimentPeon && batiment.couleur == couleur) {
                     if (batiment.construit) {
-                        if (listeBatiments.get(rang - 1).construit) {
+                        if (listeBatiments.get(rang).construit) {
                             System.out.print("[(2)]|");
                         }
                         else {
                             System.out.print(" (2) |");
                         }
                     } else {
-                        if (listeBatiments.get(rang - 1).construit) {
+                        if (listeBatiments.get(rang).construit) {
                             System.out.print("[ 2 ]|");
                         }
                         else {
                             System.out.print("  2  |");
                         }
                     }
+                    rang = rang + 2;
                 }
             }
+            System.out.println();
+
+            System.out.print("|");
+            for (Map.Entry<Batiment, String> entry : listeDesBonusBatiments.entrySet()) {
+                if (entry.getKey().couleur == couleur && entry.getKey() instanceof BatimentPeon) {
+                    System.out.print(entry.getValue() + "|");
+                }
+            }
+
             System.out.println();
             
         }
