@@ -46,6 +46,7 @@ class Partie {
         while (true) {
             for (Joueur joueur : listeJoueurs) {
                 tourDeJeu(joueur);
+                plateau.lancerDe();
                 int choix = plateau.demanderChoixDe();
 
                 while (plateau.checkRessourcesAchat(joueur, choix) == 1){
@@ -83,7 +84,10 @@ class Partie {
 
     public void demanderModifierDe(Joueur joueur, De de) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Voulez-vous modifier un dé ? (O/N)");
+        System.out.println("etat actuel du de :\n");
+        de.afficherDe();
+        joueur.getFiche().afficherRessources(joueur);
+        System.out.println("Voulez-vous modifier le dé ? (O/N)");
         String choix = scanner.nextLine();
         if (choix.equalsIgnoreCase("O")) {
             System.out.println("Voulez-vous modifier la couleur (C) ou la valeur (V) ou annuler (N) ?");
@@ -131,15 +135,24 @@ class Partie {
 
     private void demanderModifierValeur(Joueur joueur, De de) {
         Scanner scanner3 = new Scanner(System.in);
-        System.out.println("Modifier la valeur du De ? (1-6)");
+        System.out.println("Modifier la valeur du De ? (1-6) ou anuler la modification (0)");
         int valeur = scanner3.nextInt();
         if (valeur >= 1 && valeur <= 6 && valeur != de.getValeur()) {
             // Modifier la valeur du dé
-            System.out.println("Valeur modifiée en " + valeur);
-            de.setVal(valeur);
-            joueur.retirerRessource(Ressources.DRAPEAUX, 1);
+            int difference = Math.abs(de.getValeur() - valeur);
+            if (joueur.getInventaireRes().get(Ressources.DRAPEAUX) >= difference) {
+                joueur.retirerRessource(Ressources.DRAPEAUX, difference);
+                System.out.println("Valeur modifiée en " + valeur);
+                de.setVal(valeur);
+            } else {
+                System.out.println("Vous n'avez pas assez de drapeaux pour effectuer cette modification.");
+                demanderModifierValeur(joueur, de);
+            }
+            //joueur.retirerRessource(Ressources.DRAPEAUX, 1);
         } else if (valeur == de.getValeur()) {
             System.out.println("La valeur est déjà la même. Veuillez choisir une autre valeur.");
+        } else if (valeur == 0) {;
+            demanderModifierDe(joueur, de);
         } else {
             System.out.println("Valeur invalide. Veuillez choisir un numéro entre 1 et 6.");
             demanderModifierValeur(joueur, de);
