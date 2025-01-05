@@ -36,6 +36,7 @@ class Plateau {
     }
 
     public void afficherPlateau(String currentCycle, int jour) {
+        ModifierCouleurDeCouleurTuile(currentCycle, jour);
         System.out.println("===========================================================");
         System.out.println("                     Plateau de jeu     ");
         System.out.println("===========================================================");
@@ -53,13 +54,12 @@ class Plateau {
             }
 
             if (temp + 3 >= MAX_TUILES && y < temp + 4 - MAX_TUILES) {
+                System.out.println("De " + (y+1) + ": " + listesDes.get(MAX_DES - (4-y) + (- temp + MAX_TUILES)).getValeur() + " (" + listesDes.get(MAX_DES - (4-y) + (- temp + MAX_TUILES)).getCouleur() + ") " + showCout(MAX_DES - (4-y) + (- temp + MAX_TUILES)));
                 y += 1;
-                System.out.println("De " + (y) + ": " + listesDes.get(MAX_DES - y).getValeur() + " (" + listesDes.get(MAX_DES - y).getCouleur() + ") " + showCout(MAX_DES - y));
                 
             }
             if ((i >= temp) && (j < listesDes.size())) {
-                System.out.println("De " + (j + y + 1) + ": " + listesDes.get(j).getValeur() + " (" + listesDes.get(j).getCouleur() + ") "  + showCout(j));
-                
+                System.out.println("De "+ (j+1) + ": " + listesDes.get(j).getValeur() + " (" + listesDes.get(j).getCouleur() + ") "  + showCout(j));
                 j += 1;
             }
         }
@@ -67,6 +67,34 @@ class Plateau {
         System.out.println("===========================================================");
         System.out.printf("       Cycle actuel : %s %d                        \n", currentCycle, jour);
         System.out.println("===========================================================");
+    }
+
+    private void ModifierCouleurDeCouleurTuile(String currentCycle, int jour) {
+        int j = 0;
+        int y = 0;
+        trierListeDes();
+
+        for (int i = 0; i < listeTuiles.size(); i++) {
+            int temp = 0;
+            if (currentCycle.equals("Jour")) {
+                temp = jour;
+            } else {
+                temp = jour + 4;
+            }
+
+            if (temp + 3 >= MAX_TUILES && y < temp + 4 - MAX_TUILES ) {
+                if (listesDes.get(MAX_DES - (4-y) + (- temp + MAX_TUILES)).getCouleur() != CouleurDe.NOIR) {
+                    listesDes.get(MAX_DES - (4-y) + (- temp + MAX_TUILES)).setCouleur(CouleurDe.fromCouleur(listeTuiles.get(i).getCouleur()));
+                }
+                y += 1;
+            }
+            if ((i >= temp) && (j < listesDes.size())) {
+                if (listesDes.get(j).getCouleur() != CouleurDe.NOIR) {
+                    listesDes.get(j).setCouleur(CouleurDe.fromCouleur(listeTuiles.get(i).getCouleur()));
+                }
+                j += 1;
+            }
+        }
     }
 
     private void initialiserTuiles() {
@@ -171,16 +199,21 @@ class Plateau {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Veuillez choisir un dé (1-" + MAX_DES + "): ");
         int choix = scanner.nextInt();
-        if (choix >= 1 && choix <= MAX_DES && listesDes.get(choix - 1).getCouleur() != CouleurDe.NOIR) {
-            De deChoisi = listesDes.get(choix - 1);
-            System.out.println("Vous avez choisi le dé " + choix + ": " + deChoisi.getValeur() + " (" + deChoisi.getCouleur() + ")");
-            return choix;
-        } else if (listesDes.get(choix - 1).getCouleur() == CouleurDe.NOIR) {
-            System.out.println("Le dé choisi est noir. Veuillez choisir un autre dé.");
-            return demanderChoixDe();
+        if (choix >= 1 && choix <= MAX_DES) {
+            if (listesDes.get(choix - 1).getCouleur() == CouleurDe.NOIR) {
+                System.out.println("Le dé choisi est noir. Veuillez choisir un autre dé.");
+                return demanderChoixDe();
+            }
+            else {
+                De deChoisi = listesDes.get(choix - 1);
+                System.out.println("Vous avez choisi le dé " + choix + ": " + deChoisi.getValeur() + " (" + deChoisi.getCouleur() + ")");
+                return choix;
+            }
         } else {
             System.out.println("Choix invalide. Veuillez choisir un numéro entre 1 et " + MAX_DES + ".");
             return demanderChoixDe();
         }
     }
+
+
 }
