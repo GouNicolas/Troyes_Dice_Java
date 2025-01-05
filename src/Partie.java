@@ -60,12 +60,22 @@ class Partie {
                 joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
                 joueur.setNbBonusHabObtenus(1);
             } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 6 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 6 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 6 && joueur.getNbBonusHabObtenus() < 2) {
-                ConstruireArbitraire(0, plateau, joueur);
+                ConstruireArbitraire(0, plateau, joueur, CouleurDe.TRANSPARENT);
                 joueur.setNbBonusHabObtenus(2);
             } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 11 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 11 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 11 && joueur.getNbBonusHabObtenus() < 3) {
-                ConstruireArbitraire(0, plateau, joueur);
+                ConstruireArbitraire(0, plateau, joueur, CouleurDe.TRANSPARENT);
                 joueur.setNbBonusHabObtenus(3);
+            } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >=15 && !(joueur.isBonusPrestigeBlanc())) {
+                ConstruireArbitraire(1, plateau, joueur, CouleurDe.BLANC);
+                joueur.setBonusPrestigeBlanc(true);
+            } else if (joueur.getFiche().getNombreHab(Couleur.JAUNE) >=15 && !(joueur.isBonusPrestigeJaune())) {
+                ConstruireArbitraire(1, plateau, joueur, CouleurDe.JAUNE);
+                joueur.setBonusPrestigeJaune(true);
+            } else if (joueur.getFiche().getNombreHab(Couleur.ROUGE) >=15 && !(joueur.isBonusPrestigeRouge())) {
+                ConstruireArbitraire(1, plateau, joueur, CouleurDe.ROUGE);
+                joueur.setBonusPrestigeRouge(true);
             }
+
             System.out.println("Updating GUI for " + joueur.getPseudo());
             FicheGUI ficheGUI = ficheGUIMap.get(joueur);
             if (ficheGUI != null) {
@@ -237,11 +247,11 @@ class Partie {
     }
 
 
-    public void ConstruireArbitraire(int typeBatiment, Plateau plateau, Joueur joueur) {
+    public void ConstruireArbitraire(int typeBatiment, Plateau plateau, Joueur joueur, CouleurDe couleurPop) {
         if (typeBatiment == 0) {
-            System.out.println("Bonus de batiments classiques activé. Construisez un batiment classque de votre choix.");
+            System.out.println("Bonus de population activé. Construisez un batiment classque de votre choix.");
         } else {
-            System.out.println("Bonus de batiments prestige activé. Construisez un batiment prestige de votre choix.");
+            System.out.println("Bonus de population activé. Construisez un batiment prestige de votre choix.");
         }
         Scanner scanner = new Scanner(System.in);
         Fiche fiche = joueur.getFiche();
@@ -250,19 +260,22 @@ class Partie {
         String tmp;
 
         System.out.println("Choisissez la couleur : R/J/B\n");
+        if (typeBatiment==1){
+            System.out.println("La couleur ne doit pas être la même que la couleur de la population ayant atteint le palier de Bonus.");
+        }
         tmp = scanner.nextLine();
-        if (tmp.equals("R")) {
+        if (tmp.equals("R") && couleurPop != CouleurDe.ROUGE) {
             System.out.println("Vous avez choisi un batiment rouge.\n");
             couleurBatiment = Couleur.ROUGE;
-        } else if (tmp.equals("J")) {
+        } else if (tmp.equals("J") && couleurPop != CouleurDe.JAUNE) {
             System.out.println("Vous avez choisi un batiment jaune.\n");
             couleurBatiment = Couleur.JAUNE;
-        } else if (tmp.equals("B")) {
+        } else if (tmp.equals("B") && couleurPop != CouleurDe.BLANC) {
             System.out.println("Vous avez choisi un batiment blanc.\n");
             couleurBatiment = Couleur.BLANC;
         } else {
             System.out.println("Choix invalide.\n");
-            ConstruireArbitraire(typeBatiment, plateau, joueur);
+            ConstruireArbitraire(typeBatiment, plateau, joueur, couleurPop);
             return;
         }
 
@@ -282,7 +295,7 @@ class Partie {
             place = 6;
         } else {
             System.out.println("Choix invalide.\n");
-            ConstruireArbitraire(typeBatiment, plateau, joueur);
+            ConstruireArbitraire(typeBatiment, plateau, joueur, couleurPop);
             return;
         }
 
