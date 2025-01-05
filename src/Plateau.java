@@ -210,7 +210,6 @@ class Plateau {
                 return choix;
             }
         } else {
-            System.out.println("Choix invalide. Veuillez choisir un numéro entre 1 et " + MAX_DES + ".");
             return demanderChoixDe();
         }
     }

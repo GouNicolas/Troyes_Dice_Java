@@ -12,9 +12,9 @@ class Fiche {
     private ArrayList<String> adjacentBonuses = new ArrayList<>();
 
     public Fiche() {
-        listeHab.put(Couleur.ROUGE, 0);
-        listeHab.put(Couleur.JAUNE, 0);
-        listeHab.put(Couleur.BLANC, 0);
+        listeHab.put(Couleur.ROUGE, 2);
+        listeHab.put(Couleur.JAUNE, 3);
+        listeHab.put(Couleur.BLANC,3);
 
         initialiserBatiments();
     }
@@ -25,6 +25,10 @@ class Fiche {
 
     public HashMap<Couleur, Integer> getListeHab() {
         return listeHab;
+    }
+
+    public int getNombreHab(Couleur couleur) {
+        return listeHab.getOrDefault(couleur, 0);
     }
 
     public void ajouterHab(Couleur couleur, int nombre) {
@@ -203,4 +207,11 @@ class Fiche {
             System.out.println("| " + entry.getKey() + ": " + entry.getValue() + " |");
         }
     }
+    
+    public void afficherRessources(Joueur joueur) {
+        for (Map.Entry<Ressources, Integer> entry : joueur.getInventaireRes().entrySet()) {
+            System.out.println("| " + entry.getKey() + ": " + entry.getValue());
+        }
+    }
+
 }

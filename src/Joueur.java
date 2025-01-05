@@ -5,6 +5,7 @@ class Joueur {
     private String pseudo;
     private HashMap<Ressources, Integer> inventaireRes = new HashMap<>();
     private Fiche fichIndiv;
+    private int nbBonusHabObtenus = 0;
 
     public Joueur(String pseudo) {
         this.pseudo = pseudo;
@@ -29,6 +30,14 @@ class Joueur {
 
     public HashMap<Ressources, Integer> getInventaireRes() {
         return inventaireRes;
+    }
+
+    public int getNbBonusHabObtenus() {
+        return nbBonusHabObtenus;
+    }
+
+    public void setNbBonusHabObtenus(int nbBonusHabObtenus) {
+        this.nbBonusHabObtenus = nbBonusHabObtenus;
     }
 
     public void ajouterRessource(Ressources ressource, int quantite) {
