@@ -54,19 +54,29 @@ class Partie {
 
     while (true) {
         for (Joueur joueur : listeJoueurs) {
-                if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 3 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 3 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 3 && joueur.getNbBonusHabObtenus() < 1) {
-                    joueur.ajouterRessource(Ressources.DRAPEAUX, 1);
-                    joueur.ajouterRessource(Ressources.ARGENT, 1);
-                    joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
-                    joueur.setNbBonusHabObtenus(1);
-                } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 6 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 6 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 6 && joueur.getNbBonusHabObtenus() < 2) {
-                    //Construire un batiment classque au choix
-                    joueur.setNbBonusHabObtenus(2);
-                } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 11 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 11 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 11 && joueur.getNbBonusHabObtenus() < 3) {
-                    //Construire un batiment classque au choix
-                    joueur.setNbBonusHabObtenus(3);
-                }
-                plateau.lancerDe();
+            if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 3 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 3 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 3 && joueur.getNbBonusHabObtenus() < 1) {
+                joueur.ajouterRessource(Ressources.DRAPEAUX, 1);
+                joueur.ajouterRessource(Ressources.ARGENT, 1);
+                joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
+                joueur.setNbBonusHabObtenus(1);
+            } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 6 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 6 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 6 && joueur.getNbBonusHabObtenus() < 2) {
+                ConstruireArbitraire(0, plateau, joueur);
+                joueur.setNbBonusHabObtenus(2);
+            } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 11 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 11 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 11 && joueur.getNbBonusHabObtenus() < 3) {
+                ConstruireArbitraire(0, plateau, joueur);
+                joueur.setNbBonusHabObtenus(3);
+            }
+            System.out.println("Updating GUI for " + joueur.getPseudo());
+            FicheGUI ficheGUI = ficheGUIMap.get(joueur);
+            if (ficheGUI != null) {
+                ficheGUI.updateContent(joueur.getFiche());
+                ficheGUI.revalidate();
+                ficheGUI.repaint();
+            } else {
+                System.err.println("FicheGUI is null for " + joueur.getPseudo());
+            }
+            
+            plateau.lancerDe();
             tourDeJeu(joueur);
             int choix = plateau.demanderChoixDe();
 
@@ -103,7 +113,6 @@ class Partie {
                 prochainTour();
             }
             System.out.println("Updating GUI for " + joueur.getPseudo());
-            FicheGUI ficheGUI = ficheGUIMap.get(joueur);
             if (ficheGUI != null) {
                 ficheGUI.updateContent(joueur.getFiche());
                 ficheGUI.revalidate();
@@ -173,7 +182,6 @@ class Partie {
             demanderModifierCouleur(joueur, de);
         }
         demanderModifierDe(joueur, de);
-        demanderModifierDe(joueur, de);
     }
 
     private void demanderModifierValeur(Joueur joueur, De de) {
@@ -191,7 +199,6 @@ class Partie {
                 System.out.println("Vous n'avez pas assez de drapeaux pour effectuer cette modification.");
                 demanderModifierValeur(joueur, de);
             }
-            //joueur.retirerRessource(Ressources.DRAPEAUX, 1);
         } else if (valeur == de.getValeur()) {
             System.out.println("La valeur est déjà la même. Veuillez choisir une autre valeur.");
         } else if (valeur == 0) {;
@@ -201,12 +208,9 @@ class Partie {
             demanderModifierValeur(joueur, de);
         }
         demanderModifierDe(joueur, de);
-    }
+        }
 
     public void ConstruireChoix(int choix, Plateau plateau, Joueur joueur) {
-        De deChoisi = TransformationChoixToIndex(choix);
-        int index = deChoisi.getValeur();
-        CouleurDe couleurDe = deChoisi.getCouleur();
         De deChoisi = TransformationChoixToIndex(choix);
         int index = deChoisi.getValeur();
         CouleurDe couleurDe = deChoisi.getCouleur();
@@ -217,32 +221,98 @@ class Partie {
         System.out.println(choix + ": " + deChoisi.getValeur() + " (" + couleurDe + ")");
         
         int place = 1;
-        int typeBatiment = DemanderChoixTypeBatiment();
-
-        System.out.println(choix + ": " + deChoisi.getValeur() + " (" + couleurDe + ")");
-        
-        int place = 1;
         for (Batiment batiment : fiche.getListeBatiments()) {
             CouleurDe batimentCouleurDe = CouleurDe.fromCouleur(batiment.getCouleur());
             if (batimentCouleurDe == couleurDe) {
-                place++;
+            place++;
             }
             if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment)) && !batiment.isConstruit()) {
-            CouleurDe batimentCouleurDe = CouleurDe.fromCouleur(batiment.getCouleur());
-            if (batimentCouleurDe == couleurDe) {
-                place++;
+            batiment.construire();
+            System.out.println("Batiment de couleur " + couleurDe + " construit." + index + " ou " + ((index - 1) * 2 + typeBatiment));
+            break;
             }
-            if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment)) && !batiment.isConstruit()) {
+        }
+
+        ajouterHabConstruction(joueur, couleurDe, index, typeBatiment);
+    }
+
+
+    public void ConstruireArbitraire(int typeBatiment, Plateau plateau, Joueur joueur) {
+        if (typeBatiment == 0) {
+            System.out.println("Bonus de batiments classiques activé. Construisez un batiment classque de votre choix.");
+        } else {
+            System.out.println("Bonus de batiments prestige activé. Construisez un batiment prestige de votre choix.");
+        }
+        Scanner scanner = new Scanner(System.in);
+        Fiche fiche = joueur.getFiche();
+        int place;
+        Couleur couleurBatiment;
+        String tmp;
+
+        System.out.println("Choisissez la couleur : R/J/B\n");
+        tmp = scanner.nextLine();
+        if (tmp.equals("R")) {
+            System.out.println("Vous avez choisi un batiment rouge.\n");
+            couleurBatiment = Couleur.ROUGE;
+        } else if (tmp.equals("J")) {
+            System.out.println("Vous avez choisi un batiment jaune.\n");
+            couleurBatiment = Couleur.JAUNE;
+        } else if (tmp.equals("B")) {
+            System.out.println("Vous avez choisi un batiment blanc.\n");
+            couleurBatiment = Couleur.BLANC;
+        } else {
+            System.out.println("Choix invalide.\n");
+            ConstruireArbitraire(typeBatiment, plateau, joueur);
+            return;
+        }
+
+        System.out.println("Choisissez la colonne : 1-6\n");
+        tmp = scanner.nextLine();
+        if (tmp.equals("1")) {
+            place = 1;
+        } else if (tmp.equals("2")) {
+            place = 2;
+        } else if (tmp.equals("3")) {
+            place = 3;
+        } else if (tmp.equals("4")) {
+            place = 4;
+        } else if (tmp.equals("5")) {
+            place = 5;
+        } else if (tmp.equals("6")) {
+            place = 6;
+        } else {
+            System.out.println("Choix invalide.\n");
+            ConstruireArbitraire(typeBatiment, plateau, joueur);
+            return;
+        }
+
+
+        int acc = 1;
+        for (Batiment batiment : fiche.getListeBatiments()) {
+            if (batiment.getCouleur() == couleurBatiment) {
+                acc++;
+            }
+            if (batiment.getCouleur() == couleurBatiment && acc == ((place) * 2 + typeBatiment) && !batiment.isConstruit()) {
                 batiment.construire();
-                System.out.println("Batiment de couleur " + couleurDe + " construit." + index + " ou " + ((index - 1) * 2 + typeBatiment));
-                System.out.println("Batiment de couleur " + couleurDe + " construit." + index + " ou " + ((index - 1) * 2 + typeBatiment));
+                System.out.println("Batiment de couleur " + couleurBatiment + " construit." + place + " ou " + ((acc - 1) * 2 + typeBatiment));
                 break;
             }
         }
 
-        ajouterHabConstruction( joueur, couleurDe, index, typeBatiment);
-        ajouterHabConstruction( joueur, couleurDe, index, typeBatiment);
+        CouleurDe couleurFinale;
+        if (couleurBatiment == Couleur.ROUGE) {
+            couleurFinale = CouleurDe.ROUGE;
+        } else if (couleurBatiment == Couleur.JAUNE) {
+            couleurFinale = CouleurDe.JAUNE;
+        } else {
+            couleurFinale = CouleurDe.BLANC;
+        }
+
+        ajouterHabConstruction(joueur, couleurFinale, place, typeBatiment);
     }
+
+
+
 
     public De TransformationChoixToIndex(int choix) {
         System.out.println(choix);
