@@ -54,11 +54,13 @@ public class FicheGUI extends JFrame {
         JPanel whitePanel = createColoredPanel(Color.WHITE, 2);
         fichePanel.add(whitePanel);
 
+        // Add the new area with the left rectangle and the 3 lines
+        JPanel newAreaPanel = createNewAreaPanel();
+        fichePanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        fichePanel.add(newAreaPanel);
+
         // Add the fiche panel to the main panel
         mainPanel.add(fichePanel, BorderLayout.CENTER);
-
-        // Add the main panel to the frame
-        add(mainPanel, BorderLayout.CENTER);
 
         // Add other components to fill the remaining space
         JPanel leftPanel = new JPanel();
@@ -80,6 +82,8 @@ public class FicheGUI extends JFrame {
         bottomPanel.setPreferredSize(new Dimension(800, 50));
         bottomPanel.setBackground(Color.GRAY);
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+
+        add(mainPanel, BorderLayout.CENTER);
     }
 
     private JPanel createColoredPanel(Color color, int rowIndex) {
@@ -159,6 +163,102 @@ public class FicheGUI extends JFrame {
         return coloredPanel;
     }
 
+    private JPanel createNewRectanglePanel() {
+        JPanel newRectanglePanel = new JPanel();
+        newRectanglePanel.setLayout(new BoxLayout(newRectanglePanel, BoxLayout.Y_AXIS));
+        newRectanglePanel.setPreferredSize(new Dimension(700, 300));
+
+        // Create the 3 lines with different colors
+        Color[] colors = {Color.RED, Color.YELLOW, Color.WHITE};
+        for (Color color : colors) {
+            JPanel linePanel = new JPanel();
+            linePanel.setPreferredSize(new Dimension(700, 100));
+            linePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            linePanel.setOpaque(true);
+            linePanel.setBackground(color);
+            linePanel.setLayout(new GridLayout(1, 20));
+
+            // Add 20 values initialized to 0
+            for (int i = 0; i < 20; i++) {
+                JLabel valueLabel = new JLabel("0", SwingConstants.CENTER);
+                valueLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                linePanel.add(valueLabel);
+            }
+
+            newRectanglePanel.add(linePanel);
+        }
+
+        return newRectanglePanel;
+    }
+
+    private JPanel createNewLeftRectanglePanel() {
+        JPanel newLeftRectanglePanel = new JPanel();
+        newLeftRectanglePanel.setLayout(new BoxLayout(newLeftRectanglePanel, BoxLayout.Y_AXIS));
+        newLeftRectanglePanel.setPreferredSize(new Dimension(100, 300));
+
+        // First line with one case with nothing inside
+        JPanel line1 = new JPanel();
+        line1.setPreferredSize(new Dimension(100, 75));
+        line1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        line1.setOpaque(true);
+        line1.setBackground(Color.LIGHT_GRAY);
+        line1.setLayout(new GridLayout(1, 1));
+        newLeftRectanglePanel.add(line1);
+
+        // Second line with 3 cases with values 1, 3, 5
+        JPanel line2 = new JPanel();
+        line2.setPreferredSize(new Dimension(100, 75));
+        line2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        line2.setOpaque(true);
+        line2.setBackground(Color.LIGHT_GRAY);
+        line2.setLayout(new GridLayout(1, 3));
+        line2.add(new JLabel("1", SwingConstants.CENTER));
+        line2.add(new JLabel("3", SwingConstants.CENTER));
+        line2.add(new JLabel("5", SwingConstants.CENTER));
+        newLeftRectanglePanel.add(line2);
+
+        // Third line with 3 cases with values 2, 4, 6
+        JPanel line3 = new JPanel();
+        line3.setPreferredSize(new Dimension(100, 75));
+        line3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        line3.setOpaque(true);
+        line3.setBackground(Color.LIGHT_GRAY);
+        line3.setLayout(new GridLayout(1, 3));
+        line3.add(new JLabel("2", SwingConstants.CENTER));
+        line3.add(new JLabel("4", SwingConstants.CENTER));
+        line3.add(new JLabel("6", SwingConstants.CENTER));
+        newLeftRectanglePanel.add(line3);
+
+        // Fourth line with 3 cases with values x1, x2, x3
+        JPanel line4 = new JPanel();
+        line4.setPreferredSize(new Dimension(100, 75));
+        line4.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        line4.setOpaque(true);
+        line4.setBackground(Color.LIGHT_GRAY);
+        line4.setLayout(new GridLayout(1, 3));
+        line4.add(new JLabel("x1", SwingConstants.CENTER));
+        line4.add(new JLabel("x2", SwingConstants.CENTER));
+        line4.add(new JLabel("x3", SwingConstants.CENTER));
+        newLeftRectanglePanel.add(line4);
+
+        return newLeftRectanglePanel;
+    }
+
+    private JPanel createNewAreaPanel() {
+        JPanel newAreaPanel = new JPanel();
+        newAreaPanel.setLayout(new BorderLayout());
+
+        // Add the new left rectangle to the left of the new area
+        JPanel newLeftRectanglePanel = createNewLeftRectanglePanel();
+        newAreaPanel.add(newLeftRectanglePanel, BorderLayout.WEST);
+
+        // Add the new rectangle with 3 lines to the center of the new area
+        JPanel newRectanglePanel = createNewRectanglePanel();
+        newAreaPanel.add(newRectanglePanel, BorderLayout.CENTER);
+
+        return newAreaPanel;
+    }
+
     private void updateResourcesPanel(JPanel resourcesPanel, int blockIndex) {
         resourcesPanel.removeAll();
         char[] resources = controller.getResources().get(blockIndex);
@@ -198,6 +298,11 @@ public class FicheGUI extends JFrame {
 
         JPanel whitePanel = createColoredPanel(Color.WHITE, 2);
         fichePanel.add(whitePanel);
+
+        // Add the new area with the left rectangle and the 3 lines
+        JPanel newAreaPanel = createNewAreaPanel();
+        fichePanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        fichePanel.add(newAreaPanel);
 
         fichePanel.revalidate();
         fichePanel.repaint();
