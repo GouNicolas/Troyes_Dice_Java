@@ -461,4 +461,8 @@ class Partie {
             }
         }
     }
+    
+    public Plateau getPlateau() {
+        return plateau;
+    }
 }
