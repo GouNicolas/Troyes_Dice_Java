@@ -7,6 +7,9 @@ class Joueur {
     private HashMap<Ressources, Integer> historiqueRes = new HashMap<>();
     private Fiche fichIndiv;
     private int nbBonusHabObtenus = 0;
+    private boolean bonusPrestigeBlanc = false;
+    private boolean bonusPrestigeJaune = false;
+    private boolean bonusPrestigeRouge = false;
 
     public Joueur(String pseudo) {
         this.pseudo = pseudo;
@@ -92,5 +95,29 @@ class Joueur {
 
     public void retirerRessource(Ressources ressource, int quantite) {
         inventaireRes.put(ressource, getInventaireRes().getOrDefault(ressource, 0) - quantite);
+    }
+
+    public boolean isBonusPrestigeBlanc() {
+        return bonusPrestigeBlanc;
+    }
+
+    public void setBonusPrestigeBlanc(boolean bonusPrestigeBlanc) {
+        this.bonusPrestigeBlanc = bonusPrestigeBlanc;
+    }
+
+    public boolean isBonusPrestigeJaune() {
+        return bonusPrestigeJaune;
+    }
+
+    public void setBonusPrestigeJaune(boolean bonusPrestigeJaune) {
+        this.bonusPrestigeJaune = bonusPrestigeJaune;
+    }
+
+    public boolean isBonusPrestigeRouge() {
+        return bonusPrestigeRouge;
+    }
+
+    public void setBonusPrestigeRouge(boolean bonusPrestigeRouge) {
+        this.bonusPrestigeRouge = bonusPrestigeRouge;
     }
 }

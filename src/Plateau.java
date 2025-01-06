@@ -214,5 +214,11 @@ class Plateau {
         }
     }
 
+    public boolean isDiceSelectionValid(int index) {
+        if (index >= 0 && index < listesDes.size()) {
+            return listesDes.get(index).getCouleur() != CouleurDe.NOIR;
+        }
+        return false;
+    }
 
 }
