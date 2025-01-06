@@ -3,18 +3,20 @@ import java.util.Set;
 import java.util.List;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FicheController {
     private boolean[][] matrix;
     private Set<String> smallCaseCoordinates;
     private List<char[]> resources;
-
-    public FicheController(Fiche fiche) {
+    
+    public FicheController(Fiche fiche, Joueur joueur) {
         int rows = 9;
         int cols = 6;
         matrix = new boolean[rows][cols];
-        initialisermatrix(fiche);
         smallCaseCoordinates = new HashSet<>();
+        resources = new ArrayList<>(); // Initialize the resources list
+        
         // Add coordinates for small cases (example: between 0 and 1 of line 1)
         smallCaseCoordinates.add("1,0,1");
         smallCaseCoordinates.add("1,2,3");
@@ -25,25 +27,11 @@ public class FicheController {
         smallCaseCoordinates.add("5,2,3");
         smallCaseCoordinates.add("8,2,3");
         smallCaseCoordinates.add("8,4,5");
-
-        // setValue(1, 0, true);
-        // setValue(1, 1, true);
-
-        // Initialize resources
-        resources = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            char[] resource = new char[21];
-            for (int j = 0; j < 21; j++) {
-                if (j == 6 || j == 13 || j == 20) {
-                    resource[j] = 'A';
-                } else {
-                    resource[j] = '0';
-                }
-            }
-            resources.add(resource);
-        }
+        
+        initialisermatrix(fiche);
+        initialiserResources(joueur);
     }
-
+    
     public void initialisermatrix(Fiche fiche) {
         Couleur[] couleurs = {Couleur.ROUGE, Couleur.JAUNE, Couleur.BLANC};
         ArrayList<Batiment> listeBatiments = fiche.getListeBatiments();
@@ -59,7 +47,7 @@ public class FicheController {
                         matrix[2][rang] = batiment.isConstruit();
                     }
                 }
-
+                
                 else if (couleur == Couleur.JAUNE) {
                     if (batiment instanceof BatimentPrestige && batiment.couleur == couleur) {
                         matrix[4][rang] = batiment.isConstruit();
@@ -69,7 +57,7 @@ public class FicheController {
                         matrix[5][rang] = batiment.isConstruit();
                     }
                 }
-
+                
                 else if (couleur == Couleur.BLANC) {
                     if (batiment instanceof BatimentPrestige && batiment.couleur == couleur) {
                         matrix[7][rang] = batiment.isConstruit();
@@ -82,34 +70,126 @@ public class FicheController {
             }
         }
     }
+    
+    public void initialiserResources(Joueur joueur) {
+        int nb_RessD = joueur.getInventaireRes().get(Ressources.DRAPEAUX);
+        int nb_RessO = joueur.getInventaireRes().get(Ressources.ARGENT);
+        int nb_RessC = joueur.getInventaireRes().get(Ressources.CONNAISSANCE);
+        
+        int nb_HistoriqueD = joueur.getHistoriqueRes().get(Ressources.DRAPEAUX);
+        int nb_HistoriqueO = joueur.getHistoriqueRes().get(Ressources.ARGENT);
+        int nb_HistoriqueC = joueur.getHistoriqueRes().get(Ressources.CONNAISSANCE);
 
+        nb_HistoriqueD -= nb_RessD;
+        nb_HistoriqueO -= nb_RessO;
+        nb_HistoriqueC -= nb_RessC;
+        
+        System.out.println("nb_RessD: " + nb_RessD);
+        System.out.println("nb_RessO: " + nb_RessO);
+        System.out.println("nb_RessC: " + nb_RessC);
+
+        System.out.println("nb_HistoriqueD: " + nb_HistoriqueD);
+        System.out.println("nb_HistoriqueO: " + nb_HistoriqueO);
+        System.out.println("nb_HistoriqueC: " + nb_HistoriqueC);
+        
+        resources.clear();
+        
+        for (int i = 0; i < 3; i++) {
+            char[] resource = new char[21];
+            for (int j = 0; j < 21; j++) {
+                if (i == 0) {
+                    if (j == 6 || j == 13 || j == 20) {
+                        if (nb_RessD >= 0) {
+                            resource[j] = 'a';
+                        }
+                        else {
+                            resource[j] = 'A';
+                        }
+                    } else if (nb_HistoriqueD > 0) {
+                        resource[j] = 'r';
+                        nb_HistoriqueD--;
+                        System.out.println("nb_RessD: " + nb_RessD + " nb_HistoriqueD: " + nb_HistoriqueD);
+                    } else if (nb_RessD > 0) {
+                        resource[j] = 'R';
+                        nb_RessD--;
+                        System.out.println("nb_RessD: " + nb_RessD + " nb_HistoriqueD: " + nb_HistoriqueD);
+                    } else {
+                        resource[j] = '0';
+                        nb_RessD--;
+                    }
+                } else if (i == 1) {
+                    if (j == 6 || j == 13 || j == 20) {
+                        if (nb_RessO >= 0) {
+                            resource[j] = 'b';
+                        }
+                        else {
+                            resource[j] = 'B';
+                        }
+                    } else if (nb_HistoriqueO > 0) {
+                        resource[j] = 'j';
+                        nb_HistoriqueO--;
+                        System.out.println("nb_RessO: " + nb_RessO + " nb_HistoriqueO: " + nb_HistoriqueO);
+                    } else if (nb_RessO > 0) {
+                        resource[j] = 'J';
+                        nb_RessO--;
+                        System.out.println("nb_RessO: " + nb_RessO + " nb_HistoriqueO: " + nb_HistoriqueO);
+                    } else {
+                        resource[j] = '0';
+                        nb_RessO--;
+                    }
+                } else if (i == 2) {
+                    if (j == 6 || j == 13 || j == 20) {
+                        if (nb_RessC >= 0) {
+                            resource[j] = 'c';
+                        }
+                        else {
+                            resource[j] = 'C';
+                        }
+                    } else if (nb_HistoriqueC > 0) {
+                        resource[j] = 'b';
+                        nb_HistoriqueC--;
+                        System.out.println("nb_RessC: " + nb_RessC + " nb_HistoriqueC: " + nb_HistoriqueC);
+                    } else if (nb_RessC > 0) {
+                        resource[j] = 'B';
+                        nb_RessC--;
+                        System.out.println("nb_RessC: " + nb_RessC + " nb_HistoriqueC: " + nb_HistoriqueC);
+                    } else {
+                        resource[j] = '0';
+                        nb_RessC--;
+                    }
+                }
+            }
+            resources.add(resource);
+        }
+    }
+    
     public boolean getValue(int row, int col) {
         return matrix[row][col];
     }
-
+    
     public void setValue(int row, int col, boolean value) {
         matrix[row][col] = value;
     }
-
+    
     public boolean[][] getMatrix() {
         return matrix;
     }
-
+    
     public void setMatrix(boolean[][] matrix) {
         this.matrix = matrix;
     }
-
+    
     public boolean hasSmallCase(int row, int col1, int col2) {
         return smallCaseCoordinates.contains(row + "," + col1 + "," + col2);
     }
-
+    
     public int getSmallCaseValue(int row, int col1, int col2) {
         if (getValue(row, col1) && getValue(row, col2)) {
             return 1;
         }
         return 0;
     }
-
+    
     public List<char[]> getResources() {
         return resources;
     }
