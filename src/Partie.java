@@ -11,7 +11,7 @@ class Partie {
 
     public Partie() {
         this.plateau = new Plateau();
-        this.jours = 1;
+        this.jours = 3;
         this.currentCycle = "Jour";
     }
 
@@ -43,103 +43,115 @@ class Partie {
     }
     
     public void startGame() {
-    Map<Joueur, FicheGUI> ficheGUIMap = new HashMap<>();
+        Map<Joueur, FicheGUI> ficheGUIMap = new HashMap<>();
 
-    for (Joueur joueur : listeJoueurs) {
-        FicheController ficheController = new FicheController(joueur.getFiche(), joueur);
-        FicheGUI ficheGUI = new FicheGUI(ficheController);
-        ficheGUI.setVisible(true);
-        ficheGUIMap.put(joueur, ficheGUI);
-    }
-
-    while (true) {
         for (Joueur joueur : listeJoueurs) {
-            if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 3 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 3 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 3 && joueur.getNbBonusHabObtenus() < 1) {
-                joueur.ajouterRessource(Ressources.DRAPEAUX, 1);
-                joueur.ajouterRessource(Ressources.ARGENT, 1);
-                joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
-                joueur.setNbBonusHabObtenus(1);
-            } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 6 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 6 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 6 && joueur.getNbBonusHabObtenus() < 2) {
-                ConstruireArbitraire(0, plateau, joueur, CouleurDe.TRANSPARENT);
-                joueur.setNbBonusHabObtenus(2);
-            } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 11 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 11 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 11 && joueur.getNbBonusHabObtenus() < 3) {
-                ConstruireArbitraire(0, plateau, joueur, CouleurDe.TRANSPARENT);
-                joueur.setNbBonusHabObtenus(3);
-            } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >=15 && !(joueur.isBonusPrestigeBlanc())) {
-                ConstruireArbitraire(1, plateau, joueur, CouleurDe.BLANC);
-                joueur.setBonusPrestigeBlanc(true);
-            } else if (joueur.getFiche().getNombreHab(Couleur.JAUNE) >=15 && !(joueur.isBonusPrestigeJaune())) {
-                ConstruireArbitraire(1, plateau, joueur, CouleurDe.JAUNE);
-                joueur.setBonusPrestigeJaune(true);
-            } else if (joueur.getFiche().getNombreHab(Couleur.ROUGE) >=15 && !(joueur.isBonusPrestigeRouge())) {
-                ConstruireArbitraire(1, plateau, joueur, CouleurDe.ROUGE);
-                joueur.setBonusPrestigeRouge(true);
-            }
+            FicheController ficheController = new FicheController(joueur.getFiche(), joueur);
+            FicheGUI ficheGUI = new FicheGUI(ficheController);
+            ficheGUI.setVisible(true);
+            ficheGUIMap.put(joueur, ficheGUI);
+        }
 
-            System.out.println("Updating GUI for " + joueur.getPseudo());
-            FicheGUI ficheGUI = ficheGUIMap.get(joueur);
-            if (ficheGUI != null) {
-                ficheGUI.updateContent(joueur.getFiche());
-                ficheGUI.revalidate();
-                ficheGUI.repaint();
-            } else {
-                System.err.println("FicheGUI is null for " + joueur.getPseudo());
-            }
-            
-            plateau.lancerDe();
-            tourDeJeu(joueur);
-            int choix = plateau.demanderChoixDe();
-
-            while (plateau.checkRessourcesAchat(joueur, choix) == 1) {
-                choix = plateau.demanderChoixDe();
-            }
-            if (plateau.checkRessourcesAchat(joueur, choix) == 2) {
-                joueur.ajouterRessource(Ressources.DRAPEAUX, 1);
-                joueur.ajouterRessource(Ressources.ARGENT, 1);
-                joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
-                prochainTour();
-            } else {
-                if (choix == 2) {
-                    Ressources paiement = plateau.choixPaiementChoix2(joueur);
-                    joueur.retirerRessource(paiement, 1);
-                } else if (choix == 3) {
-                    joueur.retirerRessource(Ressources.ARGENT, 1);
-                } else if (choix == 4) {
-                    joueur.retirerRessource(Ressources.ARGENT, 2);
+        while (true) {
+            for (Joueur joueur : listeJoueurs) {
+                if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 3 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 3 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 3 && joueur.getNbBonusHabObtenus() < 1) {
+                    joueur.ajouterRessource(Ressources.DRAPEAUX, 1);
+                    joueur.ajouterRessource(Ressources.ARGENT, 1);
+                    joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
+                    joueur.setNbBonusHabObtenus(1);
+                } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 6 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 6 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 6 && joueur.getNbBonusHabObtenus() < 2) {
+                    ConstruireArbitraire(0, plateau, joueur, CouleurDe.TRANSPARENT);
+                    joueur.setNbBonusHabObtenus(2);
+                } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 11 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 11 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 11 && joueur.getNbBonusHabObtenus() < 3) {
+                    ConstruireArbitraire(0, plateau, joueur, CouleurDe.TRANSPARENT);
+                    joueur.setNbBonusHabObtenus(3);
+                } else if (joueur.getFiche().getNombreHab(Couleur.BLANC) >=15 && !(joueur.isBonusPrestigeBlanc())) {
+                    ConstruireArbitraire(1, plateau, joueur, CouleurDe.BLANC);
+                    joueur.setBonusPrestigeBlanc(true);
+                } else if (joueur.getFiche().getNombreHab(Couleur.JAUNE) >=15 && !(joueur.isBonusPrestigeJaune())) {
+                    ConstruireArbitraire(1, plateau, joueur, CouleurDe.JAUNE);
+                    joueur.setBonusPrestigeJaune(true);
+                } else if (joueur.getFiche().getNombreHab(Couleur.ROUGE) >=15 && !(joueur.isBonusPrestigeRouge())) {
+                    ConstruireArbitraire(1, plateau, joueur, CouleurDe.ROUGE);
+                    joueur.setBonusPrestigeRouge(true);
                 }
-                demanderModifierDe(joueur, plateau.getListesDes().get(choix - 1));
-                    int ChoixUtilisationDe = ChoixUtilisationDe();
-                    if (ChoixUtilisationDe == 0) {
-                        if (plateau.getListesDes().get(choix - 1).getCouleur()==CouleurDe.JAUNE){
-                            joueur.ajouterRessource(Ressources.ARGENT, plateau.getListesDes().get(choix - 1).getValeur());
-                        } else if (plateau.getListesDes().get(choix - 1).getCouleur()==CouleurDe.BLANC){
-                            joueur.ajouterRessource(Ressources.CONNAISSANCE, plateau.getListesDes().get(choix - 1).getValeur());
-                        } else if (plateau.getListesDes().get(choix - 1).getCouleur()==CouleurDe.ROUGE){
-                            joueur.ajouterRessource(Ressources.DRAPEAUX, plateau.getListesDes().get(choix - 1).getValeur());
-                        }
-                    } else {
-                    ConstruireChoix(choix, plateau, joueur);
+
+                System.out.println("Updating GUI for " + joueur.getPseudo());
+                FicheGUI ficheGUI = ficheGUIMap.get(joueur);
+                if (ficheGUI != null) {
+                    ficheGUI.updateContent(joueur.getFiche());
+                    ficheGUI.revalidate();
+                    ficheGUI.repaint();
+                } else {
+                    System.err.println("FicheGUI is null for " + joueur.getPseudo());
+                }
+                
+                plateau.lancerDe();
+                tourDeJeu(joueur);
+                int choix = plateau.demanderChoixDe();
+
+                while (plateau.checkRessourcesAchat(joueur, choix) == 1) {
+                    choix = plateau.demanderChoixDe();
+                }
+                if (plateau.checkRessourcesAchat(joueur, choix) == 2) {
+                    joueur.ajouterRessource(Ressources.DRAPEAUX, 1);
+                    joueur.ajouterRessource(Ressources.ARGENT, 1);
+                    joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
+                    prochainTour();
+                } else {
+                    if (choix == 2) {
+                        Ressources paiement = plateau.choixPaiementChoix2(joueur);
+                        joueur.retirerRessource(paiement, 1);
+                    } else if (choix == 3) {
+                        joueur.retirerRessource(Ressources.ARGENT, 1);
+                    } else if (choix == 4) {
+                        joueur.retirerRessource(Ressources.ARGENT, 2);
                     }
-                prochainTour();
-            }
-            System.out.println("Updating GUI for " + joueur.getPseudo());
-            if (ficheGUI != null) {
-                ficheGUI.updateContent(joueur.getFiche());
-                ficheGUI.revalidate();
-                ficheGUI.repaint();
-            } else {
-                System.err.println("FicheGUI is null for " + joueur.getPseudo());
-            }
+                    demanderModifierDe(joueur, plateau.getListesDes().get(choix - 1));
+                        int ChoixUtilisationDe = ChoixUtilisationDe();
+                        if (ChoixUtilisationDe == 0) {
+                            if (plateau.getListesDes().get(choix - 1).getCouleur()==CouleurDe.JAUNE){
+                                joueur.ajouterRessource(Ressources.ARGENT, plateau.getListesDes().get(choix - 1).getValeur());
+                            } else if (plateau.getListesDes().get(choix - 1).getCouleur()==CouleurDe.BLANC){
+                                joueur.ajouterRessource(Ressources.CONNAISSANCE, plateau.getListesDes().get(choix - 1).getValeur());
+                            } else if (plateau.getListesDes().get(choix - 1).getCouleur()==CouleurDe.ROUGE){
+                                joueur.ajouterRessource(Ressources.DRAPEAUX, plateau.getListesDes().get(choix - 1).getValeur());
+                            }
+                        } else {
+                        ConstruireChoix(choix, plateau, joueur);
+                        }
+
+                    //Fonction de destruction liée au dé noir
+                    if (jours>=3){
+                        int tmp=0;
+                        for (De de : plateau.getListesDes()) {
+                            if (de.getCouleur() == CouleurDe.NOIR) {
+                                DestroyBuilding(joueur, plateau, de, tmp);
+                            }
+                            tmp++;
+                        }
+                    }
+
+                    prochainTour();
+                }
+                System.out.println("Updating GUI for " + joueur.getPseudo());
+                if (ficheGUI != null) {
+                    ficheGUI.updateContent(joueur.getFiche());
+                    ficheGUI.revalidate();
+                    ficheGUI.repaint();
+                } else {
+                    System.err.println("FicheGUI is null for " + joueur.getPseudo());
+                }
 
 
-            try {
-                Thread.sleep(1000); // 1 second delay
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                try {
+                    Thread.sleep(1000); // 1 second delay
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
-}
 
     
 
@@ -234,12 +246,12 @@ class Partie {
         for (Batiment batiment : fiche.getListeBatiments()) {
             CouleurDe batimentCouleurDe = CouleurDe.fromCouleur(batiment.getCouleur());
             if (batimentCouleurDe == couleurDe) {
-            place++;
+                place++;
             }
             if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment)) && !batiment.isConstruit()) {
-            batiment.construire();
-            System.out.println("Batiment de couleur " + couleurDe + " construit." + index + " ou " + ((index - 1) * 2 + typeBatiment));
-            break;
+                batiment.construire();
+                System.out.println("Batiment de couleur " + couleurDe + " construit." + index + " ou " + ((index - 1) * 2 + typeBatiment));
+                break;
             }
         }
 
@@ -464,5 +476,27 @@ class Partie {
     
     public Plateau getPlateau() {
         return plateau;
+    }
+
+    public void DestroyBuilding(Joueur joueur, Plateau plateau, De de, int placeListeDe) {
+        int rang = de.getValeur();
+        ArrayList<Batiment> listeBatiments = joueur.getFiche().getListeBatiments();
+        int temp;
+        if (currentCycle.equals("Jour")) {
+            temp = (jours+placeListeDe)%9;
+        } else {
+            temp = (jours + 4+placeListeDe)%9;
+        }
+        int place=1;
+        System.out.println("DEBUG " + plateau.getListeTuiles().get(temp).getCouleur() + " ");
+        for (Batiment batiment : listeBatiments) {
+            if (batiment.getCouleur() == plateau.getListeTuiles().get(temp).getCouleur()) {
+                if (place==(de.getValeur())*2 || place==(de.getValeur())*2-1){
+                System.out.println("Destruction des batiment de couleur " + plateau.getListeTuiles().get(temp).getCouleur() + "de la " + de.getValeur() + "eme place");
+                batiment.detruire();
+                }
+                place++;
+            }
+        }
     }
 }

@@ -16,6 +16,5 @@ public class Main {
             FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(partie.getPlateau(), partie);
             
             partie.startGame();
-        
     }
 }

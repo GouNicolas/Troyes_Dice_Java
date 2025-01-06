@@ -8,13 +8,12 @@ class Fiche {
     private HashMap<Couleur, Integer> listeHab = new HashMap<>();
     private ArrayList<Batiment> listeBatiments = new ArrayList<>();
     private LinkedHashMap<Batiment, String> listeDesBonusBatiments = new LinkedHashMap<>();
-    private ArrayList<int[]> listeEmplacementsDetruit = new ArrayList<>();
     private ArrayList<String> adjacentBonuses = new ArrayList<>();
 
     public Fiche() {
-        listeHab.put(Couleur.ROUGE, 5);
-        listeHab.put(Couleur.JAUNE, 6);
-        listeHab.put(Couleur.BLANC,14);
+        listeHab.put(Couleur.ROUGE, 0);
+        listeHab.put(Couleur.JAUNE, 0);
+        listeHab.put(Couleur.BLANC,0);
 
         initialiserBatiments();
     }
@@ -108,10 +107,6 @@ class Fiche {
         }
     }
 
-    public void ajouterEmplacementDetruit(int x, int y) {
-        listeEmplacementsDetruit.add(new int[]{x, y});
-    }
-
     public void afficherFiche(Joueur joueur) {
         System.out.println("================================================");
         System.out.println("|                     FICHE                    |");
@@ -127,7 +122,11 @@ class Fiche {
             int rang = 1;
             for (Batiment batiment : listeBatiments) {
                 if (batiment instanceof BatimentPrestige && batiment.couleur == couleur) {
-                    if (batiment.construit) {
+                    if (batiment.isDetruit()) {
+                        System.out.print("  X  |");
+
+                    }
+                    else if (batiment.construit) {
                         if (listeBatiments.get(rang).construit) {
                             System.out.print("[(1)]|");
                         }
@@ -162,7 +161,11 @@ class Fiche {
             System.out.print("|");
             for (Batiment batiment : listeBatiments) {
                 if (batiment instanceof BatimentPeon && batiment.couleur == couleur) {
-                    if (batiment.construit) {
+                    if (batiment.isDetruit()) {
+                        System.out.print("  X  |");
+
+                    }
+                    else if (batiment.construit) {
                         if (listeBatiments.get(rang).construit) {
                             System.out.print("[(2)]|");
                         }
