@@ -8,14 +8,18 @@ class Fiche {
     private HashMap<Couleur, Integer> listeHab = new HashMap<>();
     private ArrayList<Batiment> listeBatiments = new ArrayList<>();
     private LinkedHashMap<Batiment, String> listeDesBonusBatiments = new LinkedHashMap<>();
-    private ArrayList<String> adjacentBonuses = new ArrayList<>();
+    private HashMap<Couleur, List<Integer>> listeDesBonusBatimentsAdjacent = new HashMap<>();
 
     public Fiche() {
         listeHab.put(Couleur.ROUGE, 0);
         listeHab.put(Couleur.JAUNE, 0);
         listeHab.put(Couleur.BLANC,0);
+        listeHab.put(Couleur.ROUGE, 0);
+        listeHab.put(Couleur.JAUNE, 0);
+        listeHab.put(Couleur.BLANC,0);
 
         initialiserBatiments();
+        initailiserDesBonusBatimentsAdjacent();
     }
 
     public ArrayList<Batiment> getListeBatiments() {
@@ -36,6 +40,21 @@ class Fiche {
 
     public LinkedHashMap<Batiment, String> getListeDesBonusBatiments() {
         return listeDesBonusBatiments;
+    }
+
+    public HashMap<Couleur, List<Integer>> getListeDesBonusBatimentsAdjacent() {
+        return listeDesBonusBatimentsAdjacent;
+    }
+
+    private void initailiserDesBonusBatimentsAdjacent() {
+        // Couleur[] couleurs = {Couleur.ROUGE, Couleur.JAUNE, Couleur.BLANC};
+        // for (Couleur couleur : couleurs) {
+        //     List<Integer> liste = new ArrayList<>();
+        //     for (int i = 0; i < 6; i++) {
+        //         liste.add(i);
+        //     }
+        //     listeDesBonusBatimentsAdjacent.put(couleur, liste);
+        // }
     }
 
     private void initialiserBatiments() {
@@ -127,6 +146,11 @@ class Fiche {
 
                     }
                     else if (batiment.construit) {
+                    if (batiment.isDetruit()) {
+                        System.out.print("  X  |");
+
+                    }
+                    else if (batiment.construit) {
                         if (listeBatiments.get(rang).construit) {
                             System.out.print("[(1)]|");
                         }
@@ -163,7 +187,6 @@ class Fiche {
                 if (batiment instanceof BatimentPeon && batiment.couleur == couleur) {
                     if (batiment.isDetruit()) {
                         System.out.print("  X  |");
-
                     }
                     else if (batiment.construit) {
                         if (listeBatiments.get(rang).construit) {

@@ -6,6 +6,7 @@ class BatimentPrestige extends Batiment {
         this.couleur = couleur;
         this.construit = false;
         this.detruit = false;
+        this.detruit = false;
     }
 
     @Override
