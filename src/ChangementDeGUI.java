@@ -15,9 +15,14 @@ class ChangementDeGUI extends JPanel {
     private JPanel valueButtonPanel;
     private int initialNumber;
     private Color initialColor;
+    private int lockedNumber;
+    private Color lockedColor;
     private boolean isDiceLocked = false;
+    private FicheGUI ficheGUI;
+    private JButton lockButton;
 
-    public ChangementDeGUI() {
+    public ChangementDeGUI(FicheGUI ficheGUI) {
+        this.ficheGUI = ficheGUI;
         setLayout(new BorderLayout());
 
         // Main panel with fixed layout
@@ -43,8 +48,11 @@ class ChangementDeGUI extends JPanel {
         dice.add(numberLabel);
         setRandomSquare();
 
+        initialNumber = Integer.parseInt(numberLabel.getText());
+        initialColor = dice.getBackground();
+
         // Add a button to lock the dice
-        JButton lockButton = new JButton();
+        lockButton = new JButton();
         lockButton.setLayout(new BorderLayout());
         lockButton.add(dice, BorderLayout.CENTER);
         lockButton.setPreferredSize(new Dimension(40, 40));
@@ -56,6 +64,9 @@ class ChangementDeGUI extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 isDiceLocked = true;
                 lockButton.setEnabled(false);
+                lockedNumber = Integer.parseInt(numberLabel.getText());
+                lockedColor = dice.getBackground();
+                ficheGUI.updateButtonStates(lockedNumber, lockedColor);
             }
         });
 
@@ -85,6 +96,7 @@ class ChangementDeGUI extends JPanel {
         gbc.gridx = 0;
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(buttonPanel, gbc);
+
         setRandomButtonColors();
 
         colorButton1.addActionListener(new ActionListener() {
@@ -151,16 +163,23 @@ class ChangementDeGUI extends JPanel {
 
     private void setRandomButtonColors() {
         Color[] colors = {Color.RED, Color.YELLOW, Color.WHITE};
-        Random rand = new Random();
-
-        do {
-            buttonColor1 = colors[rand.nextInt(colors.length)];
-        } while (buttonColor1.equals(squareColor));
-
-        do {
-            buttonColor2 = colors[rand.nextInt(colors.length)];
-        } while (buttonColor2.equals(squareColor) || buttonColor2.equals(buttonColor1));
-
+        Color color1 = null;
+        Color color2 = null;
+    
+        if (squareColor.equals(Color.RED)) {
+            color1 = Color.YELLOW;
+            color2 = Color.WHITE;
+        } else if (squareColor.equals(Color.YELLOW)) {
+            color1 = Color.RED;
+            color2 = Color.WHITE;
+        } else if (squareColor.equals(Color.WHITE)) {
+            color1 = Color.RED;
+            color2 = Color.YELLOW;
+        }
+    
+        buttonColor1 = color1;
+        buttonColor2 = color2;
+    
         colorButton1.setBackground(buttonColor1);
         colorButton2.setBackground(buttonColor2);
     }
@@ -202,16 +221,34 @@ class ChangementDeGUI extends JPanel {
     }
 
     private void resetDice() {
+        numberLabel.setText(String.valueOf(initialNumber));
+        dice.setBackground(initialColor);
+        squareColor = initialColor;
+        setRandomButtonColors();
+        updateValueButtons();
+    }
+
+    public int getLockedDiceValue() {
+        return initialNumber;
+    }
+
+    public Color getLockedDiceColor() {
+        return initialColor;
+    }
+
+    public void rerollDice() {
         setRandomSquare();
         setRandomButtonColors();
         updateValueButtons();
+        isDiceLocked = false;
+        lockButton.setEnabled(true);
     }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Changement De GUI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
-        frame.add(new ChangementDeGUI());
+        frame.add(new ChangementDeGUI(null));
         frame.setVisible(true);
     }
 }

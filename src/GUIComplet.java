@@ -8,17 +8,19 @@ public class GUIComplet extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Create the ChangementDeGUI panel
-        ChangementDeGUI changementDeGUIPanel = new ChangementDeGUI();
-
         // Create the FicheGUI panel
         FicheGUI ficheGUIPanel = new FicheGUI(ficheController);
+
+        // Create the ChangementDeGUI panel
+        ChangementDeGUI changementDeGUIPanel = new ChangementDeGUI(ficheGUIPanel);
+
 
         // Add the ChangementDeGUI panel to the center
         add(changementDeGUIPanel, BorderLayout.CENTER);
 
         // Add the FicheGUI panel to the right
         add(ficheGUIPanel.getMainPanel(), BorderLayout.EAST);
+
     }
 
     public static void main(String[] args) {
