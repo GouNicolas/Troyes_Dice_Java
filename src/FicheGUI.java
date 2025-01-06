@@ -12,12 +12,14 @@ public class FicheGUI extends JFrame {
     private List<JPanel> resourcesPanels;
     private JPanel fichePanel;
     private Map<String, JLabel> smallCaseLabels;
+    private Map<String, JButton> booleanButtons;
 
     public FicheGUI(FicheController controller) {
         System.out.println("Creating FicheGUI");
         this.controller = controller;
         resourcesPanels = new ArrayList<>();
         smallCaseLabels = new HashMap<>();
+        booleanButtons = new HashMap<>();
 
         setTitle("Fiche Information");
         setSize(800, 600);
@@ -69,28 +71,7 @@ public class FicheGUI extends JFrame {
         // Add the fiche panel to the main panel
         mainPanel.add(fichePanel, BorderLayout.CENTER);
 
-        // Add other components to fill the remaining space
-        /*JPanel leftPanel = new JPanel();
-        leftPanel.setPreferredSize(new Dimension(100, 600));
-        leftPanel.setBackground(Color.GRAY);
-        mainPanel.add(leftPanel, BorderLayout.WEST);
-
-        JPanel rightPanel = new JPanel();
-        rightPanel.setPreferredSize(new Dimension(100, 600));
-        rightPanel.setBackground(Color.GRAY);
-        mainPanel.add(rightPanel, BorderLayout.EAST);
-
-        JPanel topPanel = new JPanel();
-        topPanel.setPreferredSize(new Dimension(800, 50));
-        topPanel.setBackground(Color.GRAY);
-        mainPanel.add(topPanel, BorderLayout.NORTH);
-
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setPreferredSize(new Dimension(800, 50));
-        bottomPanel.setBackground(Color.GRAY);
-        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-
-        add(mainPanel, BorderLayout.CENTER);*/
+        add(mainPanel, BorderLayout.CENTER);
     }
 
     private JPanel createColoredPanel(Color color, int rowIndex) {
@@ -134,6 +115,7 @@ public class FicheGUI extends JFrame {
                 booleanButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 booleanButton.setOpaque(true);
                 booleanButton.setPreferredSize(new Dimension(booleanSquareWidth, 100)); // Adjust the size of the boolean square
+                booleanButton.setEnabled(false); // Initially disable all buttons
 
                 final int row = rowIndex * 3 + i;
                 final int col = j;
@@ -145,12 +127,20 @@ public class FicheGUI extends JFrame {
                         updateSmallCases(row, col);
                         revalidate();
                         repaint();
+
+                        //Disable all buttons
+                        for (JButton button : booleanButtons.values()) {
+                            button.setEnabled(false);
+                        }
                     }
                 });
 
                 gbc.gridx = j * 2;
                 gbc.weightx = 1.0;
                 linePanel.add(booleanButton, gbc);
+
+                // Store reference to the boolean button
+                booleanButtons.put(row + "-" + col, booleanButton);
 
                 // Check if a small case should be added after this square
                 if (j < 5 && controller.hasSmallCase(row, j, j + 1)) {
@@ -346,5 +336,21 @@ public class FicheGUI extends JFrame {
 
     public JPanel getMainPanel() {
         return fichePanel;
+    }
+
+    public void updateButtonStates(int diceValue, Color diceColor) {
+        // Disable all buttons initially
+        for (JButton button : booleanButtons.values()) {
+            button.setEnabled(false);
+        }
+
+        // Enable buttons based on dice value and color
+        int columnIndex = diceValue - 1;
+        for (int rowIndex = 0; rowIndex < 9; rowIndex++) {
+            JButton button = booleanButtons.get(rowIndex + "-" + columnIndex);
+            if (button != null && button.getBackground().equals(diceColor)) {
+                button.setEnabled(true);
+            }
+        }
     }
 }
