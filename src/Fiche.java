@@ -12,9 +12,9 @@ class Fiche {
     private ArrayList<String> adjacentBonuses = new ArrayList<>();
 
     public Fiche() {
-        listeHab.put(Couleur.ROUGE, 0);
-        listeHab.put(Couleur.JAUNE, 0);
-        listeHab.put(Couleur.BLANC,0);
+        listeHab.put(Couleur.ROUGE, 5);
+        listeHab.put(Couleur.JAUNE, 6);
+        listeHab.put(Couleur.BLANC,14);
 
         initialiserBatiments();
     }
