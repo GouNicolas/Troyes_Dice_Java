@@ -46,10 +46,16 @@ class Partie {
     Map<Joueur, FicheGUI> ficheGUIMap = new HashMap<>();
 
     for (Joueur joueur : listeJoueurs) {
-        FicheController ficheController = new FicheController(joueur.getFiche());
+        FicheController ficheController = new FicheController(joueur.getFiche(), joueur);
         FicheGUI ficheGUI = new FicheGUI(ficheController);
         ficheGUI.setVisible(true);
         ficheGUIMap.put(joueur, ficheGUI);
+    }
+
+    try {
+        Thread.sleep(1000); // 1 second delay
+    } catch (InterruptedException e) {
+        e.printStackTrace();
     }
 
     while (true) {
@@ -69,7 +75,7 @@ class Partie {
             System.out.println("Updating GUI for " + joueur.getPseudo());
             FicheGUI ficheGUI = ficheGUIMap.get(joueur);
             if (ficheGUI != null) {
-                ficheGUI.updateContent(joueur.getFiche());
+                ficheGUI.updateContent(joueur.getFiche(), joueur);
                 ficheGUI.revalidate();
                 ficheGUI.repaint();
             } else {
@@ -114,7 +120,7 @@ class Partie {
             }
             System.out.println("Updating GUI for " + joueur.getPseudo());
             if (ficheGUI != null) {
-                ficheGUI.updateContent(joueur.getFiche());
+                ficheGUI.updateContent(joueur.getFiche(), joueur);
                 ficheGUI.revalidate();
                 ficheGUI.repaint();
             } else {
@@ -140,14 +146,14 @@ class Partie {
         joueur.getFiche().afficherRessources(joueur);
         System.out.println("Voulez-vous modifier le dé ? (O/N)");
         String choix = scanner.nextLine();
-        if (choix.equalsIgnoreCase("O")) {
+        if (choix.equals("O")) {
             System.out.println("Voulez-vous modifier la couleur (C) ou la valeur (V) ou annuler (N) ?");
             choix = scanner.nextLine();
             if (choix.equalsIgnoreCase("C") && joueur.getInventaireRes().get(Ressources.CONNAISSANCE)>0) {
                 demanderModifierCouleur(joueur, de);
-            } else if (choix.equalsIgnoreCase("V") && joueur.getInventaireRes().get(Ressources.DRAPEAUX)>0) {
+            } else if (choix.equals("V") && joueur.getInventaireRes().get(Ressources.DRAPEAUX)>0) {
                 demanderModifierValeur(joueur, de);
-            } else if (choix.equalsIgnoreCase("N")) {
+            } else if (choix.equals("N")) {
                 demanderModifierDe(joueur, de);
             } else {
                 System.out.println("Choix invalide. Veuillez choisir entre C, V et N.");
@@ -210,6 +216,21 @@ class Partie {
         demanderModifierDe(joueur, de);
         }
 
+    public void Construire(Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {
+            int place = 1;
+            for (Batiment batiment : fiche.getListeBatiments()) {
+                CouleurDe batimentCouleurDe = CouleurDe.fromCouleur(batiment.getCouleur());
+                if (batimentCouleurDe == couleurDe) {
+                    place++;
+                }
+                if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment)) && !batiment.isConstruit()) {
+                    batiment.construire();
+                    System.out.println("Batiment de couleur " + couleurDe + " construit." + index + " ou " + ((index - 1) * 2 + typeBatiment));
+                    break;
+                }
+            }
+    }
+
     public void ConstruireChoix(int choix, Plateau plateau, Joueur joueur) {
         De deChoisi = TransformationChoixToIndex(choix);
         int index = deChoisi.getValeur();
@@ -220,18 +241,7 @@ class Partie {
 
         System.out.println(choix + ": " + deChoisi.getValeur() + " (" + couleurDe + ")");
         
-        int place = 1;
-        for (Batiment batiment : fiche.getListeBatiments()) {
-            CouleurDe batimentCouleurDe = CouleurDe.fromCouleur(batiment.getCouleur());
-            if (batimentCouleurDe == couleurDe) {
-            place++;
-            }
-            if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment)) && !batiment.isConstruit()) {
-            batiment.construire();
-            System.out.println("Batiment de couleur " + couleurDe + " construit." + index + " ou " + ((index - 1) * 2 + typeBatiment));
-            break;
-            }
-        }
+        Construire(fiche, couleurDe, index, typeBatiment);
 
         ajouterHabConstruction(joueur, couleurDe, index, typeBatiment);
     }
@@ -287,17 +297,7 @@ class Partie {
         }
 
 
-        int acc = 1;
-        for (Batiment batiment : fiche.getListeBatiments()) {
-            if (batiment.getCouleur() == couleurBatiment) {
-                acc++;
-            }
-            if (batiment.getCouleur() == couleurBatiment && acc == ((place) * 2 + typeBatiment) && !batiment.isConstruit()) {
-                batiment.construire();
-                System.out.println("Batiment de couleur " + couleurBatiment + " construit." + place + " ou " + ((acc - 1) * 2 + typeBatiment));
-                break;
-            }
-        }
+        Construire(fiche, CouleurDe.fromCouleur(couleurBatiment), place, typeBatiment);
 
         CouleurDe couleurFinale;
         if (couleurBatiment == Couleur.ROUGE) {
@@ -310,9 +310,6 @@ class Partie {
 
         ajouterHabConstruction(joueur, couleurFinale, place, typeBatiment);
     }
-
-
-
 
     public De TransformationChoixToIndex(int choix) {
         System.out.println(choix);
