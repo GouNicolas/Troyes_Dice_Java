@@ -46,19 +46,16 @@ public class FicheGUI extends JFrame {
 
         // Red rectangle
         JPanel redPanel = createColoredPanel(Color.RED, 0);
-        redPanel.setName("redPanel");
         fichePanel.add(redPanel);
 
         fichePanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel yellowPanel = createColoredPanel(Color.YELLOW, 1);
-        yellowPanel.setName("yellowPanel");
         fichePanel.add(yellowPanel);
 
         fichePanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel whitePanel = createColoredPanel(Color.WHITE, 2);
-        whitePanel.setName("whitePanel");
         fichePanel.add(whitePanel);
 
         // Add the new area with the left rectangle and the 3 lines
@@ -68,8 +65,30 @@ public class FicheGUI extends JFrame {
 
         fichePanel.revalidate();
         fichePanel.repaint();
+
         // Add the fiche panel to the main panel
         mainPanel.add(fichePanel, BorderLayout.CENTER);
+
+        // Add other components to fill the remaining space
+        JPanel leftPanel = new JPanel();
+        leftPanel.setPreferredSize(new Dimension(100, 600));
+        leftPanel.setBackground(Color.GRAY);
+        mainPanel.add(leftPanel, BorderLayout.WEST);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setPreferredSize(new Dimension(100, 600));
+        rightPanel.setBackground(Color.GRAY);
+        mainPanel.add(rightPanel, BorderLayout.EAST);
+
+        JPanel topPanel = new JPanel();
+        topPanel.setPreferredSize(new Dimension(800, 50));
+        topPanel.setBackground(Color.GRAY);
+        mainPanel.add(topPanel, BorderLayout.NORTH);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setPreferredSize(new Dimension(800, 50));
+        bottomPanel.setBackground(Color.GRAY);
+        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         add(mainPanel, BorderLayout.CENTER);
     }
@@ -296,7 +315,7 @@ public class FicheGUI extends JFrame {
         resourcesPanel.repaint();
     }
 
-    public void updateContent(Fiche fiche) {
+    public void updateContent(Fiche fiche, Joueur joueur) {
         fichePanel.removeAll(); // Clear the existing content
 
         // Re-add the title
@@ -305,6 +324,7 @@ public class FicheGUI extends JFrame {
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         controller.initialisermatrix(fiche);
+        controller.initialiserResources(joueur);
 
         fichePanel.add(titleLabel);
 

@@ -69,7 +69,7 @@ class Plateau {
         System.out.println("===========================================================");
     }
 
-    private void ModifierCouleurDeCouleurTuile(String currentCycle, int jour) {
+    public void ModifierCouleurDeCouleurTuile(String currentCycle, int jour) {
         int j = 0;
         int y = 0;
         trierListeDes();
