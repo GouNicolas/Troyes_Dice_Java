@@ -46,7 +46,7 @@ class Partie {
     Map<Joueur, FicheGUI> ficheGUIMap = new HashMap<>();
 
     for (Joueur joueur : listeJoueurs) {
-        FicheController ficheController = new FicheController(joueur.getFiche());
+        FicheController ficheController = new FicheController(joueur.getFiche(), joueur);
         FicheGUI ficheGUI = new FicheGUI(ficheController);
         ficheGUI.setVisible(true);
         ficheGUIMap.put(joueur, ficheGUI);

@@ -1,17 +1,23 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class FicheGUI extends JFrame {
     private FicheController controller;
     private List<JPanel> resourcesPanels;
     private JPanel fichePanel;
+    private Map<String, JLabel> smallCaseLabels;
 
     public FicheGUI(FicheController controller) {
         System.out.println("Creating FicheGUI");
         this.controller = controller;
         resourcesPanels = new ArrayList<>();
+        smallCaseLabels = new HashMap<>();
 
         setTitle("Fiche Information");
         setSize(800, 600);
@@ -25,7 +31,7 @@ public class FicheGUI extends JFrame {
         // Panel for the "fiche"
         fichePanel = new JPanel();
         fichePanel.setLayout(new BoxLayout(fichePanel, BoxLayout.Y_AXIS));
-        fichePanel.setBorder(BorderFactory.createTitledBorder("Fiche"));
+        fichePanel.setPreferredSize(new Dimension(500, 800));
 
         // Title
         JLabel titleLabel = new JLabel("Fiche", SwingConstants.CENTER);
@@ -38,20 +44,19 @@ public class FicheGUI extends JFrame {
 
         // Red rectangle
         JPanel redPanel = createColoredPanel(Color.RED, 0);
+        redPanel.setName("redPanel");
         fichePanel.add(redPanel);
 
-        // Add space between rectangles
         fichePanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        // Yellow rectangle
         JPanel yellowPanel = createColoredPanel(Color.YELLOW, 1);
+        yellowPanel.setName("yellowPanel");
         fichePanel.add(yellowPanel);
 
-        // Add space between rectangles
         fichePanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        // White rectangle
         JPanel whitePanel = createColoredPanel(Color.WHITE, 2);
+        whitePanel.setName("whitePanel");
         fichePanel.add(whitePanel);
 
         // Add the new area with the left rectangle and the 3 lines
@@ -59,11 +64,13 @@ public class FicheGUI extends JFrame {
         fichePanel.add(Box.createRigidArea(new Dimension(0, 10)));
         fichePanel.add(newAreaPanel);
 
+        fichePanel.revalidate();
+        fichePanel.repaint();
         // Add the fiche panel to the main panel
         mainPanel.add(fichePanel, BorderLayout.CENTER);
 
         // Add other components to fill the remaining space
-        JPanel leftPanel = new JPanel();
+        /*JPanel leftPanel = new JPanel();
         leftPanel.setPreferredSize(new Dimension(100, 600));
         leftPanel.setBackground(Color.GRAY);
         mainPanel.add(leftPanel, BorderLayout.WEST);
@@ -83,7 +90,7 @@ public class FicheGUI extends JFrame {
         bottomPanel.setBackground(Color.GRAY);
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-        add(mainPanel, BorderLayout.CENTER);
+        add(mainPanel, BorderLayout.CENTER);*/
     }
 
     private JPanel createColoredPanel(Color color, int rowIndex) {
@@ -120,21 +127,34 @@ public class FicheGUI extends JFrame {
             int booleanSquareWidth = (totalWidth - (smallCaseCount * smallCaseWidth)) / (6 + smallCaseCount);
 
             for (int j = 0; j < 6; j++) {
-                // Add JLabel with boolean value from the controller
+                // Add JButton with boolean value from the controller
                 boolean value = controller.getValue(rowIndex * 3 + i, j);
-                JLabel booleanLabel = new JLabel(String.valueOf(value), SwingConstants.CENTER);
-                booleanLabel.setBackground(color);
-                booleanLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                booleanLabel.setOpaque(true);
-                booleanLabel.setPreferredSize(new Dimension(booleanSquareWidth, 100)); // Adjust the size of the boolean square
+                JButton booleanButton = new JButton(String.valueOf(value));
+                booleanButton.setBackground(color);
+                booleanButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                booleanButton.setOpaque(true);
+                booleanButton.setPreferredSize(new Dimension(booleanSquareWidth, 100)); // Adjust the size of the boolean square
+
+                final int row = rowIndex * 3 + i;
+                final int col = j;
+                booleanButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        controller.setValue(row, col, true);
+                        booleanButton.setText("true");
+                        updateSmallCases(row, col);
+                        revalidate();
+                        repaint();
+                    }
+                });
 
                 gbc.gridx = j * 2;
                 gbc.weightx = 1.0;
-                linePanel.add(booleanLabel, gbc);
+                linePanel.add(booleanButton, gbc);
 
                 // Check if a small case should be added after this square
-                if (j < 5 && controller.hasSmallCase(rowIndex * 3 + i, j, j + 1)) {
-                    int smallCaseValue = controller.getSmallCaseValue(rowIndex * 3 + i, j, j + 1);
+                if (j < 5 && controller.hasSmallCase(row, j, j + 1)) {
+                    int smallCaseValue = controller.getSmallCaseValue(row, j, j + 1);
                     JLabel smallCaseLabel = new JLabel(String.valueOf(smallCaseValue), SwingConstants.CENTER);
                     smallCaseLabel.setBackground(Color.LIGHT_GRAY);
                     smallCaseLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -144,6 +164,9 @@ public class FicheGUI extends JFrame {
                     gbc.gridx = j * 2 + 1;
                     gbc.weightx = 0.1;
                     linePanel.add(smallCaseLabel, gbc);
+
+                    // Store reference to the small case label
+                    smallCaseLabels.put(row + "-" + j + "-" + (j + 1), smallCaseLabel);
                 }
             }
 
@@ -161,6 +184,19 @@ public class FicheGUI extends JFrame {
         resourcesPanels.add(resourcesPanel);
 
         return coloredPanel;
+    }
+
+    private void updateSmallCases(int row, int col) {
+        for (int j = 0; j < 5; j++) {
+            if (controller.getValue(row, j) && controller.getValue(row, j + 1)) {
+                int smallCaseValue = controller.getSmallCaseValue(row, j, j + 1);
+                // Update the small case value in the UI
+                JLabel smallCaseLabel = smallCaseLabels.get(row + "-" + j + "-" + (j + 1));
+                if (smallCaseLabel != null) {
+                    smallCaseLabel.setText(String.valueOf(smallCaseValue));
+                }
+            }
+        }
     }
 
     private JPanel createNewRectanglePanel() {
@@ -306,5 +342,9 @@ public class FicheGUI extends JFrame {
 
         fichePanel.revalidate();
         fichePanel.repaint();
+    }
+
+    public JPanel getMainPanel() {
+        return fichePanel;
     }
 }

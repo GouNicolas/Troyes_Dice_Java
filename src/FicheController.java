@@ -3,18 +3,53 @@ import java.util.Set;
 import java.util.List;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FicheController {
     private boolean[][] matrix;
     private Set<String> smallCaseCoordinates;
     private List<char[]> resources;
 
-    public FicheController(Fiche fiche) {
+    public FicheController(Fiche fiche, Joueur joueur) {
+        // int rows = 9;
+        // int cols = 6;
+        // matrix = new boolean[rows][cols];
+        // initialisermatrix(fiche);
+        // smallCaseCoordinates = new HashSet<>();
+        // // Add coordinates for small cases (example: between 0 and 1 of line 1)
+        // smallCaseCoordinates.add("1,0,1");
+        // smallCaseCoordinates.add("1,2,3");
+        // smallCaseCoordinates.add("1,4,5");
+        // smallCaseCoordinates.add("2,0,1");
+        // smallCaseCoordinates.add("2,4,5");
+        // smallCaseCoordinates.add("5,0,1");
+        // smallCaseCoordinates.add("5,2,3");
+        // smallCaseCoordinates.add("8,2,3");
+        // smallCaseCoordinates.add("8,4,5");
+
+        // // setValue(1, 0, true);
+        // // setValue(1, 1, true);
+
+        // // Initialize resources
+        // resources = new ArrayList<>();
+        // for (int i = 0; i < 3; i++) {
+        //     char[] resource = new char[21];
+        //     for (int j = 0; j < 21; j++) {
+        //         if (j == 6 || j == 13 || j == 20) {
+        //             resource[j] = 'A';
+        //         } else {
+        //             resource[j] = '0';
+        //         }
+        //     }
+        //     resources.add(resource);
+        // }
+
         int rows = 9;
         int cols = 6;
         matrix = new boolean[rows][cols];
-        initialisermatrix(fiche);
         smallCaseCoordinates = new HashSet<>();
+        resources = new ArrayList<>(); // Initialize the resources list
+
         // Add coordinates for small cases (example: between 0 and 1 of line 1)
         smallCaseCoordinates.add("1,0,1");
         smallCaseCoordinates.add("1,2,3");
@@ -26,22 +61,8 @@ public class FicheController {
         smallCaseCoordinates.add("8,2,3");
         smallCaseCoordinates.add("8,4,5");
 
-        // setValue(1, 0, true);
-        // setValue(1, 1, true);
-
-        // Initialize resources
-        resources = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            char[] resource = new char[21];
-            for (int j = 0; j < 21; j++) {
-                if (j == 6 || j == 13 || j == 20) {
-                    resource[j] = 'A';
-                } else {
-                    resource[j] = '0';
-                }
-            }
-            resources.add(resource);
-        }
+        initialisermatrix(fiche);
+        initialiserResources(joueur);
     }
 
     public void initialisermatrix(Fiche fiche) {
@@ -80,6 +101,47 @@ public class FicheController {
                     }
                 }
             }
+        }
+    }
+
+        public void initialiserResources(Joueur joueur) {
+        int nb_RessD = joueur.getInventaireRes().get(Ressources.DRAPEAUX);
+        int nb_RessO = joueur.getInventaireRes().get(Ressources.ARGENT);
+        int nb_RessC = joueur.getInventaireRes().get(Ressources.CONNAISSANCE);
+    
+        for (int i = 0; i < 3; i++) {
+            char[] resource = new char[21];
+            for (int j = 0; j < 21; j++) {
+                if (i == 0) {
+                    if (j == 6 || j == 13 || j == 20) {
+                        resource[j] = 'A';
+                    } else if (nb_RessD > 0) {
+                        resource[j] = 'R';
+                        nb_RessD--;
+                    } else {
+                        resource[j] = '0';
+                    }
+                } else if (i == 1) {
+                    if (j == 6 || j == 13 || j == 20) {
+                        resource[j] = 'B';
+                    } else if (nb_RessO > 0) {
+                        resource[j] = 'J';
+                        nb_RessO--;
+                    } else {
+                        resource[j] = '0';
+                    }
+                } else if (i == 2) {
+                    if (j == 6 || j == 13 || j == 20) {
+                        resource[j] = 'C';
+                    } else if (nb_RessC > 0) {
+                        resource[j] = 'B';
+                        nb_RessC--;
+                    } else {
+                        resource[j] = '0';
+                    }
+                }
+            }
+            resources.add(resource);
         }
     }
 
