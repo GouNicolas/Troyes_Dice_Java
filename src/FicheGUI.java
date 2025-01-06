@@ -12,12 +12,14 @@ public class FicheGUI extends JFrame {
     private List<JPanel> resourcesPanels;
     private JPanel fichePanel;
     private Map<String, JLabel> smallCaseLabels;
+    private Map<String, JButton> booleanButtons;
 
     public FicheGUI(FicheController controller) {
         System.out.println("Creating FicheGUI");
         this.controller = controller;
         resourcesPanels = new ArrayList<>();
         smallCaseLabels = new HashMap<>();
+        booleanButtons = new HashMap<>();
 
         setTitle("Fiche Information");
         setSize(800, 600);
@@ -44,19 +46,16 @@ public class FicheGUI extends JFrame {
 
         // Red rectangle
         JPanel redPanel = createColoredPanel(Color.RED, 0);
-        redPanel.setName("redPanel");
         fichePanel.add(redPanel);
 
         fichePanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel yellowPanel = createColoredPanel(Color.YELLOW, 1);
-        yellowPanel.setName("yellowPanel");
         fichePanel.add(yellowPanel);
 
         fichePanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel whitePanel = createColoredPanel(Color.WHITE, 2);
-        whitePanel.setName("whitePanel");
         fichePanel.add(whitePanel);
 
         // Add the new area with the left rectangle and the 3 lines
@@ -66,11 +65,12 @@ public class FicheGUI extends JFrame {
 
         fichePanel.revalidate();
         fichePanel.repaint();
+
         // Add the fiche panel to the main panel
         mainPanel.add(fichePanel, BorderLayout.CENTER);
 
         // Add other components to fill the remaining space
-        /*JPanel leftPanel = new JPanel();
+        JPanel leftPanel = new JPanel();
         leftPanel.setPreferredSize(new Dimension(100, 600));
         leftPanel.setBackground(Color.GRAY);
         mainPanel.add(leftPanel, BorderLayout.WEST);
@@ -90,7 +90,7 @@ public class FicheGUI extends JFrame {
         bottomPanel.setBackground(Color.GRAY);
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-        add(mainPanel, BorderLayout.CENTER);*/
+        add(mainPanel, BorderLayout.CENTER);
     }
 
     private JPanel createColoredPanel(Color color, int rowIndex) {
@@ -134,6 +134,7 @@ public class FicheGUI extends JFrame {
                 booleanButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 booleanButton.setOpaque(true);
                 booleanButton.setPreferredSize(new Dimension(booleanSquareWidth, 100)); // Adjust the size of the boolean square
+                booleanButton.setEnabled(false); // Initially disable all buttons
 
                 final int row = rowIndex * 3 + i;
                 final int col = j;
@@ -145,12 +146,20 @@ public class FicheGUI extends JFrame {
                         updateSmallCases(row, col);
                         revalidate();
                         repaint();
+
+                        //Disable all buttons
+                        for (JButton button : booleanButtons.values()) {
+                            button.setEnabled(false);
+                        }
                     }
                 });
 
                 gbc.gridx = j * 2;
                 gbc.weightx = 1.0;
                 linePanel.add(booleanButton, gbc);
+
+                // Store reference to the boolean button
+                booleanButtons.put(row + "-" + col, booleanButton);
 
                 // Check if a small case should be added after this square
                 if (j < 5 && controller.hasSmallCase(row, j, j + 1)) {
@@ -306,7 +315,7 @@ public class FicheGUI extends JFrame {
         resourcesPanel.repaint();
     }
 
-    public void updateContent(Fiche fiche) {
+    public void updateContent(Fiche fiche, Joueur joueur) {
         fichePanel.removeAll(); // Clear the existing content
 
         // Re-add the title
@@ -315,6 +324,7 @@ public class FicheGUI extends JFrame {
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         controller.initialisermatrix(fiche);
+        controller.initialiserResources(joueur);
 
         fichePanel.add(titleLabel);
 
@@ -346,5 +356,21 @@ public class FicheGUI extends JFrame {
 
     public JPanel getMainPanel() {
         return fichePanel;
+    }
+
+    public void updateButtonStates(int diceValue, Color diceColor) {
+        // Disable all buttons initially
+        for (JButton button : booleanButtons.values()) {
+            button.setEnabled(false);
+        }
+
+        // Enable buttons based on dice value and color
+        int columnIndex = diceValue - 1;
+        for (int rowIndex = 0; rowIndex < 9; rowIndex++) {
+            JButton button = booleanButtons.get(rowIndex + "-" + columnIndex);
+            if (button != null && button.getBackground().equals(diceColor)) {
+                button.setEnabled(true);
+            }
+        }
     }
 }
