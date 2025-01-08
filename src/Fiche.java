@@ -161,7 +161,6 @@ class Fiche {
                     }
                     rang = rang + 2;
                 }
-            }
         }
 
             System.out.println();
