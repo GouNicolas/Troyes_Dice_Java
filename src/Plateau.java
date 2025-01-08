@@ -36,6 +36,11 @@ class Plateau {
     }
 
     public void afficherPlateau(String currentCycle, int jour) {
+        System.out.println("AAAAAAAAAAAAAAAAA " + 0 + " " + RangDetoRangTuile(currentCycle, jour, 0));
+        System.out.println("BBBBBBBBBBBBBBBBB " + 1 + " " + RangDetoRangTuile(currentCycle, jour, 1));
+        System.out.println("CCCCCCCCCCCCCCCCC " + 2 + " " + RangDetoRangTuile(currentCycle, jour, 2));
+        System.out.println("DDDDDDDDDDDDDDDDD " + 3 + " " + RangDetoRangTuile(currentCycle, jour, 3));
+
         ModifierCouleurDeCouleurTuile(currentCycle, jour);
         System.out.println("===========================================================");
         System.out.println("                     Plateau de jeu     ");
@@ -67,6 +72,24 @@ class Plateau {
         System.out.println("===========================================================");
         System.out.printf("       Cycle actuel : %s %d                        \n", currentCycle, jour);
         System.out.println("===========================================================");
+    }
+
+    // Ici Nicolas
+    public int RangDetoRangTuile(String currentCycle, int jour, int rangDe) {
+        trierListeDes();
+        int temp = 0;
+        if (currentCycle.equals("Jour")) {
+            temp = jour;
+        } else {
+            temp = jour + 4;
+        }
+
+        int rang = rangDe + temp;
+        if (rang >= MAX_TUILES) {
+            rang = rang - MAX_TUILES;
+        }
+
+        return rang + 1;
     }
 
     public void ModifierCouleurDeCouleurTuile(String currentCycle, int jour) {
