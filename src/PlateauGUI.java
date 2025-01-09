@@ -30,6 +30,7 @@ public class PlateauGUI extends JPanel {
     private static final double TUILE_SCALE = 0.45; // Increased from 0.35 to 0.45
     private static final int DICE_SQUARE_SIZE = 30; // Size of the dice indicator square
     private Plateau_control controller;
+    private JLabel cycleLabel;
 
     public PlateauGUI(Plateau plateau, Partie partie) {
         this.plateau = plateau;
@@ -43,6 +44,15 @@ public class PlateauGUI extends JPanel {
         errorLabel.setForeground(Color.RED);
         errorLabel.setVisible(false);
         add(errorLabel);
+
+        // Initialize cycle label
+        cycleLabel = new JLabel("", SwingConstants.CENTER);
+        add(cycleLabel, BorderLayout.NORTH);
+
+        // Initialize refresh button
+        JButton refreshButton = new JButton("Refresh");
+        refreshButton.addActionListener(e -> refreshPlateau());
+        add(refreshButton, BorderLayout.SOUTH);
         
         // Load background images
         loadImages();
@@ -301,5 +311,10 @@ public class PlateauGUI extends JPanel {
 
     public void updateGUI() {
         controller.updateGUI();
+        cycleLabel.setText(partie.currentCycle + " - Tour " + partie.getJours());
+    }
+
+    private void refreshPlateau() {
+        updateGUI();
     }
 }

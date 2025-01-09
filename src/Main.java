@@ -13,7 +13,7 @@ public class Main {
             partie.ajouterJoueur(joueur1);
             
             // Create FenetrePrincipale before starting the game
-            FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(partie.getPlateau(), partie);
+            FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(partie.getPlateau(), partie, new FicheController(new Fiche(), joueur1));
             
             partie.startGame();
     }

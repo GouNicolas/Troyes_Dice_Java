@@ -68,7 +68,7 @@ public class Plateau_control {
     public void synchronizeRotation() {
         int totalCycles = (partie.getJours() - 1);
         double angle = totalCycles * 40;
-
+        
         if (partie.currentCycle.equals("Nuit")) {
             premireNuitpassee = true;
         }
