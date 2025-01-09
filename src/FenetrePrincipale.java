@@ -3,6 +3,8 @@ import java.awt.*;
 
 public class FenetrePrincipale extends JFrame {
     private static final Dimension MIN_SIZE = new Dimension(800, 400);
+    private static final Dimension FICHE_GUI_MIN_SIZE = new Dimension(300, 400); // Reduced minimum width
+    private static final Dimension DEFAULT_SIZE = new Dimension(1200, 600); // More reasonable default size
     private PlateauGUI plateauGUI;
     private Plateau plateau;
     private Partie partie;
@@ -14,7 +16,7 @@ public class FenetrePrincipale extends JFrame {
         this.partie = partie;
         
         // Setup window
-        setSize(1200, 600);
+        setSize(DEFAULT_SIZE);  // Set default size using variable
         setMinimumSize(MIN_SIZE);  // Set minimum size using variable
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainLayout = new BorderLayout();
@@ -29,23 +31,26 @@ public class FenetrePrincipale extends JFrame {
         JPanel columnsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
         // Add PlateauGUI to the first column
         this.plateauGUI = new PlateauGUI(plateau, partie);
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.weightx = 0.4; // Ensure column 1 takes at least 40% of the width
         columnsPanel.add(plateauGUI, gbc);
 
         // Add an empty column in the middle
         JPanel emptyPanel = new JPanel();
         gbc.gridx = 1;
+        gbc.weightx = 0.4; // Ensure column 2 takes at least 40% of the width
         columnsPanel.add(emptyPanel, gbc);
 
         // Add FicheGUI to the third column
         FicheGUI ficheGUIPanel = new FicheGUI(ficheController);
+        ficheGUIPanel.setMinimumSize(FICHE_GUI_MIN_SIZE); // Set minimum size for FicheGUI
         gbc.gridx = 2;
+        gbc.weightx = 0.6; // Ensure FicheGUI takes up to 60% of the width
         columnsPanel.add(ficheGUIPanel.getMainPanel(), gbc);
 
         mainPanel.add(columnsPanel, BorderLayout.CENTER);

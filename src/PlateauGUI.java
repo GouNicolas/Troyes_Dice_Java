@@ -28,9 +28,9 @@ public class PlateauGUI extends JPanel {
     private static final double BACKGROUND_SCALE = 1.0; // 100% of panel size for background
     private static final double NONAGON_SCALE = 0.9; // 90% of tour radius
     private static final double TUILE_SCALE = 0.45; // Increased from 0.35 to 0.45
-    private static final int DICE_SQUARE_SIZE = 30; // Size of the dice indicator square
     private Plateau_control controller;
     private JLabel cycleLabel;
+    private static final Dimension MIN_SIZE = new Dimension(400, 400);
 
     public PlateauGUI(Plateau plateau, Partie partie) {
         this.plateau = plateau;
@@ -38,6 +38,7 @@ public class PlateauGUI extends JPanel {
         this.tuileRectangles = new ArrayList<>();
         this.controller = new Plateau_control(plateau, partie, this);
         setPreferredSize(new Dimension(PANEL_SIZE, PANEL_SIZE));
+        setMinimumSize(MIN_SIZE); // Set minimum size
         
         // Initialize error label
         errorLabel = new JLabel("Image could not be loaded", JLabel.CENTER);
@@ -172,35 +173,36 @@ public class PlateauGUI extends JPanel {
     }
 
     private void drawDiceIndicator(Graphics2D g2d, De de, int x, int y, int size) {
-        int squareX = x + size - DICE_SQUARE_SIZE - 5;
-        int squareY = y + 5;
+        int diceSquareSize = size / 2; // Make dice size half the size of the tile
+        int squareX = x + (size - diceSquareSize) / 2; // Center the dice horizontally
+        int squareY = y + (size - diceSquareSize) / 2; // Center the dice vertically
 
         if (de.getCouleur() == CouleurDe.NOIR) {
             g2d.setColor(Color.BLACK);
-            g2d.fillRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+            g2d.fillRect(squareX, squareY, diceSquareSize, diceSquareSize);
             g2d.setColor(Color.WHITE); // White text for black background
         } else if (de.getCouleur() == CouleurDe.TRANSPARENT) {
             g2d.setColor(new Color(255, 255, 255, 128)); // Semi-transparent white
-            g2d.fillRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+            g2d.fillRect(squareX, squareY, diceSquareSize, diceSquareSize);
             g2d.setColor(Color.BLACK);
         } else {
             g2d.setColor(getCouleurFromEnum(Couleur.fromCouleurDe(de.getCouleur())));
-            g2d.fillRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+            g2d.fillRect(squareX, squareY, diceSquareSize, diceSquareSize);
             g2d.setColor(Color.BLACK);
         }
 
         // Draw dice value
-        g2d.setFont(new Font("Arial", Font.BOLD, DICE_SQUARE_SIZE / 2));
+        g2d.setFont(new Font("Arial", Font.BOLD, diceSquareSize / 2));
         String diceValue = String.valueOf(de.getValeur());
         FontMetrics fm = g2d.getFontMetrics();
-        int textX = squareX + (DICE_SQUARE_SIZE - fm.stringWidth(diceValue)) / 2;
-        int textY = squareY + (DICE_SQUARE_SIZE + fm.getAscent()) / 2;
+        int textX = squareX + (diceSquareSize - fm.stringWidth(diceValue)) / 2;
+        int textY = squareY + (diceSquareSize + fm.getAscent()) / 2;
         g2d.drawString(diceValue, textX, textY);
 
         // Draw square border
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(1));
-        g2d.drawRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+        g2d.drawRect(squareX, squareY, diceSquareSize, diceSquareSize);
     }
 
     private void drawNonagonAndTuiles(Graphics2D g2d, int panelSize) {
@@ -253,7 +255,7 @@ public class PlateauGUI extends JPanel {
             g2d.setColor(getCouleurFromEnum(tuile.getCouleur()));
             g2d.fill(rect);
 
-            // Draw dice indicator in top-right corner if applicable
+            // Draw dice indicator in the center of the tile
             for (int j = 0; j < plateau.getListesDes().size(); j++) {
                 int dicePosition = (firstDicePosition + j) % 9;
                 if (dicePosition == adjustedIndex) {
@@ -286,7 +288,7 @@ public class PlateauGUI extends JPanel {
 
     @Override
     public Dimension getMinimumSize() {
-        return new Dimension(PANEL_SIZE/2, PANEL_SIZE/2);
+        return MIN_SIZE;
     }
 
     private void deSelectionne(int index) {
