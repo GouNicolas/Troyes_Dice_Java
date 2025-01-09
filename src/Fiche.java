@@ -177,12 +177,12 @@ class Fiche {
             rang = 1;
             // Second layer for BatimentPeon
             System.out.print("|");
-            for (Batiment batiment : listeBatiments) {
-                if (batiment instanceof BatimentPeon && batiment.couleur == couleur) {
-                    if (batiment.isDetruit()) {
+            for (Batiment batiments : listeBatiments) {
+                if (batiments instanceof BatimentPeon && batiments.couleur == couleur) {
+                    if (batiments.isDetruit()) {
                         System.out.print("  X  |");
                     }
-                    else if (batiment.construit) {
+                    else if (batiments.construit) {
                         if (listeBatiments.get(rang).construit) {
                             System.out.print("[(2)]|");
                         }
@@ -225,6 +225,7 @@ class Fiche {
         System.out.println("================================================");
         for (Map.Entry<Couleur, Integer> entry : listeHab.entrySet()) {
             System.out.println("| " + entry.getKey() + ": " + entry.getValue() + " |");
+        }
         }
     }
     

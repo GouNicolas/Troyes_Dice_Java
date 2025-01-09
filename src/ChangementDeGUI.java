@@ -229,11 +229,11 @@ class ChangementDeGUI extends JPanel {
     }
 
     public int getLockedDiceValue() {
-        return initialNumber;
+        return lockedNumber;
     }
 
     public Color getLockedDiceColor() {
-        return initialColor;
+        return lockedColor;
     }
 
     public void rerollDice() {
