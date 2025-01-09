@@ -58,14 +58,10 @@ class Plateau {
                 temp = jour + 4;
             }
 
-            if (temp + 3 >= MAX_TUILES && y < temp + 4 - MAX_TUILES) {
-                System.out.println("De " + (y+1) + ": " + listesDes.get(MAX_DES - (4-y) + (- temp + MAX_TUILES)).getValeur() + " (" + listesDes.get(MAX_DES - (4-y) + (- temp + MAX_TUILES)).getCouleur() + ") " + showCout(MAX_DES - (4-y) + (- temp + MAX_TUILES)));
-                y += 1;
-                
-            }
-            if ((i >= temp) && (j < listesDes.size())) {
-                System.out.println("De "+ (j+1) + ": " + listesDes.get(j).getValeur() + " (" + listesDes.get(j).getCouleur() + ") "  + showCout(j));
-                j += 1;
+            for (int t=0; t < listesDes.size(); t++) {
+                if (i == RangDetoRangTuile(currentCycle, jour, t)) {
+                    System.out.println("De " + (t+1) + ": " + listesDes.get(t).getValeur() + " (" + listesDes.get(t).getCouleur() + ") " + showCout(t));
+                }
             }
         }
         System.out.println("");
@@ -89,33 +85,15 @@ class Plateau {
             rang = rang - MAX_TUILES;
         }
 
-        return rang + 1;
+        return rang;
     }
 
     public void ModifierCouleurDeCouleurTuile(String currentCycle, int jour) {
-        int j = 0;
-        int y = 0;
         trierListeDes();
 
-        for (int i = 0; i < listeTuiles.size(); i++) {
-            int temp = 0;
-            if (currentCycle.equals("Jour")) {
-                temp = jour;
-            } else {
-                temp = jour + 4;
-            }
-
-            if (temp + 3 >= MAX_TUILES && y < temp + 4 - MAX_TUILES ) {
-                if (listesDes.get(MAX_DES - (4-y) + (- temp + MAX_TUILES)).getCouleur() != CouleurDe.NOIR) {
-                    listesDes.get(MAX_DES - (4-y) + (- temp + MAX_TUILES)).setCouleur(CouleurDe.fromCouleur(listeTuiles.get(i).getCouleur()));
-                }
-                y += 1;
-            }
-            if ((i >= temp) && (j < listesDes.size())) {
-                if (listesDes.get(j).getCouleur() != CouleurDe.NOIR) {
-                    listesDes.get(j).setCouleur(CouleurDe.fromCouleur(listeTuiles.get(i).getCouleur()));
-                }
-                j += 1;
+        for (int i = 0; i < listesDes.size(); i++) {
+            if (listesDes.get(i).getCouleur() != CouleurDe.NOIR) {
+                listesDes.get(i).setCouleur(CouleurDe.fromCouleur(this.listeTuiles.get(RangDetoRangTuile(currentCycle, jour, i)).getCouleur()));
             }
         }
     }
