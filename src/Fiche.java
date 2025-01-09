@@ -8,12 +8,9 @@ class Fiche {
     private HashMap<Couleur, Integer> listeHab = new HashMap<>();
     private ArrayList<Batiment> listeBatiments = new ArrayList<>();
     private LinkedHashMap<Batiment, String> listeDesBonusBatiments = new LinkedHashMap<>();
-    private HashMap<Couleur, List<Integer>> listeDesBonusBatimentsAdjacent = new HashMap<>();
+    private ArrayList<BonusAdjacent> listeBonusAdjacent = new ArrayList<>();
 
     public Fiche() {
-        listeHab.put(Couleur.ROUGE, 0);
-        listeHab.put(Couleur.JAUNE, 0);
-        listeHab.put(Couleur.BLANC,0);
         listeHab.put(Couleur.ROUGE, 0);
         listeHab.put(Couleur.JAUNE, 0);
         listeHab.put(Couleur.BLANC,0);
@@ -42,19 +39,22 @@ class Fiche {
         return listeDesBonusBatiments;
     }
 
-    public HashMap<Couleur, List<Integer>> getListeDesBonusBatimentsAdjacent() {
-        return listeDesBonusBatimentsAdjacent;
+    public ArrayList<BonusAdjacent> getListeBonusAdjacent() {
+        return listeBonusAdjacent;
     }
 
     private void initailiserDesBonusBatimentsAdjacent() {
-        // Couleur[] couleurs = {Couleur.ROUGE, Couleur.JAUNE, Couleur.BLANC};
-        // for (Couleur couleur : couleurs) {
-        //     List<Integer> liste = new ArrayList<>();
-        //     for (int i = 0; i < 6; i++) {
-        //         liste.add(i);
-        //     }
-        //     listeDesBonusBatimentsAdjacent.put(couleur, liste);
-        // }
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 0, 2, Ressources_Bonus.DEUX_HAB_ROUGE));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 1, 3, Ressources_Bonus.UN_HAB_ROUGE));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 5, 7, Ressources_Bonus.UN_HAB_JAUNE));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 8, 10, Ressources_Bonus.TROIS_DRAPEAUX));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 9, 11, Ressources_Bonus.UN_HAB_BLANC));
+
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.JAUNE, 0, 2, Ressources_Bonus.TROIS_ARGENTS));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.JAUNE, 4, 6, Ressources_Bonus.DEUX_HAB_JAUNE));
+
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.BLANC, 4, 6, Ressources_Bonus.TROIS_CONNAISSANCES));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.BLANC, 8, 10, Ressources_Bonus.DEUX_HAB_BLANC));
     }
 
     private void initialiserBatiments() {
