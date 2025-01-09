@@ -9,7 +9,7 @@ public class GUIComplet extends JFrame {
         setLayout(new BorderLayout());
 
         // Create the FicheGUI panel
-        FicheGUI ficheGUIPanel = new FicheGUI(ficheController,null);
+        FicheGUI ficheGUIPanel = new FicheGUI(ficheController);
 
         // Create the ChangementDeGUI panel
         ChangementDeGUI changementDeGUIPanel = new ChangementDeGUI(ficheGUIPanel);

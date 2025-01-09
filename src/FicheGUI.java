@@ -15,8 +15,7 @@ public class FicheGUI extends JFrame {
     private Map<String, JLabel> smallCaseLabels;
     private Map<String, JButton> booleanButtons;
     
-    public FicheGUI(FicheController controller, ChangementDeGUI changementDeGUIPanel) {
-        this.changementDeGUIPanel = changementDeGUIPanel;
+    public FicheGUI(FicheController controller) {
         this.controller = controller;
         resourcesPanels = new ArrayList<>();
         smallCaseLabels = new HashMap<>();
