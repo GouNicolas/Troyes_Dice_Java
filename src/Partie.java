@@ -82,8 +82,6 @@ class Partie {
                     ConstruireArbitraire(1, plateau, joueur, CouleurDe.ROUGE);
                     joueur.setBonusPrestigeRouge(true);
                 }
-
-                System.out.println("Updating GUI for " + joueur.getPseudo());
                 //joueur.calculerScore();
                 FicheGUI ficheGUI = ficheGUIMap.get(joueur);
                 if (ficheGUI != null) {
@@ -140,7 +138,6 @@ class Partie {
                         }
                     }
                 }
-                System.out.println("Updating GUI for " + joueur.getPseudo());
                 if (ficheGUI != null) {
                     ficheGUI.updateContent(joueur.getFiche(), joueur);
                     ficheGUI.revalidate();
@@ -157,7 +154,6 @@ class Partie {
                 }
             }
             if (jours == 8 && currentCycle.equals("Nuit")) {
-                System.out.println("Fin de la partie.");
                 for (Joueur joueur : listeJoueurs) {
                     int SC = joueur.calculerScore();
                     System.out.println("Score de " + joueur.getPseudo() + " : " + SC);
@@ -380,9 +376,7 @@ class Partie {
     }
 
     public De TransformationChoixToIndex(int choix) {
-        System.out.println(choix);
         ArrayList<De> listesDes = plateau.getListesDes();
-        System.out.println(listesDes.get(choix - 1).getValeur() + " " + listesDes.get(choix - 1).getCouleur());
         return listesDes.get(choix - 1);
     }
 
@@ -531,14 +525,11 @@ class Partie {
             temp = (jours + 4+placeListeDe)%9;
         }
         int place=0;
-        System.out.println("DEBUG " + plateau.getListeTuiles().get(temp).getCouleur() + " ");
         for (Batiment batiment : listeBatiments) {
             if (batiment.getCouleur() == plateau.getListeTuiles().get(temp).getCouleur()) {
                 if ((place==(de.getValeur()-1)*2+1 || place==(de.getValeur()-1)*2) && !listeBatiments.get((de.getValeur()-1)*2+1).isConstruit() && !batiment.isConstruit()){
                     System.out.println("Destruction des batiment de couleur " + plateau.getListeTuiles().get(temp).getCouleur() + "de la " + de.getValeur() + "eme place "+ de.getValeur() + " ");
                     batiment.detruire();
-                } else {
-                    System.out.println("CA KASSE PAS");
                 }
                 place++;
             }

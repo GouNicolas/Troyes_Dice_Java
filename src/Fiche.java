@@ -36,8 +36,8 @@ class Fiche {
 
     public void ajouterCathedrale(int place, int quantieme){
         listeCathedrales.set(place, quantieme);
-        System.out.println("Cathédrale placée en position " + place + "de la liste, c'est la " + quantieme+"eme");
-        System.out.println("Liste des cathédrales : " + listeCathedrales);
+        // System.out.println("Cathédrale placée en position " + place + "de la liste, c'est la " + quantieme+"eme");
+        // System.out.println("Liste des cathédrales : " + listeCathedrales);
     }
 
     public List<Integer> getListeCathedrales() {
