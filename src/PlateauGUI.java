@@ -35,6 +35,7 @@ public class PlateauGUI extends JPanel {
         this.plateau = plateau;
         this.partie = partie;
         this.tuileRectangles = new ArrayList<>();
+        this.controller = new Plateau_control(plateau, partie, this);
         setPreferredSize(new Dimension(PANEL_SIZE, PANEL_SIZE));
         
         // Initialize error label
@@ -98,6 +99,23 @@ public class PlateauGUI extends JPanel {
         if (tourAngle >= 360) {
             tourAngle -= 360; // Reset after full rotation
         }
+        repaint();
+    }
+
+    public void setTourAngle(double angle) {
+        this.tourAngle = angle % 360;
+        repaint();
+    }
+
+    public void flipToNight() {
+        int w = tourImage.getWidth();
+        int h = tourImage.getHeight();
+        BufferedImage flipped = new BufferedImage(w, h, tourImage.getType());
+        Graphics2D g2d = flipped.createGraphics();
+        
+        g2d.drawImage(tourImage, 0, 0, w, h, w, 0, 0, h, null);
+        g2d.dispose();
+        tourImage = flipped;
         repaint();
     }
 
@@ -206,30 +224,34 @@ public class PlateauGUI extends JPanel {
         g2d.setStroke(new BasicStroke(2));
         g2d.drawPolygon(xPoints, yPoints, 9);
 
+        int firstDicePosition = controller.positionPremierDe();
+
         // Draw tuiles
         for (int i = 0; i < plateau.getListeTuiles().size() && i < 9; i++) {
-            Tuile tuile = plateau.getListeTuiles().get(i);
+            int adjustedIndex = (i + 5) % 9; // Adjust index to start from position 5
+            Tuile tuile = plateau.getListeTuiles().get(adjustedIndex);
             int x = (int)(points[i].x - scaledTuileSize/2);
             int y = (int)(points[i].y - scaledTuileSize/2);
-            
+
             Rectangle2D rect = new Rectangle2D.Double(x, y, scaledTuileSize, scaledTuileSize);
             tuileRectangles.add(rect);
-            
+
             // Draw tuile with shadow effect
             g2d.setColor(new Color(0, 0, 0, 32));
             g2d.fillRect(x + 2, y + 2, scaledTuileSize, scaledTuileSize);
-            
+
             g2d.setColor(getCouleurFromEnum(tuile.getCouleur()));
             g2d.fill(rect);
-            
+
             // Draw dice indicator in top-right corner if applicable
             for (int j = 0; j < plateau.getListesDes().size(); j++) {
                 int dicePosition = (firstDicePosition + j) % 9;
                 if (dicePosition == adjustedIndex) {
                     De de = plateau.getListesDes().get(j);
-                drawDiceIndicator(g2d, de, x, y, scaledTuileSize);
+                    drawDiceIndicator(g2d, de, x, y, scaledTuileSize);
+                }
             }
-            
+
             // Enhanced border drawing
             if (i == selectedTuileIndex) {
                 g2d.setColor(new Color(0, 128, 255, 200));
@@ -239,7 +261,7 @@ public class PlateauGUI extends JPanel {
                 g2d.setStroke(new BasicStroke(Math.max(1, panelSize/600)));
             }
             g2d.draw(rect);
-            
+
             // Improved text rendering
             g2d.setColor(Color.BLACK);
             int fontSize = Math.max(10, scaledTuileSize/4);
@@ -251,8 +273,6 @@ public class PlateauGUI extends JPanel {
             g2d.drawString(couleurRetournee, textX, textY);
         }
     }
-
-    
 
     @Override
     public Dimension getMinimumSize() {
@@ -277,5 +297,9 @@ public class PlateauGUI extends JPanel {
 
     public Plateau getPlateau() {
         return plateau;
+    }
+
+    public void updateGUI() {
+        controller.updateGUI();
     }
 }

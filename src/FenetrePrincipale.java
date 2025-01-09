@@ -6,6 +6,7 @@ public class FenetrePrincipale extends JFrame {
     private Plateau plateau;
     private Partie partie;
     private BorderLayout mainLayout;
+    private JLabel cycleLabel;
 
     public FenetrePrincipale(Plateau plateau, Partie partie) {
         super("Troyes Dice Game");
@@ -49,15 +50,16 @@ public class FenetrePrincipale extends JFrame {
         JPanel northPanel = new JPanel(new GridLayout(1, 3));
         northPanel.add(new JPanel()); // Empty panel for column 1
         
-        northPanel.add(new JLabel("Joueur_infos", SwingConstants.CENTER)); // Column 2
+        cycleLabel = new JLabel("", SwingConstants.CENTER); // Column 2
+        northPanel.add(cycleLabel);
         
         northPanel.add(new JPanel()); // Empty panel for column 3
         mainPanel.add(northPanel, BorderLayout.NORTH);
 
-        // Add rotate button
-        JButton rotateButton = new JButton("Rotate Tour");
-        rotateButton.addActionListener(e -> rotateTour());
-        mainPanel.add(rotateButton, BorderLayout.SOUTH);
+        // Add refresh button
+        JButton refreshButton = new JButton("Refresh");
+        refreshButton.addActionListener(e -> refreshPlateau());
+        mainPanel.add(refreshButton, BorderLayout.SOUTH);
 
         // Add main panel to frame
         add(mainPanel);
@@ -68,11 +70,8 @@ public class FenetrePrincipale extends JFrame {
         setVisible(true);
     }
 
-    public void rotateTour() {
-        plateauGUI.rotateTour();
-    }
-
     public void refreshPlateau() {
-        plateauGUI.repaint();
+        plateauGUI.updateGUI();
+        cycleLabel.setText(partie.currentCycle + " - Tour " + partie.getJours());
     }
 }
