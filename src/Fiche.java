@@ -9,18 +9,40 @@ class Fiche {
     private ArrayList<Batiment> listeBatiments = new ArrayList<>();
     private LinkedHashMap<Batiment, String> listeDesBonusBatiments = new LinkedHashMap<>();
     private HashMap<Couleur, List<Integer>> listeDesBonusBatimentsAdjacent = new HashMap<>();
+    private List<Integer> listeCathedrales; //liste toutes les cathédrales et leur ordre de construction. tout est initialisé a 0.
 
     public Fiche() {
         listeHab.put(Couleur.ROUGE, 0);
         listeHab.put(Couleur.JAUNE, 0);
         listeHab.put(Couleur.BLANC,0);
-        listeHab.put(Couleur.ROUGE, 0);
-        listeHab.put(Couleur.JAUNE, 0);
-        listeHab.put(Couleur.BLANC,0);
+        listeCathedrales = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            listeCathedrales.add(0);
+        }
 
         initialiserBatiments();
         initailiserDesBonusBatimentsAdjacent();
     }
+
+    int getNBCathedrales(){
+        int nbCathedrales = 0;
+        for (int i = 0; i < 6; i++) {
+            if (listeCathedrales.get(i) !=0) {
+                nbCathedrales++;
+            }
+        }
+        return nbCathedrales;
+    }
+
+    public void ajouterCathedrale(int place, int quantieme){
+        listeCathedrales.set(place, quantieme);
+        System.out.println("Cathédrale placée en position " + place + "de la liste, c'est la " + quantieme+"eme");
+        System.out.println("Liste des cathédrales : " + listeCathedrales);
+    }
+
+    public List<Integer> getListeCathedrales() {
+        return listeCathedrales;
+    } 
 
     public ArrayList<Batiment> getListeBatiments() {
         return listeBatiments;
@@ -28,6 +50,14 @@ class Fiche {
 
     public HashMap<Couleur, Integer> getListeHab() {
         return listeHab;
+    }
+
+    public int getNombreHab() {
+        int total = 0;
+        for (Map.Entry<Couleur, Integer> entry : listeHab.entrySet()) {
+            total += entry.getValue();
+        }
+        return total;
     }
 
     public int getNombreHab(Couleur couleur) {

@@ -16,5 +16,7 @@ public class Main {
             FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(partie.getPlateau(), partie);
             
             partie.startGame();
+            System.out.println("Fin de la partie. mais genre l'autre");
+            return;
     }
 }
