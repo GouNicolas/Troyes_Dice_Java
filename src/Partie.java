@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -11,7 +12,7 @@ class Partie {
 
     public Partie() {
         this.plateau = new Plateau();
-        this.jours = 3;
+        this.jours = 1;
         this.currentCycle = "Jour";
     }
 
@@ -45,18 +46,18 @@ class Partie {
     public void startGame() {
         Map<Joueur, FicheGUI> ficheGUIMap = new HashMap<>();
 
-    for (Joueur joueur : listeJoueurs) {
-        FicheController ficheController = new FicheController(joueur.getFiche(), joueur);
-        FicheGUI ficheGUI = new FicheGUI(ficheController);
-        ficheGUI.setVisible(true);
-        ficheGUIMap.put(joueur, ficheGUI);
-    }
+        for (Joueur joueur : listeJoueurs) {
+            FicheController ficheController = new FicheController(joueur.getFiche(), joueur);
+            FicheGUI ficheGUI = new FicheGUI(ficheController);
+            ficheGUI.setVisible(true);
+            ficheGUIMap.put(joueur, ficheGUI);
+        }
 
-    try {
-        Thread.sleep(1000); // 1 second delay
-    } catch (InterruptedException e) {
-        e.printStackTrace();
-    }
+        try {
+            Thread.sleep(1000); // 1 second delay
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         while (true) {
             for (Joueur joueur : listeJoueurs) {
@@ -81,20 +82,19 @@ class Partie {
                     ConstruireArbitraire(1, plateau, joueur, CouleurDe.ROUGE);
                     joueur.setBonusPrestigeRouge(true);
                 }
-
-            System.out.println("Updating GUI for " + joueur.getPseudo());
-            FicheGUI ficheGUI = ficheGUIMap.get(joueur);
-            if (ficheGUI != null) {
-                ficheGUI.updateContent(joueur.getFiche(), joueur);
-                ficheGUI.revalidate();
-                ficheGUI.repaint();
-            } else {
-                System.err.println("FicheGUI is null for " + joueur.getPseudo());
-            }
-            
-            plateau.lancerDe();
-            tourDeJeu(joueur);
-            int choix = plateau.demanderChoixDe();
+                //joueur.calculerScore();
+                FicheGUI ficheGUI = ficheGUIMap.get(joueur);
+                if (ficheGUI != null) {
+                    ficheGUI.updateContent(joueur.getFiche(), joueur);
+                    ficheGUI.revalidate();
+                    ficheGUI.repaint();
+                } else {
+                    System.err.println("FicheGUI is null for " + joueur.getPseudo());
+                }
+                
+                plateau.lancerDe();
+                tourDeJeu(joueur);
+                int choix = plateau.demanderChoixDe();
 
                 while (plateau.checkRessourcesAchat(joueur, choix) == 1) {
                     choix = plateau.demanderChoixDe();
@@ -137,10 +137,7 @@ class Partie {
                             tmp++;
                         }
                     }
-
-                    prochainTour();
                 }
-                System.out.println("Updating GUI for " + joueur.getPseudo());
                 if (ficheGUI != null) {
                     ficheGUI.updateContent(joueur.getFiche(), joueur);
                     ficheGUI.revalidate();
@@ -148,17 +145,27 @@ class Partie {
                 } else {
                     System.err.println("FicheGUI is null for " + joueur.getPseudo());
                 }
-
-
+                
+                
                 try {
                     Thread.sleep(1000); // 1 second delay
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            if (jours == 8 && currentCycle.equals("Nuit")) {
+                for (Joueur joueur : listeJoueurs) {
+                    int SC = joueur.calculerScore();
+                    System.out.println("Score de " + joueur.getPseudo() + " : " + SC);
+                }
+                return;
+            }
+            if (currentCycle != "Nuit" || jours != 8){
+                prochainTour();
+            }
         }
     }
-
+    
     
 
     public void demanderModifierDe(Joueur joueur, De de) {
@@ -236,21 +243,53 @@ class Partie {
             demanderModifierValeur(joueur, de);
         }
         demanderModifierDe(joueur, de);
-        }
+    }
 
-    public void Construire(Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {
+    public void Construire(Joueur joueur, Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {
             int place = 1;
             for (Batiment batiment : fiche.getListeBatiments()) {
                 CouleurDe batimentCouleurDe = CouleurDe.fromCouleur(batiment.getCouleur());
                 if (batimentCouleurDe == couleurDe) {
                     place++;
                 }
-                if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment)) && !batiment.isConstruit()) {
+                if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment)) && !batiment.isConstruit() && !batiment.isDetruit()) {
                     batiment.construire();
+                    if (batiment.getCouleur()==Couleur.BLANC && place%2==1){//le batiment construit est une cathedrale
+                        int nb_cat=fiche.getNBCathedrales();
+                        fiche.ajouterCathedrale(index-1, nb_cat+1);
+                    }
                     System.out.println("Batiment de couleur " + couleurDe + " construit." + index + " ou " + ((index - 1) * 2 + typeBatiment));
                     break;
                 }
             }
+            verificationBonusAdjacent(joueur, fiche, couleurDe, index, typeBatiment);
+    }
+
+    public void verificationBonusAdjacent(Joueur joueur, Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {
+        for (BonusAdjacent bonusAdjacent : fiche.getListeBonusAdjacent()) {
+            List<Integer> liste = bonusAdjacent.getAdjacentIndexes();
+            Couleur couleur = bonusAdjacent.getCouleur();
+            int adjacentIndex1 = liste.get(0);
+            int adjacentIndex2 = liste.get(1);
+            if (couleur == Couleur.fromCouleurDe(couleurDe)) {
+                if (liste.contains(((index - 1) * 2 + typeBatiment))) {
+                    if (couleur == Couleur.JAUNE) {
+                        adjacentIndex1 += 12;
+                        adjacentIndex2 += 12;
+                    }
+                    else if (couleur == Couleur.BLANC) {
+                        adjacentIndex1 += 24;
+                        adjacentIndex2 += 24;
+                    }
+
+                    if (fiche.getListeBatiments().get(adjacentIndex1).isConstruit() && fiche.getListeBatiments().get(adjacentIndex2).isConstruit()) {
+                            System.out.println("Bonus for batiment adjacent: " + bonusAdjacent.getBonus());
+                            bonusAdjacent.AjouterBonusAdjacent(joueur, bonusAdjacent.getBonus());
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     public void ConstruireChoix(int choix, Plateau plateau, Joueur joueur) {
@@ -263,7 +302,7 @@ class Partie {
 
         System.out.println(choix + ": " + deChoisi.getValeur() + " (" + couleurDe + ")");
         
-        Construire(fiche, couleurDe, index, typeBatiment);
+        Construire(joueur, fiche, couleurDe, index, typeBatiment);
 
         ajouterHabConstruction(joueur, couleurDe, index, typeBatiment);
     }
@@ -322,7 +361,7 @@ class Partie {
         }
 
 
-        Construire(fiche, CouleurDe.fromCouleur(couleurBatiment), place, typeBatiment);
+        Construire(joueur, fiche, CouleurDe.fromCouleur(couleurBatiment), place, typeBatiment);
 
         CouleurDe couleurFinale;
         if (couleurBatiment == Couleur.ROUGE) {
@@ -337,9 +376,7 @@ class Partie {
     }
 
     public De TransformationChoixToIndex(int choix) {
-        System.out.println(choix);
         ArrayList<De> listesDes = plateau.getListesDes();
-        System.out.println(listesDes.get(choix - 1).getValeur() + " " + listesDes.get(choix - 1).getCouleur());
         return listesDes.get(choix - 1);
     }
 
@@ -488,14 +525,11 @@ class Partie {
             temp = (jours + 4+placeListeDe)%9;
         }
         int place=0;
-        System.out.println("DEBUG " + plateau.getListeTuiles().get(temp).getCouleur() + " ");
         for (Batiment batiment : listeBatiments) {
             if (batiment.getCouleur() == plateau.getListeTuiles().get(temp).getCouleur()) {
                 if ((place==(de.getValeur()-1)*2+1 || place==(de.getValeur()-1)*2) && !listeBatiments.get((de.getValeur()-1)*2+1).isConstruit() && !batiment.isConstruit()){
                     System.out.println("Destruction des batiment de couleur " + plateau.getListeTuiles().get(temp).getCouleur() + "de la " + de.getValeur() + "eme place "+ de.getValeur() + " ");
                     batiment.detruire();
-                } else {
-                    System.out.println("CA KASSE PAS");
                 }
                 place++;
             }

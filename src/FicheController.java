@@ -85,14 +85,6 @@ public class FicheController {
         nb_HistoriqueO -= nb_RessO;
         nb_HistoriqueC -= nb_RessC;
         
-        System.out.println("nb_RessD: " + nb_RessD);
-        System.out.println("nb_RessO: " + nb_RessO);
-        System.out.println("nb_RessC: " + nb_RessC);
-
-        System.out.println("nb_HistoriqueD: " + nb_HistoriqueD);
-        System.out.println("nb_HistoriqueO: " + nb_HistoriqueO);
-        System.out.println("nb_HistoriqueC: " + nb_HistoriqueC);
-        
         resources.clear();
         
         for (int i = 0; i < 3; i++) {
@@ -109,11 +101,9 @@ public class FicheController {
                     } else if (nb_HistoriqueD > 0) {
                         resource[j] = 'r';
                         nb_HistoriqueD--;
-                        System.out.println("nb_RessD: " + nb_RessD + " nb_HistoriqueD: " + nb_HistoriqueD);
                     } else if (nb_RessD > 0) {
                         resource[j] = 'R';
                         nb_RessD--;
-                        System.out.println("nb_RessD: " + nb_RessD + " nb_HistoriqueD: " + nb_HistoriqueD);
                     } else {
                         resource[j] = '0';
                         nb_RessD--;
@@ -129,11 +119,9 @@ public class FicheController {
                     } else if (nb_HistoriqueO > 0) {
                         resource[j] = 'j';
                         nb_HistoriqueO--;
-                        System.out.println("nb_RessO: " + nb_RessO + " nb_HistoriqueO: " + nb_HistoriqueO);
                     } else if (nb_RessO > 0) {
                         resource[j] = 'J';
                         nb_RessO--;
-                        System.out.println("nb_RessO: " + nb_RessO + " nb_HistoriqueO: " + nb_HistoriqueO);
                     } else {
                         resource[j] = '0';
                         nb_RessO--;
@@ -149,11 +137,9 @@ public class FicheController {
                     } else if (nb_HistoriqueC > 0) {
                         resource[j] = 'b';
                         nb_HistoriqueC--;
-                        System.out.println("nb_RessC: " + nb_RessC + " nb_HistoriqueC: " + nb_HistoriqueC);
                     } else if (nb_RessC > 0) {
                         resource[j] = 'B';
                         nb_RessC--;
-                        System.out.println("nb_RessC: " + nb_RessC + " nb_HistoriqueC: " + nb_HistoriqueC);
                     } else {
                         resource[j] = '0';
                         nb_RessC--;
