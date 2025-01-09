@@ -143,12 +143,6 @@ class Fiche {
                 if (batiment instanceof BatimentPrestige && batiment.couleur == couleur) {
                     if (batiment.isDetruit()) {
                         System.out.print("  X  |");
-
-                    }
-                    else if (batiment.construit) {
-                    if (batiment.isDetruit()) {
-                        System.out.print("  X  |");
-
                     }
                     else if (batiment.construit) {
                         if (listeBatiments.get(rang).construit) {
@@ -167,7 +161,7 @@ class Fiche {
                     }
                     rang = rang + 2;
                 }
-            }
+        }
 
             System.out.println();
             System.out.print("|");

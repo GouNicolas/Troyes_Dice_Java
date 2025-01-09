@@ -484,13 +484,15 @@ class Partie {
         } else {
             temp = (jours + 4+placeListeDe)%9;
         }
-        int place=1;
+        int place=0;
         System.out.println("DEBUG " + plateau.getListeTuiles().get(temp).getCouleur() + " ");
         for (Batiment batiment : listeBatiments) {
             if (batiment.getCouleur() == plateau.getListeTuiles().get(temp).getCouleur()) {
-                if (place==(de.getValeur())*2 || place==(de.getValeur())*2-1){
-                System.out.println("Destruction des batiment de couleur " + plateau.getListeTuiles().get(temp).getCouleur() + "de la " + de.getValeur() + "eme place");
-                batiment.detruire();
+                if ((place==(de.getValeur()-1)*2+1 || place==(de.getValeur()-1)*2) && !listeBatiments.get((de.getValeur()-1)*2+1).isConstruit() && !batiment.isConstruit()){
+                    System.out.println("Destruction des batiment de couleur " + plateau.getListeTuiles().get(temp).getCouleur() + "de la " + de.getValeur() + "eme place "+ de.getValeur() + " ");
+                    batiment.detruire();
+                } else {
+                    System.out.println("CA KASSE PAS");
                 }
                 place++;
             }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class PlateauGUI extends JPanel {
     private Plateau plateau;
     private Partie partie;
-    private static final int PANEL_SIZE = 600;
+    private static final int PANEL_SIZE = 400;
     private static final int TUILE_SIZE = 80;
     private ArrayList<Rectangle2D> tuileRectangles;
     private int selectedTuileIndex = -1;
@@ -21,13 +21,15 @@ public class PlateauGUI extends JPanel {
     private static final String IMAGES_PATH = "src/ressources/tuiles";
     private BufferedImage backgroundImage;
     private BufferedImage tourImage;
-    private double tourAngle = 0;
+    private double tourAngle = 0; // Reset to 0 instead of 20
     private JLabel errorLabel;
     private Point tourCenter;
     private static final double TOUR_SCALE = 0.8; // 80% of panel size for tour
     private static final double BACKGROUND_SCALE = 1.0; // 100% of panel size for background
     private static final double NONAGON_SCALE = 0.9; // 90% of tour radius
-    private static final double TUILE_SCALE = 0.35; // 35% of nonagon radius
+    private static final double TUILE_SCALE = 0.45; // Increased from 0.35 to 0.45
+    private static final int DICE_SQUARE_SIZE = 30; // Size of the dice indicator square
+    private Plateau_control controller;
 
     public PlateauGUI(Plateau plateau, Partie partie) {
         this.plateau = plateau;
@@ -52,13 +54,17 @@ public class PlateauGUI extends JPanel {
                 for (int i = 0; i < tuileRectangles.size(); i++) {
                     if (tuileRectangles.get(i).contains(e.getPoint())) {
                         selectedTuileIndex = i;
-                        deSelectionne(i);
+                        controller.handleTuileSelection(i); // Delegate to controller
                         repaint();
                         break;
                     }
                 }
             }
         });
+    }
+
+    public void setController(Plateau_control controller) {
+        this.controller = controller;
     }
 
     private void loadImages() {
@@ -88,7 +94,10 @@ public class PlateauGUI extends JPanel {
     }
 
     public void rotateTour() {
-        tourAngle += 40;
+        tourAngle += 40; // Keep the 40-degree rotation
+        if (tourAngle >= 360) {
+            tourAngle -= 360; // Reset after full rotation
+        }
         repaint();
     }
 
@@ -134,6 +143,38 @@ public class PlateauGUI extends JPanel {
         drawNonagonAndTuiles(g2d, size);
     }
 
+    private void drawDiceIndicator(Graphics2D g2d, De de, int x, int y, int size) {
+        int squareX = x + size - DICE_SQUARE_SIZE - 5;
+        int squareY = y + 5;
+
+        if (de.getCouleur() == CouleurDe.NOIR) {
+            g2d.setColor(Color.BLACK);
+            g2d.fillRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+            g2d.setColor(Color.WHITE); // White text for black background
+        } else if (de.getCouleur() == CouleurDe.TRANSPARENT) {
+            g2d.setColor(new Color(255, 255, 255, 128)); // Semi-transparent white
+            g2d.fillRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+            g2d.setColor(Color.BLACK);
+        } else {
+            g2d.setColor(getCouleurFromEnum(Couleur.fromCouleurDe(de.getCouleur())));
+            g2d.fillRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+            g2d.setColor(Color.BLACK);
+        }
+
+        // Draw dice value
+        g2d.setFont(new Font("Arial", Font.BOLD, DICE_SQUARE_SIZE / 2));
+        String diceValue = String.valueOf(de.getValeur());
+        FontMetrics fm = g2d.getFontMetrics();
+        int textX = squareX + (DICE_SQUARE_SIZE - fm.stringWidth(diceValue)) / 2;
+        int textY = squareY + (DICE_SQUARE_SIZE + fm.getAscent()) / 2;
+        g2d.drawString(diceValue, textX, textY);
+
+        // Draw square border
+        g2d.setColor(Color.BLACK);
+        g2d.setStroke(new BasicStroke(1));
+        g2d.drawRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+    }
+
     private void drawNonagonAndTuiles(Graphics2D g2d, int panelSize) {
         // Calculate sizes based on panel size
         int tourSize = (int)(panelSize * TOUR_SCALE);
@@ -147,8 +188,8 @@ public class PlateauGUI extends JPanel {
         int[] yPoints = new int[9];
 
         for (int i = 0; i < 9; i++) {
-            // Start from top (270 degrees) and go clockwise
-            double angle = Math.toRadians(270 + (i * 40));
+            // Start from 20 degrees offset (290 instead of 270)
+            double angle = Math.toRadians(290 + (i * 40));
             double x = tourCenter.x + nonagonRadius * Math.cos(angle);
             double y = tourCenter.y + nonagonRadius * Math.sin(angle);
             points[i] = new Point2D.Double(x, y);
@@ -181,6 +222,12 @@ public class PlateauGUI extends JPanel {
             g2d.setColor(getCouleurFromEnum(tuile.getCouleur()));
             g2d.fill(rect);
             
+            // Draw dice indicator in top-right corner if applicable
+            if (i < plateau.getListesDes().size()) {
+                De de = plateau.getListesDes().get(i);
+                drawDiceIndicator(g2d, de, x, y, scaledTuileSize);
+            }
+            
             // Enhanced border drawing
             if (i == selectedTuileIndex) {
                 g2d.setColor(new Color(0, 128, 255, 200));
@@ -203,10 +250,7 @@ public class PlateauGUI extends JPanel {
         }
     }
 
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(PANEL_SIZE, PANEL_SIZE);
-    }
+    
 
     @Override
     public Dimension getMinimumSize() {
@@ -214,7 +258,9 @@ public class PlateauGUI extends JPanel {
     }
 
     private void deSelectionne(int index) {
-        
+        if (controller != null) {
+            controller.handleTuileSelection(index);
+        }
         repaint();
     }
 
