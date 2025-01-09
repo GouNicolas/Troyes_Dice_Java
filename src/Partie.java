@@ -474,6 +474,9 @@ class Partie {
     public Plateau getPlateau() {
         return plateau;
     }
+    public int getJours() {
+        return jours;
+    }
 
     public void DestroyBuilding(Joueur joueur, Plateau plateau, De de, int placeListeDe) {
         int rang = de.getValeur();
