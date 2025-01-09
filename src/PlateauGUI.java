@@ -223,8 +223,10 @@ public class PlateauGUI extends JPanel {
             g2d.fill(rect);
             
             // Draw dice indicator in top-right corner if applicable
-            if (i < plateau.getListesDes().size()) {
-                De de = plateau.getListesDes().get(i);
+            for (int j = 0; j < plateau.getListesDes().size(); j++) {
+                int dicePosition = (firstDicePosition + j) % 9;
+                if (dicePosition == adjustedIndex) {
+                    De de = plateau.getListesDes().get(j);
                 drawDiceIndicator(g2d, de, x, y, scaledTuileSize);
             }
             

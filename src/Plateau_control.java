@@ -44,13 +44,31 @@ public class Plateau_control {
 
     // Example method to handle next turn
     public void nextTurn() {
+        String previousCycle = partie.currentCycle;
         partie.prochainTour();
+        synchronizeRotation();
+        if (!previousCycle.equals(partie.currentCycle) && partie.currentCycle.equals("Nuit")) {
+            plateauGUI.flipTourImageHorizontally();
+        }
         updateGUI();
     }
     public int positionPremierDe() {
-        // debug show
-        System.out.println("nico"+plateau.RangDetoRangTuile(partie.currentCycle, partie.getJours(), 0));
         // Returns the position of the first die for the current day
         return plateau.RangDetoRangTuile(partie.currentCycle, partie.getJours(), 0);
+    }
+
+    public void synchronizeRotation() {
+        int totalCycles = (partie.getJours() - 1);
+        double angle = totalCycles * -40;
+
+        if (partie.currentCycle.equals("Nuit")) {
+            premireNuitpassee = true;
+        }
+        if (partie.getJours() > 1 && premireNuitpassee && !changement) {
+            plateauGUI.flipTourImageHorizontally();
+        }
+        System.out.println("Angle: " + angle);
+        plateauGUI.setTourAngle(angle);
+        plateauGUI.repaint();
     }
 }
