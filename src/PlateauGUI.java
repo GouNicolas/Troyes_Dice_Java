@@ -29,7 +29,7 @@ public class PlateauGUI extends JPanel {
     private static final double NONAGON_SCALE = 0.9; // 90% of tour radius
     private static final double TUILE_SCALE = 0.45; // Increased from 0.35 to 0.45
     private static final int DICE_SQUARE_SIZE = 30; // Size of the dice indicator square
-    private PlateauController controller;
+    private Plateau_control controller;
 
     public PlateauGUI(Plateau plateau, Partie partie) {
         this.plateau = plateau;
@@ -54,7 +54,7 @@ public class PlateauGUI extends JPanel {
                 for (int i = 0; i < tuileRectangles.size(); i++) {
                     if (tuileRectangles.get(i).contains(e.getPoint())) {
                         selectedTuileIndex = i;
-                        deSelectionne(i);
+                        controller.handleTuileSelection(i); // Delegate to controller
                         repaint();
                         break;
                     }
@@ -63,7 +63,7 @@ public class PlateauGUI extends JPanel {
         });
     }
 
-    public void setController(PlateauController controller) {
+    public void setController(Plateau_control controller) {
         this.controller = controller;
     }
 
@@ -223,9 +223,8 @@ public class PlateauGUI extends JPanel {
             g2d.fill(rect);
             
             // Draw dice indicator in top-right corner if applicable
-            ArrayList<De> listesDes = plateau.getListesDes();
-            if (i < listesDes.size()) {
-                De de = listesDes.get(i);
+            if (i < plateau.getListesDes().size()) {
+                De de = plateau.getListesDes().get(i);
                 drawDiceIndicator(g2d, de, x, y, scaledTuileSize);
             }
             
@@ -251,10 +250,7 @@ public class PlateauGUI extends JPanel {
         }
     }
 
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(PANEL_SIZE, PANEL_SIZE);
-    }
+    
 
     @Override
     public Dimension getMinimumSize() {

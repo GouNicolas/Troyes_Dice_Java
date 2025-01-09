@@ -10,7 +10,7 @@ public class Plateau_control {
         this.plateau = plateau;
         this.partie = partie;
         this.plateauGUI = plateauGUI;
-        this.plateauGUI.setController(this); // Establish connection
+        this.plateauGUI.setController(this);
     }
 
     public void handleTuileSelection(int tuileIndex) {
