@@ -17,6 +17,7 @@ public class Plateau_control {
         // Implement the logic for handling tuile selection
         System.out.println("Tuile selected: " + tuileIndex);
         // Example: Update the model or perform actions based on the selected tuile
+        plateauGUI.repaint(); // Repaint to update the view
     }
 
     public void updateGUI() {
@@ -45,5 +46,11 @@ public class Plateau_control {
     public void nextTurn() {
         partie.prochainTour();
         updateGUI();
+    }
+    public int positionPremierDe() {
+        // debug show
+        System.out.println("nico"+plateau.RangDetoRangTuile(partie.currentCycle, partie.getJours(), 0));
+        // Returns the position of the first die for the current day
+        return plateau.RangDetoRangTuile(partie.currentCycle, partie.getJours(), 0);
     }
 }

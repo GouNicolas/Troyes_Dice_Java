@@ -8,7 +8,7 @@ class Fiche {
     private HashMap<Couleur, Integer> listeHab = new HashMap<>();
     private ArrayList<Batiment> listeBatiments = new ArrayList<>();
     private LinkedHashMap<Batiment, String> listeDesBonusBatiments = new LinkedHashMap<>();
-    private HashMap<Couleur, List<Integer>> listeDesBonusBatimentsAdjacent = new HashMap<>();
+    private ArrayList<BonusAdjacent> listeBonusAdjacent = new ArrayList<>();
     private List<Integer> listeCathedrales; //liste toutes les cathédrales et leur ordre de construction. tout est initialisé a 0.
 
     public Fiche() {
@@ -72,19 +72,22 @@ class Fiche {
         return listeDesBonusBatiments;
     }
 
-    public HashMap<Couleur, List<Integer>> getListeDesBonusBatimentsAdjacent() {
-        return listeDesBonusBatimentsAdjacent;
+    public ArrayList<BonusAdjacent> getListeBonusAdjacent() {
+        return listeBonusAdjacent;
     }
 
     private void initailiserDesBonusBatimentsAdjacent() {
-        // Couleur[] couleurs = {Couleur.ROUGE, Couleur.JAUNE, Couleur.BLANC};
-        // for (Couleur couleur : couleurs) {
-        //     List<Integer> liste = new ArrayList<>();
-        //     for (int i = 0; i < 6; i++) {
-        //         liste.add(i);
-        //     }
-        //     listeDesBonusBatimentsAdjacent.put(couleur, liste);
-        // }
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 0, 2, Ressources_Bonus.DEUX_HAB_ROUGE));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 1, 3, Ressources_Bonus.UN_HAB_ROUGE));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 5, 7, Ressources_Bonus.UN_HAB_JAUNE));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 8, 10, Ressources_Bonus.TROIS_DRAPEAUX));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 9, 11, Ressources_Bonus.UN_HAB_BLANC));
+
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.JAUNE, 0, 2, Ressources_Bonus.TROIS_ARGENTS));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.JAUNE, 4, 6, Ressources_Bonus.DEUX_HAB_JAUNE));
+
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.BLANC, 4, 6, Ressources_Bonus.TROIS_CONNAISSANCES));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.BLANC, 8, 10, Ressources_Bonus.DEUX_HAB_BLANC));
     }
 
     private void initialiserBatiments() {
@@ -207,12 +210,12 @@ class Fiche {
             rang = 1;
             // Second layer for BatimentPeon
             System.out.print("|");
-            for (Batiment batiment : listeBatiments) {
-                if (batiment instanceof BatimentPeon && batiment.couleur == couleur) {
-                    if (batiment.isDetruit()) {
+            for (Batiment batiments : listeBatiments) {
+                if (batiments instanceof BatimentPeon && batiments.couleur == couleur) {
+                    if (batiments.isDetruit()) {
                         System.out.print("  X  |");
                     }
-                    else if (batiment.construit) {
+                    else if (batiments.construit) {
                         if (listeBatiments.get(rang).construit) {
                             System.out.print("[(2)]|");
                         }
@@ -257,6 +260,7 @@ class Fiche {
             System.out.println("| " + entry.getKey() + ": " + entry.getValue() + " |");
         }
     }
+    
     
     public void afficherRessources(Joueur joueur) {
         for (Map.Entry<Ressources, Integer> entry : joueur.getInventaireRes().entrySet()) {

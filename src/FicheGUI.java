@@ -8,19 +8,19 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class FicheGUI extends JFrame {
+    private ChangementDeGUI changementDeGUIPanel;
     private FicheController controller;
     private List<JPanel> resourcesPanels;
     private JPanel fichePanel;
     private Map<String, JLabel> smallCaseLabels;
     private Map<String, JButton> booleanButtons;
-
+    
     public FicheGUI(FicheController controller) {
-        System.out.println("Creating FicheGUI");
         this.controller = controller;
         resourcesPanels = new ArrayList<>();
         smallCaseLabels = new HashMap<>();
         booleanButtons = new HashMap<>();
-
+        
         setTitle("Fiche Information");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -120,8 +120,6 @@ public class FicheGUI extends JFrame {
                 }
             }
 
-            System.out.println("Small case count: " + smallCaseCount);
-
             int totalWidth = 700;
             int smallCaseWidth = 10;
             int booleanSquareWidth = (totalWidth - (smallCaseCount * smallCaseWidth)) / (6 + smallCaseCount);
@@ -135,7 +133,7 @@ public class FicheGUI extends JFrame {
                 booleanButton.setOpaque(true);
                 booleanButton.setPreferredSize(new Dimension(booleanSquareWidth, 100)); // Adjust the size of the boolean square
                 booleanButton.setEnabled(false); // Initially disable all buttons
-
+                
                 final int row = rowIndex * 3 + i;
                 final int col = j;
                 booleanButton.addActionListener(new ActionListener() {
@@ -146,13 +144,14 @@ public class FicheGUI extends JFrame {
                         updateSmallCases(row, col);
                         revalidate();
                         repaint();
-
+      
                         //Disable all buttons
-                        for (JButton button : booleanButtons.values()) {
-                            button.setEnabled(false);
-                        }
+                    for (JButton button : booleanButtons.values()) {
+                        button.setEnabled(false);
                     }
-                });
+                }
+            });
+            
 
                 gbc.gridx = j * 2;
                 gbc.weightx = 1.0;
@@ -191,6 +190,27 @@ public class FicheGUI extends JFrame {
         updateResourcesPanel(resourcesPanel, rowIndex);
         coloredPanel.add(resourcesPanel);
         resourcesPanels.add(resourcesPanel);
+
+        //Add the + button
+        JButton plusButton = new JButton("+");
+        plusButton.setBackground(color);
+        plusButton.setEnabled(false);
+        plusButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (JButton button : booleanButtons.values()) {
+                    button.setEnabled(false);
+                }
+                for (JPanel panel : resourcesPanels) {
+                    for (Component component : panel.getComponents()) {
+                        if (component instanceof JButton) {
+                            ((JButton) component).setEnabled(false);
+                        }
+                    }
+                }
+            }
+        });
+        resourcesPanel.add(plusButton);
 
         return coloredPanel;
     }
@@ -304,6 +324,8 @@ public class FicheGUI extends JFrame {
         return newAreaPanel;
     }
 
+    
+
     private void updateResourcesPanel(JPanel resourcesPanel, int blockIndex) {
         resourcesPanel.removeAll();
         char[] resources = controller.getResources().get(blockIndex);
@@ -363,6 +385,7 @@ public class FicheGUI extends JFrame {
         for (JButton button : booleanButtons.values()) {
             button.setEnabled(false);
         }
+    
 
         // Enable buttons based on dice value and color
         int columnIndex = diceValue - 1;
@@ -370,6 +393,18 @@ public class FicheGUI extends JFrame {
             JButton button = booleanButtons.get(rowIndex + "-" + columnIndex);
             if (button != null && button.getBackground().equals(diceColor)) {
                 button.setEnabled(true);
+            }
+        }
+
+        // Enable the + button
+        for (JPanel resourcesPanel : resourcesPanels) {
+            for (Component component : resourcesPanel.getComponents()) {
+                if (component instanceof JButton) {
+                    JButton button = (JButton) component;
+                    if (button.getText().equals("+")) {
+                        button.setEnabled(button.getBackground().equals(diceColor));
+                    }
+                }
             }
         }
     }

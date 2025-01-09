@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -246,9 +247,9 @@ class Partie {
             demanderModifierValeur(joueur, de);
         }
         demanderModifierDe(joueur, de);
-        }
+    }
 
-    public void Construire(Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {
+    public void Construire(Joueur joueur, Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {
             int place = 1;
             for (Batiment batiment : fiche.getListeBatiments()) {
                 CouleurDe batimentCouleurDe = CouleurDe.fromCouleur(batiment.getCouleur());
@@ -263,10 +264,36 @@ class Partie {
                     }
                     System.out.println("Batiment de couleur " + couleurDe + " construit." + index + " ou " + ((index - 1) * 2 + typeBatiment));
                     break;
-                } else if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment)) && (batiment.isConstruit() || batiment.isDetruit())){
-                    System.out.println("Batiment non construit. Il est detriot ou deja construit.");
                 }
             }
+            verificationBonusAdjacent(joueur, fiche, couleurDe, index, typeBatiment);
+    }
+
+    public void verificationBonusAdjacent(Joueur joueur, Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {
+        for (BonusAdjacent bonusAdjacent : fiche.getListeBonusAdjacent()) {
+            List<Integer> liste = bonusAdjacent.getAdjacentIndexes();
+            Couleur couleur = bonusAdjacent.getCouleur();
+            int adjacentIndex1 = liste.get(0);
+            int adjacentIndex2 = liste.get(1);
+            if (couleur == Couleur.fromCouleurDe(couleurDe)) {
+                if (liste.contains(((index - 1) * 2 + typeBatiment))) {
+                    if (couleur == Couleur.JAUNE) {
+                        adjacentIndex1 += 12;
+                        adjacentIndex2 += 12;
+                    }
+                    else if (couleur == Couleur.BLANC) {
+                        adjacentIndex1 += 24;
+                        adjacentIndex2 += 24;
+                    }
+
+                    if (fiche.getListeBatiments().get(adjacentIndex1).isConstruit() && fiche.getListeBatiments().get(adjacentIndex2).isConstruit()) {
+                            System.out.println("Bonus for batiment adjacent: " + bonusAdjacent.getBonus());
+                            bonusAdjacent.AjouterBonusAdjacent(joueur, bonusAdjacent.getBonus());
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     public void ConstruireChoix(int choix, Plateau plateau, Joueur joueur) {
@@ -278,7 +305,8 @@ class Partie {
         int typeBatiment = DemanderChoixTypeBatiment();
 
         System.out.println(choix + ": " + deChoisi.getValeur() + " (" + couleurDe + ")");
-        Construire(fiche, couleurDe, index, typeBatiment);
+        
+        Construire(joueur, fiche, couleurDe, index, typeBatiment);
 
         ajouterHabConstruction(joueur, couleurDe, index, typeBatiment);
     }
@@ -337,7 +365,7 @@ class Partie {
         }
 
 
-        Construire(fiche, CouleurDe.fromCouleur(couleurBatiment), place, typeBatiment);
+        Construire(joueur, fiche, CouleurDe.fromCouleur(couleurBatiment), place, typeBatiment);
 
         CouleurDe couleurFinale;
         if (couleurBatiment == Couleur.ROUGE) {
@@ -488,6 +516,9 @@ class Partie {
     
     public Plateau getPlateau() {
         return plateau;
+    }
+    public int getJours() {
+        return jours;
     }
 
     public void DestroyBuilding(Joueur joueur, Plateau plateau, De de, int placeListeDe) {
