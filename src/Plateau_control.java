@@ -46,4 +46,10 @@ public class Plateau_control {
         partie.prochainTour();
         updateGUI();
     }
+    public int positionPremierDe() {
+        // debug show
+        System.out.println("nico"+plateau.RangDetoRangTuile(partie.currentCycle, partie.getJours(), 0));
+        // Returns the position of the first die for the current day
+        return plateau.RangDetoRangTuile(partie.currentCycle, partie.getJours(), 0);
+    }
 }
