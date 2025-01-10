@@ -49,22 +49,20 @@ public class FenetrePrincipale extends JFrame {
         gbc.weightx = 0.4; // Ensure column 1 takes at least 40% of the width
         columnsPanel.add(plateauGUI, gbc);
 
-        // Add an empty column in the middle
-        JPanel emptyPanel = new JPanel();
+        // Add ChangementDeGUI to the second column
+        ChangementDeGUI changementDeGUI = new ChangementDeGUI(ficheGUIPanel);
         gbc.gridx = 1;
-        gbc.weightx = 0.4; // Ensure column 2 takes at least 40% of the width
-        columnsPanel.add(emptyPanel, gbc);
+        gbc.weightx = 0.2; // Ensure column 2 takes at least 20% of the width
+        columnsPanel.add(changementDeGUI, gbc);
 
         // Add FicheGUI to the third column
         this.ficheGUIPanel = ficheGUIPanel;
         ficheGUIPanel.setMinimumSize(FICHE_GUI_MIN_SIZE); // Set minimum size for FicheGUI
         gbc.gridx = 2;
-        gbc.weightx = 0.6; // Ensure FicheGUI takes up to 60% of the width
+        gbc.weightx = 0.4; // Ensure FicheGUI takes up to 40% of the width
         columnsPanel.add(ficheGUIPanel.getMainPanel(), gbc);
 
         mainPanel.add(columnsPanel, BorderLayout.CENTER);
-
-        ChangementDeGUI changementDeGUI = new ChangementDeGUI(ficheGUIPanel);
         
         // Add main panel to frame
         add(mainPanel);

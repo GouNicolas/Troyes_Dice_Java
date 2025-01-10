@@ -40,8 +40,8 @@ class ChangementDeGUI extends JPanel {
 
         // Square with random number and color
         dice = new JPanel();
-        dice.setPreferredSize(new Dimension(40, 40));
-        dice.setMaximumSize(new Dimension(40, 40));
+        dice.setPreferredSize(new Dimension(60, 60)); // Increased size
+        dice.setMinimumSize(new Dimension(60, 60)); // Set minimum size
         dice.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
         numberLabel = new JLabel();
         numberLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -55,8 +55,8 @@ class ChangementDeGUI extends JPanel {
         lockButton = new JButton();
         lockButton.setLayout(new BorderLayout());
         lockButton.add(dice, BorderLayout.CENTER);
-        lockButton.setPreferredSize(new Dimension(40, 40));
-        lockButton.setMaximumSize(new Dimension(40, 40));
+        lockButton.setPreferredSize(new Dimension(60, 60)); // Increased size
+        lockButton.setMinimumSize(new Dimension(60, 60)); // Set minimum size
         lockButton.setBorder(BorderFactory.createEmptyBorder());
         lockButton.setContentAreaFilled(false);
         lockButton.addActionListener(new ActionListener() {
@@ -83,8 +83,10 @@ class ChangementDeGUI extends JPanel {
         // Color buttons
         colorButton1 = new JButton();
         colorButton1.setPreferredSize(new Dimension(50, 50));
+        colorButton1.setMinimumSize(new Dimension(50, 50)); // Set minimum size
         colorButton2 = new JButton();
         colorButton2.setPreferredSize(new Dimension(50, 50));
+        colorButton2.setMinimumSize(new Dimension(50, 50)); // Set minimum size
         // Create a panel to hold the buttons
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0)); // Center the buttons with a gap of 10 pixels
@@ -202,6 +204,7 @@ class ChangementDeGUI extends JPanel {
         for (int i = 1; i <= 6; i++) {
             JButton valueButton = new JButton(String.valueOf(i));
             valueButton.setPreferredSize(new Dimension(50, 50));
+            valueButton.setMinimumSize(new Dimension(50, 50)); // Set minimum size
             valueButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

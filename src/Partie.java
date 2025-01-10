@@ -47,10 +47,6 @@ class Partie {
         Map<Joueur, FicheGUI> ficheGUIMap = new HashMap<>();
 
         FicheGUI ficheGUI = fenetrePrincipale.getFicheGUIPanel(); 
-        // for (Joueur joueur : listeJoueurs) {
-        //     ficheGUI.setVisible(true);
-        //     ficheGUIMap.put(joueur, ficheGUI);
-        // }
 
         try {
             Thread.sleep(1000); // 1 second delay
