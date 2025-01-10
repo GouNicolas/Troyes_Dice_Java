@@ -200,17 +200,19 @@ class ChangementDeGUI extends JPanel {
         valueButtonPanel.removeAll();
         int currentValue = Integer.parseInt(numberLabel.getText());
         for (int i = 1; i <= 6; i++) {
-            JButton valueButton = new JButton(String.valueOf(i));
-            valueButton.setPreferredSize(new Dimension(50, 50));
-            valueButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!isDiceLocked) {
-                        swapValues(Integer.parseInt(valueButton.getText()));
+            if (i != currentValue) {
+                JButton valueButton = new JButton(String.valueOf(i));
+                valueButton.setPreferredSize(new Dimension(50, 50));
+                valueButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (!isDiceLocked) {
+                            swapValues(Integer.parseInt(valueButton.getText()));
+                        }
                     }
-                }
-            });
-            valueButtonPanel.add(valueButton);
+                });
+                valueButtonPanel.add(valueButton);
+            }
         }
         valueButtonPanel.revalidate();
         valueButtonPanel.repaint();
@@ -218,6 +220,7 @@ class ChangementDeGUI extends JPanel {
 
     private void swapValues(int newValue) {
         numberLabel.setText(String.valueOf(newValue));
+        updateValueButtons(); // Met à jour les boutons après avoir changé la valeur du dé
     }
 
     private void resetDice() {
