@@ -8,10 +8,13 @@ public class Main {
             Joueur joueur1 = new Joueur("Alice");
             partie.ajouterJoueur(joueur1);
             
-            // Create FenetrePrincipale before starting the game
-            FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(partie.getPlateau(), partie, new FicheController(new Fiche(), joueur1));
+            FicheController ficheController = new FicheController(new Fiche(), joueur1);
+            FicheGUI ficheGUI = new FicheGUI(ficheController);
             
-            partie.startGame();
+            // Create FenetrePrincipale before starting the game
+            FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(partie.getPlateau(), partie, ficheController, ficheGUI);
+            
+            partie.startGame(fenetrePrincipale);
             System.out.println("Fin de la partie.");
             return;
     }
