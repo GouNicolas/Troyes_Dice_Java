@@ -316,7 +316,7 @@ public class PlateauGUI extends JPanel {
         cycleLabel.setText(partie.currentCycle + " - Tour " + partie.getJours());
     }
 
-    private void refreshPlateau() {
+    public void refreshPlateau() {
         updateGUI();
     }
 }

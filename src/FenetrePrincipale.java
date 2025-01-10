@@ -11,6 +11,14 @@ public class FenetrePrincipale extends JFrame {
     private Partie partie;
     private BorderLayout mainLayout;
 
+    public PlateauGUI getPlateauGUI() {
+        return plateauGUI;
+    }
+
+    public FicheGUI getFicheGUIPanel() {
+        return ficheGUIPanel;
+    }
+
     public FenetrePrincipale(Plateau plateau, Partie partie, FicheController ficheController, FicheGUI ficheGUIPanel) {
         super("Troyes Dice Game");
         this.plateau = plateau;
@@ -65,6 +73,24 @@ public class FenetrePrincipale extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    public void reload_fenetre(Joueur joueur) {
+        if (this.ficheGUIPanel != null) {
+            this.ficheGUIPanel.updateContent(joueur.getFiche(), joueur);
+            this.ficheGUIPanel.revalidate();
+            this.ficheGUIPanel.repaint();
+        } else {
+            System.err.println("FicheGUI is null for " + joueur.getPseudo());
+        }
+
+        if (this.plateauGUI != null) {
+            this.plateauGUI.refreshPlateau();
+            this.plateauGUI.revalidate();
+            this.plateauGUI.repaint();
+        } else {
+            System.err.println("PlateauGUI is null");
+        }
     }
 
     public static void main(String[] args) {

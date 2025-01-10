@@ -43,13 +43,14 @@ class Partie {
         }
     }
     
-    public void startGame(FicheController ficheController, FicheGUI ficheGUI) {
+    public void startGame(FenetrePrincipale fenetrePrincipale) {
         Map<Joueur, FicheGUI> ficheGUIMap = new HashMap<>();
 
-        for (Joueur joueur : listeJoueurs) {
-            ficheGUI.setVisible(true);
-            ficheGUIMap.put(joueur, ficheGUI);
-        }
+        FicheGUI ficheGUI = fenetrePrincipale.getFicheGUIPanel(); 
+        // for (Joueur joueur : listeJoueurs) {
+        //     ficheGUI.setVisible(true);
+        //     ficheGUIMap.put(joueur, ficheGUI);
+        // }
 
         try {
             Thread.sleep(1000); // 1 second delay
@@ -59,6 +60,7 @@ class Partie {
 
         while (true) {
             for (Joueur joueur : listeJoueurs) {
+                fenetrePrincipale.reload_fenetre(joueur);
                 if (joueur.getFiche().getNombreHab(Couleur.BLANC) >= 3 && joueur.getFiche().getNombreHab(Couleur.JAUNE) >= 3 && joueur.getFiche().getNombreHab(Couleur.ROUGE) >= 3 && joueur.getNbBonusHabObtenus() < 1) {
                     joueur.ajouterRessource(Ressources.DRAPEAUX, 1);
                     joueur.ajouterRessource(Ressources.ARGENT, 1);
@@ -135,14 +137,8 @@ class Partie {
                         }
                     }
                 }
-                if (ficheGUI != null) {
-                    ficheGUI.updateContent(joueur.getFiche(), joueur);
-                    ficheGUI.revalidate();
-                    ficheGUI.repaint();
-                } else {
-                    System.err.println("FicheGUI is null for " + joueur.getPseudo());
-                }
-                
+
+                fenetrePrincipale.reload_fenetre(joueur);
                 
                 try {
                     Thread.sleep(1000); // 1 second delay

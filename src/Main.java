@@ -14,7 +14,7 @@ public class Main {
             // Create FenetrePrincipale before starting the game
             FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(partie.getPlateau(), partie, ficheController, ficheGUI);
             
-            partie.startGame(ficheController, ficheGUI);
+            partie.startGame(fenetrePrincipale);
             System.out.println("Fin de la partie.");
             return;
     }
