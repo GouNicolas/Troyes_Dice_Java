@@ -43,12 +43,10 @@ class Partie {
         }
     }
     
-    public void startGame() {
+    public void startGame(FicheController ficheController, FicheGUI ficheGUI) {
         Map<Joueur, FicheGUI> ficheGUIMap = new HashMap<>();
 
         for (Joueur joueur : listeJoueurs) {
-            FicheController ficheController = new FicheController(joueur.getFiche(), joueur);
-            FicheGUI ficheGUI = new FicheGUI(ficheController);
             ficheGUI.setVisible(true);
             ficheGUIMap.put(joueur, ficheGUI);
         }
@@ -83,7 +81,6 @@ class Partie {
                     joueur.setBonusPrestigeRouge(true);
                 }
                 //joueur.calculerScore();
-                FicheGUI ficheGUI = ficheGUIMap.get(joueur);
                 if (ficheGUI != null) {
                     ficheGUI.updateContent(joueur.getFiche(), joueur);
                     ficheGUI.revalidate();
