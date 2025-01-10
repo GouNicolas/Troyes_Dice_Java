@@ -226,7 +226,7 @@ class Fiche {
         for (Map.Entry<Couleur, Integer> entry : listeHab.entrySet()) {
             System.out.println("| " + entry.getKey() + ": " + entry.getValue() + " |");
         }
-        }
+        
     }
     
     public void afficherRessources(Joueur joueur) {
