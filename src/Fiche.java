@@ -261,7 +261,7 @@ class Fiche {
         }
         
     }
-    }
+    
     
     
     public void afficherRessources(Joueur joueur) {
