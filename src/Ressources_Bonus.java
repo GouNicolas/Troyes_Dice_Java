@@ -1,0 +1,13 @@
+enum Ressources_Bonus {
+    UN_HAB_ROUGE,
+    UN_HAB_BLANC,
+    UN_HAB_JAUNE,
+
+    DEUX_HAB_ROUGE,
+    DEUX_HAB_BLANC,
+    DEUX_HAB_JAUNE,
+
+    TROIS_ARGENTS,
+    TROIS_DRAPEAUX,
+    TROIS_CONNAISSANCES,
+}

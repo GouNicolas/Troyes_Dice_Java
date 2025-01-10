@@ -8,19 +8,41 @@ class Fiche {
     private HashMap<Couleur, Integer> listeHab = new HashMap<>();
     private ArrayList<Batiment> listeBatiments = new ArrayList<>();
     private LinkedHashMap<Batiment, String> listeDesBonusBatiments = new LinkedHashMap<>();
-    private HashMap<Couleur, List<Integer>> listeDesBonusBatimentsAdjacent = new HashMap<>();
+    private ArrayList<BonusAdjacent> listeBonusAdjacent = new ArrayList<>();
+    private List<Integer> listeCathedrales; //liste toutes les cathédrales et leur ordre de construction. tout est initialisé a 0.
 
     public Fiche() {
         listeHab.put(Couleur.ROUGE, 0);
         listeHab.put(Couleur.JAUNE, 0);
         listeHab.put(Couleur.BLANC,0);
-        listeHab.put(Couleur.ROUGE, 0);
-        listeHab.put(Couleur.JAUNE, 0);
-        listeHab.put(Couleur.BLANC,0);
+        listeCathedrales = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            listeCathedrales.add(0);
+        }
 
         initialiserBatiments();
         initailiserDesBonusBatimentsAdjacent();
     }
+
+    int getNBCathedrales(){
+        int nbCathedrales = 0;
+        for (int i = 0; i < 6; i++) {
+            if (listeCathedrales.get(i) !=0) {
+                nbCathedrales++;
+            }
+        }
+        return nbCathedrales;
+    }
+
+    public void ajouterCathedrale(int place, int quantieme){
+        listeCathedrales.set(place, quantieme);
+        // System.out.println("Cathédrale placée en position " + place + "de la liste, c'est la " + quantieme+"eme");
+        // System.out.println("Liste des cathédrales : " + listeCathedrales);
+    }
+
+    public List<Integer> getListeCathedrales() {
+        return listeCathedrales;
+    } 
 
     public ArrayList<Batiment> getListeBatiments() {
         return listeBatiments;
@@ -28,6 +50,14 @@ class Fiche {
 
     public HashMap<Couleur, Integer> getListeHab() {
         return listeHab;
+    }
+
+    public int getNombreHab() {
+        int total = 0;
+        for (Map.Entry<Couleur, Integer> entry : listeHab.entrySet()) {
+            total += entry.getValue();
+        }
+        return total;
     }
 
     public int getNombreHab(Couleur couleur) {
@@ -42,19 +72,22 @@ class Fiche {
         return listeDesBonusBatiments;
     }
 
-    public HashMap<Couleur, List<Integer>> getListeDesBonusBatimentsAdjacent() {
-        return listeDesBonusBatimentsAdjacent;
+    public ArrayList<BonusAdjacent> getListeBonusAdjacent() {
+        return listeBonusAdjacent;
     }
 
     private void initailiserDesBonusBatimentsAdjacent() {
-        // Couleur[] couleurs = {Couleur.ROUGE, Couleur.JAUNE, Couleur.BLANC};
-        // for (Couleur couleur : couleurs) {
-        //     List<Integer> liste = new ArrayList<>();
-        //     for (int i = 0; i < 6; i++) {
-        //         liste.add(i);
-        //     }
-        //     listeDesBonusBatimentsAdjacent.put(couleur, liste);
-        // }
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 0, 2, Ressources_Bonus.DEUX_HAB_ROUGE));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 1, 3, Ressources_Bonus.UN_HAB_ROUGE));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 5, 7, Ressources_Bonus.UN_HAB_JAUNE));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 8, 10, Ressources_Bonus.TROIS_DRAPEAUX));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.ROUGE, 9, 11, Ressources_Bonus.UN_HAB_BLANC));
+
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.JAUNE, 0, 2, Ressources_Bonus.TROIS_ARGENTS));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.JAUNE, 4, 6, Ressources_Bonus.DEUX_HAB_JAUNE));
+
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.BLANC, 4, 6, Ressources_Bonus.TROIS_CONNAISSANCES));
+        listeBonusAdjacent.add(new BonusAdjacent(Couleur.BLANC, 8, 10, Ressources_Bonus.DEUX_HAB_BLANC));
     }
 
     private void initialiserBatiments() {
@@ -228,6 +261,8 @@ class Fiche {
         }
         
     }
+    }
+    
     
     public void afficherRessources(Joueur joueur) {
         for (Map.Entry<Ressources, Integer> entry : joueur.getInventaireRes().entrySet()) {

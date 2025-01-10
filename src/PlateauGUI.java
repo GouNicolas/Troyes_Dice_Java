@@ -28,20 +28,32 @@ public class PlateauGUI extends JPanel {
     private static final double BACKGROUND_SCALE = 1.0; // 100% of panel size for background
     private static final double NONAGON_SCALE = 0.9; // 90% of tour radius
     private static final double TUILE_SCALE = 0.45; // Increased from 0.35 to 0.45
-    private static final int DICE_SQUARE_SIZE = 30; // Size of the dice indicator square
     private Plateau_control controller;
+    private JLabel cycleLabel;
+    private static final Dimension MIN_SIZE = new Dimension(400, 400);
 
     public PlateauGUI(Plateau plateau, Partie partie) {
         this.plateau = plateau;
         this.partie = partie;
         this.tuileRectangles = new ArrayList<>();
+        this.controller = new Plateau_control(plateau, partie, this);
         setPreferredSize(new Dimension(PANEL_SIZE, PANEL_SIZE));
+        setMinimumSize(MIN_SIZE); // Set minimum size
         
         // Initialize error label
         errorLabel = new JLabel("Image could not be loaded", JLabel.CENTER);
         errorLabel.setForeground(Color.RED);
         errorLabel.setVisible(false);
         add(errorLabel);
+
+        // Initialize cycle label
+        cycleLabel = new JLabel("", SwingConstants.CENTER);
+        add(cycleLabel, BorderLayout.NORTH);
+
+        // Initialize refresh button
+        JButton refreshButton = new JButton("Refresh");
+        refreshButton.addActionListener(e -> refreshPlateau());
+        add(refreshButton, BorderLayout.SOUTH);
         
         // Load background images
         loadImages();
@@ -101,6 +113,23 @@ public class PlateauGUI extends JPanel {
         repaint();
     }
 
+    public void setTourAngle(double angle) {
+        this.tourAngle = angle % 360;
+        repaint();
+    }
+
+    public void flipToNight() {
+        int w = tourImage.getWidth();
+        int h = tourImage.getHeight();
+        BufferedImage flipped = new BufferedImage(w, h, tourImage.getType());
+        Graphics2D g2d = flipped.createGraphics();
+        
+        g2d.drawImage(tourImage, 0, 0, w, h, w, 0, 0, h, null);
+        g2d.dispose();
+        tourImage = flipped;
+        repaint();
+    }
+
     private BufferedImage rotateImage(BufferedImage originalImage, double angle) {
         int w = originalImage.getWidth();
         int h = originalImage.getHeight();
@@ -144,35 +173,36 @@ public class PlateauGUI extends JPanel {
     }
 
     private void drawDiceIndicator(Graphics2D g2d, De de, int x, int y, int size) {
-        int squareX = x + size - DICE_SQUARE_SIZE - 5;
-        int squareY = y + 5;
+        int diceSquareSize = size / 2; // Make dice size half the size of the tile
+        int squareX = x + (size - diceSquareSize) / 2; // Center the dice horizontally
+        int squareY = y + (size - diceSquareSize) / 2; // Center the dice vertically
 
         if (de.getCouleur() == CouleurDe.NOIR) {
             g2d.setColor(Color.BLACK);
-            g2d.fillRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+            g2d.fillRect(squareX, squareY, diceSquareSize, diceSquareSize);
             g2d.setColor(Color.WHITE); // White text for black background
         } else if (de.getCouleur() == CouleurDe.TRANSPARENT) {
             g2d.setColor(new Color(255, 255, 255, 128)); // Semi-transparent white
-            g2d.fillRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+            g2d.fillRect(squareX, squareY, diceSquareSize, diceSquareSize);
             g2d.setColor(Color.BLACK);
         } else {
             g2d.setColor(getCouleurFromEnum(Couleur.fromCouleurDe(de.getCouleur())));
-            g2d.fillRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+            g2d.fillRect(squareX, squareY, diceSquareSize, diceSquareSize);
             g2d.setColor(Color.BLACK);
         }
 
         // Draw dice value
-        g2d.setFont(new Font("Arial", Font.BOLD, DICE_SQUARE_SIZE / 2));
+        g2d.setFont(new Font("Arial", Font.BOLD, diceSquareSize / 2));
         String diceValue = String.valueOf(de.getValeur());
         FontMetrics fm = g2d.getFontMetrics();
-        int textX = squareX + (DICE_SQUARE_SIZE - fm.stringWidth(diceValue)) / 2;
-        int textY = squareY + (DICE_SQUARE_SIZE + fm.getAscent()) / 2;
+        int textX = squareX + (diceSquareSize - fm.stringWidth(diceValue)) / 2;
+        int textY = squareY + (diceSquareSize + fm.getAscent()) / 2;
         g2d.drawString(diceValue, textX, textY);
 
         // Draw square border
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(1));
-        g2d.drawRect(squareX, squareY, DICE_SQUARE_SIZE, DICE_SQUARE_SIZE);
+        g2d.drawRect(squareX, squareY, diceSquareSize, diceSquareSize);
     }
 
     private void drawNonagonAndTuiles(Graphics2D g2d, int panelSize) {
@@ -206,28 +236,34 @@ public class PlateauGUI extends JPanel {
         g2d.setStroke(new BasicStroke(2));
         g2d.drawPolygon(xPoints, yPoints, 9);
 
+        int firstDicePosition = controller.positionPremierDe();
+
         // Draw tuiles
         for (int i = 0; i < plateau.getListeTuiles().size() && i < 9; i++) {
-            Tuile tuile = plateau.getListeTuiles().get(i);
+            int adjustedIndex = (i + 5) % 9; // Adjust index to start from position 5
+            Tuile tuile = plateau.getListeTuiles().get(adjustedIndex);
             int x = (int)(points[i].x - scaledTuileSize/2);
             int y = (int)(points[i].y - scaledTuileSize/2);
-            
+
             Rectangle2D rect = new Rectangle2D.Double(x, y, scaledTuileSize, scaledTuileSize);
             tuileRectangles.add(rect);
-            
+
             // Draw tuile with shadow effect
             g2d.setColor(new Color(0, 0, 0, 32));
             g2d.fillRect(x + 2, y + 2, scaledTuileSize, scaledTuileSize);
-            
+
             g2d.setColor(getCouleurFromEnum(tuile.getCouleur()));
             g2d.fill(rect);
-            
-            // Draw dice indicator in top-right corner if applicable
-            if (i < plateau.getListesDes().size()) {
-                De de = plateau.getListesDes().get(i);
-                drawDiceIndicator(g2d, de, x, y, scaledTuileSize);
+
+            // Draw dice indicator in the center of the tile
+            for (int j = 0; j < plateau.getListesDes().size(); j++) {
+                int dicePosition = (firstDicePosition + j) % 9;
+                if (dicePosition == adjustedIndex) {
+                    De de = plateau.getListesDes().get(j);
+                    drawDiceIndicator(g2d, de, x, y, scaledTuileSize);
+                }
             }
-            
+
             // Enhanced border drawing
             if (i == selectedTuileIndex) {
                 g2d.setColor(new Color(0, 128, 255, 200));
@@ -237,7 +273,7 @@ public class PlateauGUI extends JPanel {
                 g2d.setStroke(new BasicStroke(Math.max(1, panelSize/600)));
             }
             g2d.draw(rect);
-            
+
             // Improved text rendering
             g2d.setColor(Color.BLACK);
             int fontSize = Math.max(10, scaledTuileSize/4);
@@ -250,11 +286,9 @@ public class PlateauGUI extends JPanel {
         }
     }
 
-    
-
     @Override
     public Dimension getMinimumSize() {
-        return new Dimension(PANEL_SIZE/2, PANEL_SIZE/2);
+        return MIN_SIZE;
     }
 
     private void deSelectionne(int index) {
@@ -275,5 +309,14 @@ public class PlateauGUI extends JPanel {
 
     public Plateau getPlateau() {
         return plateau;
+    }
+
+    public void updateGUI() {
+        controller.updateGUI();
+        cycleLabel.setText(partie.currentCycle + " - Tour " + partie.getJours());
+    }
+
+    private void refreshPlateau() {
+        updateGUI();
     }
 }
