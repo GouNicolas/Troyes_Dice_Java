@@ -7,6 +7,7 @@ public class FenetrePrincipale extends JFrame {
     private static final Dimension DEFAULT_SIZE = new Dimension(1200, 600); // More reasonable default size
     private PlateauGUI plateauGUI;
     private FicheGUI ficheGUIPanel;
+    private ChangementDeGUI changementDeGUI;
     private Plateau plateau;
     private Partie partie;
     private BorderLayout mainLayout;
@@ -17,6 +18,10 @@ public class FenetrePrincipale extends JFrame {
 
     public FicheGUI getFicheGUIPanel() {
         return ficheGUIPanel;
+    }
+
+    public ChangementDeGUI getChangementDeGUI() {
+        return changementDeGUI;
     }
 
     public FenetrePrincipale(Plateau plateau, Partie partie, FicheController ficheController, FicheGUI ficheGUIPanel) {
@@ -50,7 +55,7 @@ public class FenetrePrincipale extends JFrame {
         columnsPanel.add(plateauGUI, gbc);
 
         // Add ChangementDeGUI to the second column
-        ChangementDeGUI changementDeGUI = new ChangementDeGUI(ficheGUIPanel);
+        this.changementDeGUI = new ChangementDeGUI(ficheGUIPanel);
         gbc.gridx = 1;
         gbc.weightx = 0.2; // Ensure column 2 takes at least 20% of the width
         columnsPanel.add(changementDeGUI, gbc);
@@ -89,16 +94,5 @@ public class FenetrePrincipale extends JFrame {
         } else {
             System.err.println("PlateauGUI is null");
         }
-    }
-
-    public static void main(String[] args) {
-        // Ensure all required objects are properly initialized
-        Plateau plateau = new Plateau();
-        Partie partie = new Partie();
-        FicheController ficheController = new FicheController(new Fiche(), new Joueur("Joueur 1"));
-        
-        // Create and display the FenetrePrincipale frame
-        FenetrePrincipale frame = new FenetrePrincipale(plateau, partie, ficheController, new FicheGUI(ficheController));
-        frame.setVisible(true);
     }
 }

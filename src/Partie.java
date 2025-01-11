@@ -8,6 +8,7 @@ class Partie {
     private ArrayList<Joueur> listeJoueurs = new ArrayList<>();
     private Plateau plateau;
     private int jours;
+    private FenetrePrincipale fenetrePrincipale;
     String currentCycle;
 
     public Partie() {
@@ -24,6 +25,14 @@ class Partie {
         listeJoueurs.remove(joueur);
     }
 
+    public FenetrePrincipale getFenetrePrincipale() {
+        return fenetrePrincipale;
+    }
+
+    public void setFenetrePrincipale(FenetrePrincipale fenetrePrincipale) {
+        this.fenetrePrincipale = fenetrePrincipale;
+    }
+
     public void tourDeJeu(Joueur joueur) {
         System.out.println("C'est le tour de " + joueur.getPseudo());
         joueur.getFiche().afficherFiche(joueur);
@@ -32,6 +41,10 @@ class Partie {
 
     public void passerTour() {
         // Passer le tour
+    }
+
+    public Joueur getJoueur(int index) {
+        return listeJoueurs.get(index);
     }
 
     public void prochainTour() {
@@ -44,15 +57,11 @@ class Partie {
     }
     
     public void startGame(FenetrePrincipale fenetrePrincipale) {
+        setFenetrePrincipale(fenetrePrincipale);
+
         Map<Joueur, FicheGUI> ficheGUIMap = new HashMap<>();
 
-        FicheGUI ficheGUI = fenetrePrincipale.getFicheGUIPanel(); 
-
-        try {
-            Thread.sleep(1000); // 1 second delay
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        FicheGUI ficheGUI = fenetrePrincipale.getFicheGUIPanel();
 
         while (true) {
             for (Joueur joueur : listeJoueurs) {
@@ -78,19 +87,20 @@ class Partie {
                     ConstruireArbitraire(1, plateau, joueur, CouleurDe.ROUGE);
                     joueur.setBonusPrestigeRouge(true);
                 }
-                //joueur.calculerScore();
                 if (ficheGUI != null) {
                     ficheGUI.updateContent(joueur.getFiche(), joueur);
                     ficheGUI.revalidate();
                     ficheGUI.repaint();
+                    ficheGUI.setPartieJeu(this);
                 } else {
                     System.err.println("FicheGUI is null for " + joueur.getPseudo());
                 }
                 
                 plateau.lancerDe();
                 tourDeJeu(joueur);
+                fenetrePrincipale.reload_fenetre(joueur);
                 int choix = plateau.demanderChoixDe();
-
+                
                 while (plateau.checkRessourcesAchat(joueur, choix) == 1) {
                     choix = plateau.demanderChoixDe();
                 }
@@ -108,6 +118,10 @@ class Partie {
                     } else if (choix == 4) {
                         joueur.retirerRessource(Ressources.ARGENT, 2);
                     }
+
+                    // ficheGUI.getChangementDeGUIPanel().setDeChoisis(plateau.getListesDes().get(choix - 1));
+                    ficheGUI.getChangementDeGUIPanel().AfficherDeChoisis(plateau.getListesDes().get(choix - 1));
+                    
                     demanderModifierDe(joueur, plateau.getListesDes().get(choix - 1));
                         int ChoixUtilisationDe = ChoixUtilisationDe();
                         if (ChoixUtilisationDe == 0) {
@@ -234,6 +248,21 @@ class Partie {
         demanderModifierDe(joueur, de);
     }
 
+    public void modfiDeAvecArg(Joueur joueur, De de, CouleurDe couleur, int valeur) {
+        if (de.getCouleur() != couleur && joueur.getInventaireRes().get(Ressources.CONNAISSANCE) > 0) {
+            de.setCouleur(couleur);
+            joueur.retirerRessource(Ressources.CONNAISSANCE, 1);
+        }
+        if (de.getValeur() != valeur) {
+            int difference = Math.abs(de.getValeur() - valeur);
+            if (joueur.getInventaireRes().get(Ressources.DRAPEAUX) >= difference) {
+                joueur.retirerRessource(Ressources.DRAPEAUX, difference);
+                de.setVal(valeur);
+            }
+        }
+        
+    }
+
     public void Construire(Joueur joueur, Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {
             int place = 1;
             for (Batiment batiment : fiche.getListeBatiments()) {
@@ -252,6 +281,7 @@ class Partie {
                 }
             }
             verificationBonusAdjacent(joueur, fiche, couleurDe, index, typeBatiment);
+            
     }
 
     public void verificationBonusAdjacent(Joueur joueur, Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {
@@ -524,4 +554,5 @@ class Partie {
             }
         }
     }
+
 }
