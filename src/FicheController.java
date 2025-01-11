@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashMap;
+import java.awt.Color;
 
 public class FicheController {
     private boolean[][] matrix;
@@ -92,17 +93,12 @@ public class FicheController {
             for (int j = 0; j < 21; j++) {
                 if (i == 0) {
                     if (j == 6 || j == 13 || j == 20) {
-                        if (nb_RessD >= 0) {
-                            resource[j] = 'a';
-                        }
-                        else {
-                            resource[j] = 'A';
-                        }
+                        resource[j] = nb_RessD >= 0 ? '1' : '0';
                     } else if (nb_HistoriqueD > 0) {
-                        resource[j] = 'r';
+                        resource[j] = '1';
                         nb_HistoriqueD--;
                     } else if (nb_RessD > 0) {
-                        resource[j] = 'R';
+                        resource[j] = '1';
                         nb_RessD--;
                     } else {
                         resource[j] = '0';
@@ -110,17 +106,12 @@ public class FicheController {
                     }
                 } else if (i == 1) {
                     if (j == 6 || j == 13 || j == 20) {
-                        if (nb_RessO >= 0) {
-                            resource[j] = 'b';
-                        }
-                        else {
-                            resource[j] = 'B';
-                        }
+                        resource[j] = nb_RessO >= 0 ? '1' : '0';
                     } else if (nb_HistoriqueO > 0) {
-                        resource[j] = 'j';
+                        resource[j] = '1';
                         nb_HistoriqueO--;
                     } else if (nb_RessO > 0) {
-                        resource[j] = 'J';
+                        resource[j] = '1';
                         nb_RessO--;
                     } else {
                         resource[j] = '0';
@@ -128,17 +119,12 @@ public class FicheController {
                     }
                 } else if (i == 2) {
                     if (j == 6 || j == 13 || j == 20) {
-                        if (nb_RessC >= 0) {
-                            resource[j] = 'c';
-                        }
-                        else {
-                            resource[j] = 'C';
-                        }
+                        resource[j] = nb_RessC >= 0 ? '1' : '0';
                     } else if (nb_HistoriqueC > 0) {
-                        resource[j] = 'b';
+                        resource[j] = '1';
                         nb_HistoriqueC--;
                     } else if (nb_RessC > 0) {
-                        resource[j] = 'B';
+                        resource[j] = '1';
                         nb_RessC--;
                     } else {
                         resource[j] = '0';
@@ -149,7 +135,28 @@ public class FicheController {
             resources.add(resource);
         }
     }
+
+    public void ajouterRessource(Color color) {
+        int index = -1;
+        if (Color.RED.equals(color)) {
+            index = 0;
+        } else if (Color.YELLOW.equals(color)) {
+            index = 1;
+        } else if (Color.WHITE.equals(color)) {
+            index = 2;
+        }
     
+        if (index != -1) {
+            char[] resourceArray = resources.get(index);
+            for (int i = 0; i < resourceArray.length; i++) {
+                if (resourceArray[i] == '0') {
+                    resourceArray[i] = '1';
+                    break;
+                }
+            }
+        }
+    }
+
     public boolean getValue(int row, int col) {
         return matrix[row][col];
     }

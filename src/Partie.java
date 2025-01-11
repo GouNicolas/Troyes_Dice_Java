@@ -17,6 +17,10 @@ class Partie {
         this.currentCycle = "Jour";
     }
 
+    public ArrayList<Joueur> getListeJoueurs() {
+        return listeJoueurs;
+    }
+
     public void ajouterJoueur(Joueur joueur) {
         listeJoueurs.add(joueur);
     }
@@ -43,6 +47,10 @@ class Partie {
         // Passer le tour
     }
 
+    public Joueur getJoueur(int index) {
+        return listeJoueurs.get(index);
+    }
+
     public void prochainTour() {
         if (currentCycle.equals("Jour")) {
             currentCycle = "Nuit";
@@ -57,7 +65,7 @@ class Partie {
 
         Map<Joueur, FicheGUI> ficheGUIMap = new HashMap<>();
 
-        FicheGUI ficheGUI = fenetrePrincipale.getFicheGUIPanel(); 
+        FicheGUI ficheGUI = fenetrePrincipale.getFicheGUIPanel();
 
         while (true) {
             for (Joueur joueur : listeJoueurs) {
@@ -83,11 +91,11 @@ class Partie {
                     ConstruireArbitraire(1, plateau, joueur, CouleurDe.ROUGE);
                     joueur.setBonusPrestigeRouge(true);
                 }
-                //joueur.calculerScore();
                 if (ficheGUI != null) {
                     ficheGUI.updateContent(joueur.getFiche(), joueur);
                     ficheGUI.revalidate();
                     ficheGUI.repaint();
+                    ficheGUI.setPartieJeu(this);
                 } else {
                     System.err.println("FicheGUI is null for " + joueur.getPseudo());
                 }
@@ -96,7 +104,7 @@ class Partie {
                 tourDeJeu(joueur);
                 fenetrePrincipale.reload_fenetre(joueur);
                 int choix = plateau.demanderChoixDe();
-
+                
                 while (plateau.checkRessourcesAchat(joueur, choix) == 1) {
                     choix = plateau.demanderChoixDe();
                 }
@@ -114,6 +122,7 @@ class Partie {
                     } else if (choix == 4) {
                         joueur.retirerRessource(Ressources.ARGENT, 2);
                     }
+                    
                     demanderModifierDe(joueur, plateau.getListesDes().get(choix - 1));
                         int ChoixUtilisationDe = ChoixUtilisationDe();
                         if (ChoixUtilisationDe == 0) {
@@ -160,8 +169,6 @@ class Partie {
             }
         }
     }
-    
-    
 
     public void demanderModifierDe(Joueur joueur, De de) {
         Scanner scanner = new Scanner(System.in);
@@ -240,6 +247,21 @@ class Partie {
         demanderModifierDe(joueur, de);
     }
 
+    public void modfiDeAvecArg(Joueur joueur, De de, CouleurDe couleur, int valeur) {
+        if (de.getCouleur() != couleur && joueur.getInventaireRes().get(Ressources.CONNAISSANCE) > 0) {
+            de.setCouleur(couleur);
+            joueur.retirerRessource(Ressources.CONNAISSANCE, 1);
+        }
+        if (de.getValeur() != valeur) {
+            int difference = Math.abs(de.getValeur() - valeur);
+            if (joueur.getInventaireRes().get(Ressources.DRAPEAUX) >= difference) {
+                joueur.retirerRessource(Ressources.DRAPEAUX, difference);
+                de.setVal(valeur);
+            }
+        }
+        
+    }
+
     public void Construire(Joueur joueur, Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {
             int place = 1;
             for (Batiment batiment : fiche.getListeBatiments()) {
@@ -258,6 +280,7 @@ class Partie {
                 }
             }
             verificationBonusAdjacent(joueur, fiche, couleurDe, index, typeBatiment);
+            fenetrePrincipale.reload_fenetre(joueur);
     }
 
     public void verificationBonusAdjacent(Joueur joueur, Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {
@@ -354,7 +377,6 @@ class Partie {
             ConstruireArbitraire(typeBatiment, plateau, joueur, couleurPop);
             return;
         }
-
 
         Construire(joueur, fiche, CouleurDe.fromCouleur(couleurBatiment), place, typeBatiment);
 
@@ -530,4 +552,5 @@ class Partie {
             }
         }
     }
+
 }

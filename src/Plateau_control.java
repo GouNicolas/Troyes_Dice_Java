@@ -25,8 +25,25 @@ public class Plateau_control {
         // Example: Update the model or perform actions based on the selected tuile
         plateauGUI.repaint(); // Repaint to update the view
 
-        System.out.println("AAA" + partie.getPlateau().getListeTuiles().get(partie.getPlateau().RangDetoRangTuile(partie.currentCycle, partie.getJours(), tuileIndex)).getCouleur());
-        partie.getFenetrePrincipale().getChangementDeGUI().setDe(plateau.getListesDes().get(0));
+        if (partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1) != null) {
+            System.out.println("AAA" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getCouleur());
+            System.out.println("AAA" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getValeur());
+            System.out.println("B" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1));
+
+
+            int rangeDe = 0;
+            De de_temp = partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1);
+            for (De de : partie.getPlateau().getListesDes()) {
+                if (de == de_temp) {
+                    break;
+                }
+                rangeDe++;
+            }
+            int verif = partie.getPlateau().checkRessourcesAchat(partie.getListeJoueurs().get(0), rangeDe);
+            if (partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getCouleur() != CouleurDe.NOIR && verif == 0) {
+                partie.getFenetrePrincipale().getChangementDeGUI().setDe(partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1));
+            }
+        }
     }
 
     public void updateGUI() {
