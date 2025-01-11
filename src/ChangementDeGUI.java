@@ -186,7 +186,7 @@ class ChangementDeGUI extends JPanel {
         colorButton2.setBackground(buttonColor2);
     }
 
-    private void swapColors(Color newColor) {
+    public void swapColors(Color newColor) {
         Color oldColor = squareColor;
         squareColor = newColor;
         dice.setBackground(squareColor);
@@ -196,6 +196,12 @@ class ChangementDeGUI extends JPanel {
         } else {
             colorButton2.setBackground(oldColor);
         }
+    }
+
+    public void setDe(De de) {
+        swapColors(Couleur.convertCouleurDeToColor(de.getCouleur()));
+        numberLabel.setText(String.valueOf(de.getValeur()));
+        updateValueButtons();
     }
 
     private void updateValueButtons() {
@@ -248,13 +254,5 @@ class ChangementDeGUI extends JPanel {
         updateValueButtons();
         isDiceLocked = false;
         lockButton.setEnabled(true);
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Changement De GUI");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
-        frame.add(new ChangementDeGUI(null));
-        frame.setVisible(true);
     }
 }
