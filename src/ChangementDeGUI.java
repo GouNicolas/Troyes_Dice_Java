@@ -202,17 +202,20 @@ class ChangementDeGUI extends JPanel {
         valueButtonPanel.removeAll();
         int currentValue = Integer.parseInt(numberLabel.getText());
         for (int i = 1; i <= 6; i++) {
-            JButton valueButton = new JButton(String.valueOf(i));
-            valueButton.setPreferredSize(new Dimension(50, 50));
-            valueButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!isDiceLocked) {
-                        swapValues(Integer.parseInt(valueButton.getText()));
+            if (i != currentValue) {
+                JButton valueButton = new JButton(String.valueOf(i));
+                valueButton.setPreferredSize(new Dimension(50, 50));
+                valueButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (!isDiceLocked) {
+                            swapValues(Integer.parseInt(valueButton.getText()));
+                            updateValueButtons(); // Mettre à jour les boutons après le changement de valeur
+                        }
                     }
-                }
-            });
-            valueButtonPanel.add(valueButton);
+                });
+                valueButtonPanel.add(valueButton);
+            }
         }
         valueButtonPanel.revalidate();
         valueButtonPanel.repaint();

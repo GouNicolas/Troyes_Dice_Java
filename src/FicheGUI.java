@@ -112,14 +112,61 @@ public class FicheGUI extends JFrame {
     }
 
     private JPanel createColoredPanel(Color color, int rowIndex) {
-        final ImageIcon trueIcon = new ImageIcon("C:/Users/33787/OneDrive - Université De Technologie De Belfort-Montbeliard/Bureau/UTBM BR01-02/AP4B/Portage UTBM projet AP4B/Autre/Forteresse.png");
-        final ImageIcon falseIcon = new ImageIcon("C:/Users/33787/OneDrive - Université De Technologie De Belfort-Montbeliard/Bureau/UTBM BR01-02/AP4B/Portage UTBM projet AP4B/Autre/ForteresseNonPosee.png");
         
+        final ImageIcon FortIcon = new ImageIcon("./ressources/Portage/Autre/ForteressePosee.png");
+        final ImageIcon FortNPIcon = new ImageIcon("./ressources/Portage/Autre/ForteresseNonPosee.png");
+        
+        final ImageIcon red11Icon = new ImageIcon("./ressources/Portage/GMC/Gmc1.png");
+        final ImageIcon red11NPIcon = new ImageIcon("./ressources/Portage/GMC/GmcPeuple.png");
+        final ImageIcon red12Icon = new ImageIcon("./ressources/Portage/GMC/Gmc2.png");
+        final ImageIcon red12NPIcon = new ImageIcon("./ressources/Portage/Info/InfoPeuple.png");
+        final ImageIcon red2Icon = new ImageIcon("./ressources/Portage/GMC/Gmc2.png");
+        final ImageIcon red2NPIcon = new ImageIcon("./ressources/Portage/Plateau/RewardGmc.png");
+
+        final ImageIcon yel1Icon = new ImageIcon("./ressources/Portage/Info/Info1.png");
+        final ImageIcon yel1NPIcon = new ImageIcon("./ressources/Portage/Plateau/Case1-QuartierInfo.png");
+        final ImageIcon yel2Icon = new ImageIcon("./ressources/Portage/Info/Info2.png");
+        final ImageIcon yel2NPIcon = new ImageIcon("./ressources/Portage/Plateau/RewardInfo.png");
+
+        final ImageIcon white1Icon = new ImageIcon("./ressources/Portage/Edim/Edim1.png");
+        final ImageIcon white1NPIcon = new ImageIcon("./ressources/Portage/Edim/Edim1NonPose.png");
+        final ImageIcon white2Icon = new ImageIcon("./ressources/Portage/Edim/Edim2.png");
+        final ImageIcon white2NPIcon = new ImageIcon("./ressources/Portage/Plateau/RewardEdim.png");
+
         // Resize images
-        Image trueImage = trueIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        Image falseImage = falseIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        final ImageIcon resizedtrueIcon = new ImageIcon(trueImage);
-        final ImageIcon resizedfalseIcon = new ImageIcon(falseImage);
+        Image FortImage = FortIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image FortNPImage = FortNPIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image red1Image = red11Icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image red1NPImage = red11NPIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image red2Image = red2Icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image red2NPImage = red2NPIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image yel1Image = yel1Icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image yel1NPImage = yel1NPIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image yel2Image = yel2Icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image yel2NPImage = yel2NPIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image white1Image = white1Icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image white1NPImage = white1NPIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image white2Image = white2Icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image white2NPImage = white2NPIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+
+        // Create resized icons
+        final ImageIcon resizedFortIcon = new ImageIcon(FortImage);
+        final ImageIcon resizedFortNPIcon = new ImageIcon(FortNPImage);
+        final ImageIcon resizedred11Icon = new ImageIcon(red1Image);
+        final ImageIcon resizedred11NPIcon = new ImageIcon(red1NPImage);
+        final ImageIcon resizedred2Icon = new ImageIcon(red2Image);
+        final ImageIcon resizedred2NPIcon = new ImageIcon(red2NPImage);
+        final ImageIcon resizedYel1Icon = new ImageIcon(yel1Image);
+        final ImageIcon resizedYel1NPIcon = new ImageIcon(yel1NPImage);
+        final ImageIcon resizedYel2Icon = new ImageIcon(yel2Image);
+        final ImageIcon resizedYel2NPIcon = new ImageIcon(yel2NPImage);
+        final ImageIcon resizedWhite1Icon = new ImageIcon(white1Image);
+        final ImageIcon resizedWhite1NPIcon = new ImageIcon(white1NPImage);
+        final ImageIcon resizedWhite2Icon = new ImageIcon(white2Image);
+        final ImageIcon resizedWhite2NPIcon = new ImageIcon(white2NPImage);
+
+        ImageIcon[][] rowIcons = {{resizedred11NPIcon, resizedred2NPIcon, resizedYel1NPIcon, resizedYel2NPIcon, resizedWhite1NPIcon, resizedWhite2NPIcon},
+                                 {resizedred11Icon, resizedred2Icon, resizedYel1Icon, resizedYel2Icon, resizedWhite1Icon, resizedWhite2Icon}};
 
         JPanel coloredPanel = new JPanel();
         coloredPanel.setBackground(color);
@@ -152,48 +199,61 @@ public class FicheGUI extends JFrame {
             int booleanSquareWidth = (totalWidth - (smallCaseCount * smallCaseWidth)) / (6 + smallCaseCount);
 
             for (int j = 0; j < 6; j++) {
-                // Add JButton with boolean value from the controller
-                boolean value = controller.getValue(rowIndex * 3 + i, j);
-                JButton booleanButton = new JButton(value ? resizedtrueIcon : resizedfalseIcon);
-                booleanButton.setBackground(color);
-                booleanButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                booleanButton.setOpaque(true);
-                booleanButton.setPreferredSize(new Dimension(booleanSquareWidth, 100)); // Adjust the size of the boolean square
-                booleanButton.setEnabled(false); // Initially disable all buttons
-                
-                final int row = rowIndex * 3 + i;
-                final int col = j;
-                booleanButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        controller.setValue(row, col, true);
-                        booleanButton.setIcon(resizedtrueIcon);
-                        booleanButton.setText("");
-                        updateSmallCases(row, col);
-                        revalidate();
-                        repaint();
-      
-                         // Disable buttons with false value
-                        for (Map.Entry<String, JButton> entry : booleanButtons.entrySet()) {
-                            JButton button = entry.getValue();
-                            if (button != booleanButton) {
-                                button.setEnabled(false);
+                ImageIcon trueButtonIcon = rowIcons[1][i % rowIcons[1].length];
+                ImageIcon falseButtonIcon = rowIcons[0][i % rowIcons[1].length];
+                if (i == 0) {
+                    // Add JLabel for text display
+                    boolean value = controller.getValue(rowIndex * 3 + i, j);
+                    JLabel imageLabel = new JLabel(value ? resizedFortIcon : resizedFortNPIcon);
+                    imageLabel.setOpaque(true);
+                    imageLabel.setBackground(color);
+    
+                    gbc.gridx = j * 2;
+                    gbc.weightx = 1.0;
+                    linePanel.add(imageLabel, gbc);
+                }else {
+                    // Add JButton with boolean value from the controller
+                    boolean value = controller.getValue(rowIndex * 3 + i, j);
+                    JButton booleanButton = new JButton(value ? trueButtonIcon : falseButtonIcon);
+                    booleanButton.setBackground(color);
+                    booleanButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                    booleanButton.setOpaque(true);
+                    booleanButton.setPreferredSize(new Dimension(booleanSquareWidth, 100)); // Adjust the size of the boolean square
+                    booleanButton.setEnabled(false); // Initially disable all buttons
+    
+                    final int row = rowIndex * 3 + i;
+                    final int col = j;
+                    booleanButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            controller.setValue(row, col, true);
+                            booleanButton.setIcon(trueButtonIcon);
+                            booleanButton.setText("");
+                            updateSmallCases(row, col);
+                            revalidate();
+                            repaint();
+    
+                            // Disable buttons with false value
+                            for (Map.Entry<String, JButton> entry : booleanButtons.entrySet()) {
+                                JButton button = entry.getValue();
+                                if (button != booleanButton) {
+                                    button.setEnabled(false);
+                                }
                             }
                         }
+                    });
+    
+                    gbc.gridx = j * 2;
+                    gbc.weightx = 1.0;
+                    linePanel.add(booleanButton, gbc);
+    
+                    // Store reference to the boolean button
+                    booleanButtons.put((rowIndex * 3 + i) + "-" + col, booleanButton);
                 }
-            });
-            
-
-                gbc.gridx = j * 2;
-                gbc.weightx = 1.0;
-                linePanel.add(booleanButton, gbc);
-
-                // Store reference to the boolean button
-                booleanButtons.put(row + "-" + col, booleanButton);
 
                 // Check if a small case should be added after this square
-                if (j < 5 && controller.hasSmallCase(row, j, j + 1)) {
-                    int smallCaseValue = controller.getSmallCaseValue(row, j, j + 1);
+                if (j < 5 && controller.hasSmallCase(rowIndex * 3 + i, j, j + 1)) {
+                    int smallCaseValue = controller.getSmallCaseValue(rowIndex * 3 + i, j, j + 1);
                     JLabel smallCaseLabel = new JLabel(String.valueOf(smallCaseValue), SwingConstants.CENTER);
                     smallCaseLabel.setBackground(Color.LIGHT_GRAY);
                     smallCaseLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -205,7 +265,7 @@ public class FicheGUI extends JFrame {
                     linePanel.add(smallCaseLabel, gbc);
 
                     // Store reference to the small case label
-                    smallCaseLabels.put(row + "-" + j + "-" + (j + 1), smallCaseLabel);
+                    smallCaseLabels.put(rowIndex * 3 + i + "-" + j + "-" + (j + 1), smallCaseLabel);
                 }
             }
 
