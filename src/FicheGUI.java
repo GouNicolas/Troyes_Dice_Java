@@ -795,6 +795,20 @@ public class FicheGUI extends JFrame {
         return fichePanel;
     }
 
+    public void updateResourcesDisplay() {
+        for (int i = 0; i < resourcesPanels.size(); i++) {
+            updateResourcesPanel(resourcesPanels.get(i), i);
+        }
+    }
+
+    public void reloadButtonStates() {
+        for (Map.Entry<String, JButton> entry : booleanButtons.entrySet()) {
+            JButton button = entry.getValue();
+            boolean value = controller.getValue(Integer.parseInt(entry.getKey().split("-")[0]), Integer.parseInt(entry.getKey().split("-")[1]));
+            button.setEnabled(value);
+        }
+    }
+
     public void updateButtonStates(int diceValue, Color diceColor) {
         // Disable all buttons initially
         for (JButton button : booleanButtons.values()) {

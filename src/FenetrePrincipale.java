@@ -81,6 +81,7 @@ public class FenetrePrincipale extends JFrame {
     public void reload_fenetre(Joueur joueur) {
         if (this.ficheGUIPanel != null) {
             this.ficheGUIPanel.updateContent(joueur.getFiche(), joueur);
+            this.ficheGUIPanel.reloadButtonStates();
             this.ficheGUIPanel.revalidate();
             this.ficheGUIPanel.repaint();
         } else {
