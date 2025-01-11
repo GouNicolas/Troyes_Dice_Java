@@ -8,6 +8,7 @@ class Partie {
     private ArrayList<Joueur> listeJoueurs = new ArrayList<>();
     private Plateau plateau;
     private int jours;
+    private FenetrePrincipale fenetrePrincipale;
     String currentCycle;
 
     public Partie() {
@@ -22,6 +23,14 @@ class Partie {
 
     public void retirerJoueur(Joueur joueur) {
         listeJoueurs.remove(joueur);
+    }
+
+    public FenetrePrincipale getFenetrePrincipale() {
+        return fenetrePrincipale;
+    }
+
+    public void setFenetrePrincipale(FenetrePrincipale fenetrePrincipale) {
+        this.fenetrePrincipale = fenetrePrincipale;
     }
 
     public void tourDeJeu(Joueur joueur) {
@@ -48,15 +57,11 @@ class Partie {
     }
     
     public void startGame(FenetrePrincipale fenetrePrincipale) {
+        setFenetrePrincipale(fenetrePrincipale);
+
         Map<Joueur, FicheGUI> ficheGUIMap = new HashMap<>();
 
         FicheGUI ficheGUI = fenetrePrincipale.getFicheGUIPanel();
-
-        try {
-            Thread.sleep(1000); // 1 second delay
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         while (true) {
             for (Joueur joueur : listeJoueurs) {
@@ -93,6 +98,7 @@ class Partie {
                 
                 plateau.lancerDe();
                 tourDeJeu(joueur);
+                fenetrePrincipale.reload_fenetre(joueur);
                 int choix = plateau.demanderChoixDe();
                 
                 while (plateau.checkRessourcesAchat(joueur, choix) == 1) {

@@ -47,14 +47,9 @@ public class PlateauGUI extends JPanel {
         add(errorLabel);
 
         // Initialize cycle label
-        cycleLabel = new JLabel("", SwingConstants.CENTER);
+        cycleLabel = new JLabel("Jour - Tour 1", SwingConstants.CENTER); // Initialize with "Jour - Tour 1"
         add(cycleLabel, BorderLayout.NORTH);
 
-        // Initialize refresh button
-        JButton refreshButton = new JButton("Refresh");
-        refreshButton.addActionListener(e -> refreshPlateau());
-        add(refreshButton, BorderLayout.SOUTH);
-        
         // Load background images
         loadImages();
         
