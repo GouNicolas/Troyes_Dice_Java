@@ -58,6 +58,7 @@ class Partie {
             currentCycle = "Jour";
             jours += 1;
         }
+        plateau.lancerDe();
         plateau.ModifierCouleurDeCouleurTuile(currentCycle, jours);
     }
     

@@ -165,7 +165,7 @@ class Plateau {
     /**
      * Initialise les dés du plateau avec un dé noir aléatoire
      */
-    private void initialiserDes() {
+    public void initialiserDes() {
         Random random = new Random();
         int DE_NOIR = random.nextInt(MAX_DES);
         for (int i = 0; i < MAX_DES; i++) {

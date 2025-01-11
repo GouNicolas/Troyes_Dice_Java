@@ -189,12 +189,12 @@ class ChangementDeGUI extends JPanel {
             }
         });
 
-        // Suppress the score display
-        // scoreLabel = new JLabel("Score : 0");
-        // gbc.gridx = 0;
-        // gbc.gridy = 10;
-        // gbc.gridwidth = 2;
-        // mainPanel.add(scoreLabel, gbc);
+        // Initialize scoreLabel
+        scoreLabel = new JLabel("Score : 0");
+        gbc.gridx = 0;
+        gbc.gridy = 10;
+        gbc.gridwidth = 2;
+        mainPanel.add(scoreLabel, gbc);
 
         add(mainPanel, BorderLayout.CENTER);
     }
