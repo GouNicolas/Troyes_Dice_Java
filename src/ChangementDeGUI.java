@@ -256,6 +256,10 @@ class ChangementDeGUI extends JPanel {
         updateValueButtons(this.joueur); // Met à jour les boutons après avoir changé la valeur du dé
     }
 
+    public boolean isLocked() {
+        return isDiceLocked;
+    }
+
     private void resetDice() {
         numberLabel.setText(String.valueOf(initialNumber));
         dice.setBackground(initialColor);

@@ -24,7 +24,6 @@ public class FicheGUI extends JFrame {
         resourcesPanels = new ArrayList<>();
         smallCaseLabels = new HashMap<>();
         booleanButtons = new HashMap<>();
-        changementDeGUIPanel = new ChangementDeGUI(this);
         
         setTitle("Fiche Information");
         setSize(800, 600);

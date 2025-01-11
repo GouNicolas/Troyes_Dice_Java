@@ -40,7 +40,7 @@ public class Plateau_control {
                 rangeDe++;
             }
             int verif = partie.getPlateau().checkRessourcesAchat(partie.getListeJoueurs().get(0), rangeDe);
-            if (partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getCouleur() != CouleurDe.NOIR && verif == 0) {
+            if (partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getCouleur() != CouleurDe.NOIR && verif == 0 && !partie.getFenetrePrincipale().getChangementDeGUI().isLocked()) {
                 partie.getFenetrePrincipale().getChangementDeGUI().setDe(partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1));
             }
         }
