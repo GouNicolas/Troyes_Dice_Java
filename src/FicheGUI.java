@@ -25,6 +25,18 @@ public class FicheGUI extends JFrame {
     private static final String GMC_IMAGE_PATH = IMAGES_PATH + "/Portage/GMC/RessourceGmc.png";
     
     public FicheGUI(FicheController controller) {
+        // Apply Nimbus look and feel
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         this.controller = controller;
         resourcesPanels = new ArrayList<>();
         smallCaseLabels = new HashMap<>();

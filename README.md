@@ -101,19 +101,6 @@ Partie.java
  : Logique principale du jeu
 - 
 
-PlateauGUI.java
-
- : Interface du plateau
-- 
-
-FicheGUI.java
-
- : Interface de la fiche joueur
-- 
-
-ChangementDeGUI.java
-
- : Interface de modification des dés
 
 ## Licence
 
@@ -125,7 +112,7 @@ LICENSE
 
 ## Auteurs
 
-
+GouNicolas[]
 
 ## Remarques
 
