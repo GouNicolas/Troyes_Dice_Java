@@ -19,12 +19,22 @@ public class Plateau_control {
     }
 
     public void handleTuileSelection(int tuileIndex) {
-        tuileIndex = (tuileIndex + 6) % 9; // vrai index
+        // si le joueur 
+        int nombreTentatives = 0;
+        // Implement the logic for handling tuile selection
+        tuileIndex = (tuileIndex+6)%9; // vrai index
         System.out.println("Tuile selected: " + tuileIndex);
+        // Example: Update the model or perform actions based on the selected tuile
+        plateauGUI.repaint(); // Repaint to update the view
 
-        if (partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex - 1) != null) {
-            De de_temp = partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex - 1);
+        if (partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1) != null) {
+            System.out.println("AAA" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getCouleur());
+            System.out.println("AAA" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getValeur());
+            System.out.println("B" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1));
+
+
             int rangeDe = 0;
+            De de_temp = partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1);
             for (De de : partie.getPlateau().getListesDes()) {
                 if (de == de_temp) {
                     break;
