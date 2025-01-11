@@ -1,16 +1,34 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Classe représentant un joueur dans le jeu Troyes Dice.
+ * Un joueur peut construire des bâtiments, collecter des ressources et marquer des points
+ * en développant les trois branches de l'UTBM (EDIM, GMC, INFO).
+ */
 class Joueur {
+    /** Pseudo du joueur */
     private String pseudo;
+    /** Inventaire des ressources actuelles */
     private HashMap<Ressources, Integer> inventaireRes = new HashMap<>();
+    /** Historique des ressources obtenues */
     private HashMap<Ressources, Integer> historiqueRes = new HashMap<>();
+    /** Fiche individuelle du joueur */
     private Fiche fichIndiv;
+    /** Nombre de bonus d'habitants obtenus */
     private int nbBonusHabObtenus = 0;
+    /** Bonus de prestige pour la branche EDIM */
     private boolean bonusPrestigeBlanc = false;
+    /** Bonus de prestige pour la branche INFO */
     private boolean bonusPrestigeJaune = false;
+    /** Bonus de prestige pour la branche GMC */
     private boolean bonusPrestigeRouge = false;
 
+    /**
+     * Constructeur du joueur.
+     * Initialise la fiche du joueur et lui donne ses ressources de départ.
+     * @param pseudo Le nom du joueur
+     */
     public Joueur(String pseudo) {
         this.pseudo = pseudo;
         this.fichIndiv = new Fiche();
@@ -19,6 +37,12 @@ class Joueur {
         }
     }
 
+    /**
+     * Calcule le score final du joueur.
+     * Prend en compte les bâtiments construits, les habitants, les ressources restantes
+     * et les bonus des cathédrales.
+     * @return Le score total du joueur
+     */
     public int calculerScore() {
         Fiche fiche = getFiche();
 
@@ -57,9 +81,6 @@ class Joueur {
                 }
             }
             rang++;
-
-            
-            
         }
 
         for (int i = 0; i < 6; i++) {
@@ -125,34 +146,63 @@ class Joueur {
         System.out.println("Cathédrales :" + fiche.getListeCathedrales());
         System.out.println("Score : " + SCORE);
 
-
         return SCORE;
     }
 
+    /**
+     * Obtient le pseudo du joueur
+     * @return Le pseudo du joueur
+     */
     public String getPseudo() {
         return pseudo;
     }
 
+    /**
+     * Obtient la fiche du joueur
+     * @return La fiche du joueur
+     */
     public Fiche getFiche() {
         return fichIndiv;
     }
 
+    /**
+     * Obtient l'inventaire actuel des ressources du joueur
+     * @return Une HashMap contenant les ressources et leurs quantités
+     */
     public HashMap<Ressources, Integer> getInventaireRes() {
         return inventaireRes;
     }
 
+    /**
+     * Obtient l'historique des ressources obtenues par le joueur
+     * @return Une HashMap contenant toutes les ressources obtenues
+     */
     public HashMap<Ressources, Integer> getHistoriqueRes() {
         return historiqueRes;
     }
 
+    /**
+     * Obtient le nombre de bonus d'habitants déjà obtenus
+     * @return Le nombre de bonus d'habitants
+     */
     public int getNbBonusHabObtenus() {
         return nbBonusHabObtenus;
     }
 
+    /**
+     * Définit le nombre de bonus d'habitants obtenus
+     * @param nbBonusHabObtenus Le nouveau nombre de bonus
+     */
     public void setNbBonusHabObtenus(int nbBonusHabObtenus) {
         this.nbBonusHabObtenus = nbBonusHabObtenus;
     }
 
+    /**
+     * Ajoute des ressources à l'inventaire du joueur et met à jour l'historique.
+     * Déclenche automatiquement les bonus d'habitants si les seuils sont atteints.
+     * @param ressource Le type de ressource à ajouter
+     * @param quantite La quantité à ajouter
+     */
     public void ajouterRessource(Ressources ressource, int quantite) {
         System.out.println("Ajout de " + quantite + " " + ressource);
         inventaireRes.put(ressource, getInventaireRes().getOrDefault(ressource, 0) + quantite);
@@ -166,7 +216,6 @@ class Joueur {
             else if (ressource == Ressources.CONNAISSANCE) {
                 getFiche().ajouterHab(Couleur.BLANC, 1);
             }
-            
         }
 
         if (getHistoriqueRes().getOrDefault(ressource, 0) < 12 && ((getHistoriqueRes().getOrDefault(ressource, 0) + quantite) >= 12)) {
@@ -179,7 +228,6 @@ class Joueur {
             else if (ressource == Ressources.CONNAISSANCE) {
                 getFiche().ajouterHab(Couleur.BLANC, 1);
             }
-            
         }
 
         if (getHistoriqueRes().getOrDefault(ressource, 0) < 18 && ((getHistoriqueRes().getOrDefault(ressource, 0) + quantite) >= 18)) {
@@ -192,36 +240,64 @@ class Joueur {
             else if (ressource == Ressources.CONNAISSANCE) {
                 getFiche().ajouterHab(Couleur.BLANC, 1);
             }
-            
         }
         System.out.println("Inventaire de " + ressource + " : " + getInventaireRes().get(ressource));
         historiqueRes.put(ressource, getHistoriqueRes().getOrDefault(ressource, 0) + quantite);
     }
 
+    /**
+     * Retire des ressources de l'inventaire du joueur
+     * @param ressource Le type de ressource à retirer
+     * @param quantite La quantité à retirer
+     */
     public void retirerRessource(Ressources ressource, int quantite) {
         inventaireRes.put(ressource, getInventaireRes().getOrDefault(ressource, 0) - quantite);
     }
 
+    /**
+     * Vérifie si le bonus de prestige EDIM est obtenu
+     * @return true si le bonus est obtenu, false sinon
+     */
     public boolean isBonusPrestigeBlanc() {
         return bonusPrestigeBlanc;
     }
 
+    /**
+     * Définit l'état du bonus de prestige EDIM
+     * @param bonusPrestigeBlanc Le nouvel état du bonus
+     */
     public void setBonusPrestigeBlanc(boolean bonusPrestigeBlanc) {
         this.bonusPrestigeBlanc = bonusPrestigeBlanc;
     }
 
+    /**
+     * Vérifie si le bonus de prestige INFO est obtenu
+     * @return true si le bonus est obtenu, false sinon
+     */
     public boolean isBonusPrestigeJaune() {
         return bonusPrestigeJaune;
     }
 
+    /**
+     * Définit l'état du bonus de prestige INFO
+     * @param bonusPrestigeJaune Le nouvel état du bonus
+     */
     public void setBonusPrestigeJaune(boolean bonusPrestigeJaune) {
         this.bonusPrestigeJaune = bonusPrestigeJaune;
     }
 
+    /**
+     * Vérifie si le bonus de prestige GMC est obtenu
+     * @return true si le bonus est obtenu, false sinon
+     */
     public boolean isBonusPrestigeRouge() {
         return bonusPrestigeRouge;
     }
 
+    /**
+     * Définit l'état du bonus de prestige GMC
+     * @param bonusPrestigeRouge Le nouvel état du bonus
+     */
     public void setBonusPrestigeRouge(boolean bonusPrestigeRouge) {
         this.bonusPrestigeRouge = bonusPrestigeRouge;
     }
