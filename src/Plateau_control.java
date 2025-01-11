@@ -33,7 +33,6 @@ public class Plateau_control {
         if (de_temp != null) {
             System.out.println("Tuile selected: " + tuileIndex);
             int rangeDe = 0;
-            De de_temp = partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1);
             for (De de : partie.getPlateau().getListesDes()) {
                 if (de == de_temp) {
                     break;
