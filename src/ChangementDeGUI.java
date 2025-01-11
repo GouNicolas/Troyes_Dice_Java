@@ -15,14 +15,19 @@ class ChangementDeGUI extends JPanel {
     private JPanel valueButtonPanel;
     private int initialNumber;
     private Color initialColor;
+
+    private Color currentColor;
+
     private int lockedNumber;
     private Color lockedColor;
     private boolean isDiceLocked = false;
     private FicheGUI ficheGUI;
     private JButton lockButton;
+    private Joueur joueur;
 
-    public ChangementDeGUI(FicheGUI ficheGUI) {
+    public ChangementDeGUI(FicheGUI ficheGUI, Joueur joueur_) {
         this.ficheGUI = ficheGUI;
+        this.joueur = joueur_;
         setLayout(new BorderLayout());
 
         // Main panel with fixed layout
@@ -50,6 +55,7 @@ class ChangementDeGUI extends JPanel {
 
         initialNumber = Integer.parseInt(numberLabel.getText());
         initialColor = dice.getBackground();
+        currentColor = dice.getBackground();
 
         // Add a button to lock the dice
         lockButton = new JButton();
@@ -104,7 +110,7 @@ class ChangementDeGUI extends JPanel {
         colorButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!isDiceLocked) {
+                if (!isDiceLocked && joueur.getInventaireRes().get(Ressources.CONNAISSANCE)>0) {
                     swapColors(colorButton1.getBackground());
                 }
             }
@@ -113,7 +119,7 @@ class ChangementDeGUI extends JPanel {
         colorButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!isDiceLocked) {
+                if (!isDiceLocked && joueur.getInventaireRes().get(Ressources.CONNAISSANCE)>0) {
                     swapColors(colorButton2.getBackground());
                 }
             }
@@ -132,7 +138,7 @@ class ChangementDeGUI extends JPanel {
         gbc.gridwidth = 2;
         mainPanel.add(valueButtonPanel, gbc);
 
-        updateValueButtons();
+        updateValueButtons(this.joueur);
 
         // "Reset dice" button
         JButton resetButton = new JButton("Reset dice");
@@ -188,7 +194,8 @@ class ChangementDeGUI extends JPanel {
 
     public void swapColors(Color newColor) {
         System.out.println("Swap colors from " + squareColor + " to " + newColor);
-
+        currentColor = newColor;
+        
         Color oldColor = squareColor;
         if (oldColor.equals(newColor)) {
             return;
@@ -208,24 +215,32 @@ class ChangementDeGUI extends JPanel {
     }
 
     public void setDe(De de) {
+        initialNumber = de.getValeur();
+        initialColor = Couleur.convertCouleurDeToColor(de.getCouleur());
+
+
         swapColors(Couleur.convertCouleurDeToColor(de.getCouleur()));
         numberLabel.setText(String.valueOf(de.getValeur()));
-        updateValueButtons();
+        updateValueButtons(this.joueur);
     }
 
-    private void updateValueButtons() {
+    private void updateValueButtons(Joueur joueur) {
         valueButtonPanel.removeAll();
         int currentValue = Integer.parseInt(numberLabel.getText());
         for (int i = 1; i <= 6; i++) {
-            if (i != currentValue) {
+            System.out.println("i: " + initialNumber + " currentValue: " + currentValue);
+            
+            int Diff = Math.abs(i - initialNumber);
+
+            if (i != currentValue && joueur.getInventaireRes().get(Ressources.DRAPEAUX) >= Diff) {
                 JButton valueButton = new JButton(String.valueOf(i));
                 valueButton.setPreferredSize(new Dimension(50, 50));
                 valueButton.addActionListener(new ActionListener() {
-                    @Override
+                    @Override ///LAAAA
                     public void actionPerformed(ActionEvent e) {
                         if (!isDiceLocked) {
                             swapValues(Integer.parseInt(valueButton.getText()));
-                            updateValueButtons(); // Mettre à jour les boutons après le changement de valeur
+                            updateValueButtons(joueur); // Mettre à jour les boutons après le changement de valeur
                         }
                     }
                 });
@@ -238,7 +253,7 @@ class ChangementDeGUI extends JPanel {
 
     private void swapValues(int newValue) {
         numberLabel.setText(String.valueOf(newValue));
-        updateValueButtons(); // Met à jour les boutons après avoir changé la valeur du dé
+        updateValueButtons(this.joueur); // Met à jour les boutons après avoir changé la valeur du dé
     }
 
     private void resetDice() {
@@ -246,7 +261,7 @@ class ChangementDeGUI extends JPanel {
         dice.setBackground(initialColor);
         squareColor = initialColor;
         setRandomButtonColors();
-        updateValueButtons();
+        updateValueButtons(this.joueur);
     }
 
     public int getLockedDiceValue() {
@@ -260,7 +275,7 @@ class ChangementDeGUI extends JPanel {
     public void rerollDice() {
         setRandomSquare();
         setRandomButtonColors();
-        updateValueButtons();
+        updateValueButtons(this.joueur);
         isDiceLocked = false;
         lockButton.setEnabled(true);
     }

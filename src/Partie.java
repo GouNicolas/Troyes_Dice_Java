@@ -17,6 +17,10 @@ class Partie {
         this.currentCycle = "Jour";
     }
 
+    public ArrayList<Joueur> getListeJoueurs() {
+        return listeJoueurs;
+    }
+
     public void ajouterJoueur(Joueur joueur) {
         listeJoueurs.add(joueur);
     }
@@ -160,8 +164,6 @@ class Partie {
             }
         }
     }
-    
-    
 
     public void demanderModifierDe(Joueur joueur, De de) {
         Scanner scanner = new Scanner(System.in);
@@ -354,7 +356,6 @@ class Partie {
             ConstruireArbitraire(typeBatiment, plateau, joueur, couleurPop);
             return;
         }
-
 
         Construire(joueur, fiche, CouleurDe.fromCouleur(couleurBatiment), place, typeBatiment);
 
