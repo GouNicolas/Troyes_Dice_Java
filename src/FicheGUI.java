@@ -301,7 +301,7 @@ public class FicheGUI extends JFrame {
                     booleanButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                     booleanButton.setOpaque(true);
                     booleanButton.setPreferredSize(new Dimension(booleanSquareWidth, 100)); // Adjust the size of the boolean square
-                    booleanButton.setEnabled(false); // Initially disable all buttons
+                    //booleanButton.setEnabled(false); // Initially disable all buttons
     
                     final int row = rowIndex * 3 + i;
                     final int col = j;
@@ -355,7 +355,7 @@ public class FicheGUI extends JFrame {
         //Add the + button
         JButton plusButton = new JButton("+");
         plusButton.setBackground(color);
-        plusButton.setEnabled(false);
+        //plusButton.setEnabled(false);
         plusButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

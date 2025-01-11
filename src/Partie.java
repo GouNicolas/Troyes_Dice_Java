@@ -98,6 +98,7 @@ class Partie {
                 
                 plateau.lancerDe();
                 tourDeJeu(joueur);
+                fenetrePrincipale.getChangementDeGUI().updateScore(joueur);
                 fenetrePrincipale.reload_fenetre(joueur);
                 int choix = plateau.demanderChoixDe();
                 

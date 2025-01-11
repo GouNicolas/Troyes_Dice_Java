@@ -18,11 +18,10 @@ class ChangementDeGUI extends JPanel {
     private int lockedNumber;
     private Color lockedColor;
     private boolean isDiceLocked = false;
-    private FicheGUI ficheGUI;
     private JButton lockButton;
+    private JLabel scoreLabel;
 
     public ChangementDeGUI(FicheGUI ficheGUI) {
-        this.ficheGUI = ficheGUI;
         setLayout(new BorderLayout());
 
         // Main panel with fixed layout
@@ -149,7 +148,19 @@ class ChangementDeGUI extends JPanel {
             }
         });
 
+        scoreLabel = new JLabel("Score : 0");
+        gbc.gridx = 0;
+        gbc.gridy = 10;
+        gbc.gridwidth = 2;
+        mainPanel.add(scoreLabel, gbc);
+
         add(mainPanel, BorderLayout.CENTER);
+    }
+
+    // Method to update the score
+    public void updateScore(Joueur joueur) {
+        int score = joueur.calculerScore(); // Call the method to calculate the score
+        scoreLabel.setText("Score : "+score); // Update the score label
     }
 
     private void setRandomSquare() {
