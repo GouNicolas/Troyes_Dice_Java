@@ -118,9 +118,6 @@ class Partie {
                     } else if (choix == 4) {
                         joueur.retirerRessource(Ressources.ARGENT, 2);
                     }
-
-                    // ficheGUI.getChangementDeGUIPanel().setDeChoisis(plateau.getListesDes().get(choix - 1));
-                    ficheGUI.getChangementDeGUIPanel().AfficherDeChoisis(plateau.getListesDes().get(choix - 1));
                     
                     demanderModifierDe(joueur, plateau.getListesDes().get(choix - 1));
                         int ChoixUtilisationDe = ChoixUtilisationDe();
@@ -281,7 +278,7 @@ class Partie {
                 }
             }
             verificationBonusAdjacent(joueur, fiche, couleurDe, index, typeBatiment);
-            
+            fenetrePrincipale.reload_fenetre(joueur);
     }
 
     public void verificationBonusAdjacent(Joueur joueur, Fiche fiche, CouleurDe couleurDe, int index, int typeBatiment) {

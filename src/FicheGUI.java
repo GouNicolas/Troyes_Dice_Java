@@ -126,27 +126,27 @@ public class FicheGUI extends JFrame {
 
     private JPanel createColoredPanel(Color color, int rowIndex) {
         
-        final ImageIcon FortIcon = new ImageIcon("./ressources/Portage/Autre/Forteresse.png");
-        final ImageIcon FortNPIcon = new ImageIcon("./ressources/Portage/Autre/ForteresseNonPosee.png");
+        final ImageIcon FortIcon = new ImageIcon("src/ressources/Portage/Autre/Forteresse.png");
+        final ImageIcon FortNPIcon = new ImageIcon("src/ressources/Portage/Autre/ForteresseNonPosee.png");
         
-        final ImageIcon red11Icon = new ImageIcon("./ressources/Portage/GMC/Gmc1.png");
-        final ImageIcon red11NPIcon = new ImageIcon("./ressources/Portage/GMC/GmcPeuple.png");
-        final ImageIcon red12Icon = new ImageIcon("./ressources/Portage/GMC/Gmc1.png");
-        final ImageIcon red12NPIcon = new ImageIcon("./ressources/Portage/Info/InfoPeuple.png");
-        final ImageIcon red13Icon = new ImageIcon("./ressources/Portage/GMC/Gmc1.png");
-        final ImageIcon red13NPIcon = new ImageIcon("./ressources/Portage/Edim/EdimPeuple.png");
-        final ImageIcon red2Icon = new ImageIcon("./ressources/Portage/GMC/Gmc2.png");
-        final ImageIcon red2NPIcon = new ImageIcon("./ressources/Portage/Plateau/RewardGmc.png");
+        final ImageIcon red11Icon = new ImageIcon("src/ressources/Portage/GMC/Gmc1.png");
+        final ImageIcon red11NPIcon = new ImageIcon("src/ressources/Portage/GMC/GmcPeuple.png");
+        final ImageIcon red12Icon = new ImageIcon("src/ressources/Portage/GMC/Gmc1.png");
+        final ImageIcon red12NPIcon = new ImageIcon("src/ressources/Portage/Info/InfoPeuple.png");
+        final ImageIcon red13Icon = new ImageIcon("src/ressources/Portage/GMC/Gmc1.png");
+        final ImageIcon red13NPIcon = new ImageIcon("src/ressources/Portage/Edim/EdimPeuple.png");
+        final ImageIcon red2Icon = new ImageIcon("src/ressources/Portage/GMC/Gmc2.png");
+        final ImageIcon red2NPIcon = new ImageIcon("src/ressources/Portage/Plateau/RewardGmc.png");
 
-        final ImageIcon yel1Icon = new ImageIcon("./ressources/Portage/Info/Info1.png");
-        final ImageIcon yel11NPIcon = new ImageIcon("./ressources/Portage/Plateau/Case1-QuartierInfo.png");
-        final ImageIcon yel12NPIcon = new ImageIcon("./ressources/Portage/Plateau/Case2-QuartierInfo.png");
-        final ImageIcon yel13NPIcon = new ImageIcon("./ressources/Portage/Plateau/Case3-QuartierInfo.png");
-        final ImageIcon yel14NPIcon = new ImageIcon("./ressources/Portage/Plateau/Case4-QuartierInfo.png");
-        final ImageIcon yel15NPIcon = new ImageIcon("./ressources/Portage/Plateau/Case5-QuartierInfo.png");
-        final ImageIcon yel16NPIcon = new ImageIcon("./ressources/Portage/Plateau/Case6-QuartierInfo.png");
-        final ImageIcon yel2Icon = new ImageIcon("./ressources/Portage/Info/Info2.png");
-        final ImageIcon yel2NPIcon = new ImageIcon("./ressources/Portage/Plateau/RewardInfo.png");
+        final ImageIcon yel1Icon = new ImageIcon("src/ressources/Portage/Info/Info1.png");
+        final ImageIcon yel11NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case1-QuartierInfo.png");
+        final ImageIcon yel12NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case2-QuartierInfo.png");
+        final ImageIcon yel13NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case3-QuartierInfo.png");
+        final ImageIcon yel14NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case4-QuartierInfo.png");
+        final ImageIcon yel15NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case5-QuartierInfo.png");
+        final ImageIcon yel16NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case6-QuartierInfo.png");
+        final ImageIcon yel2Icon = new ImageIcon("src/ressources/Portage/Info/Info2.png");
+        final ImageIcon yel2NPIcon = new ImageIcon("src/ressources/Portage/Plateau/RewardInfo.png");
 
         final ImageIcon white1Icon = new ImageIcon("src/ressources/Portage/Edim/Edim1.png");
         final ImageIcon white1NPIcon = new ImageIcon("src/ressources/Portage/Edim/Edim1NonPose.png");
@@ -613,12 +613,12 @@ public class FicheGUI extends JFrame {
 
         // Load and resize images
         ImageIcon[] people = new ImageIcon[6];
-        people[0] = new ImageIcon(new ImageIcon("./ressources/Portage/Plateau/GmcObtenu.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        people[1] = new ImageIcon(new ImageIcon("./ressources/Portage/GMC/GmcPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        people[2] = new ImageIcon(new ImageIcon("./ressources/Portage/Plateau/InfoObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        people[3] = new ImageIcon(new ImageIcon("./ressources/Portage/Info/InfoPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        people[4] = new ImageIcon(new ImageIcon("./ressources/Portage/Plateau/EdimObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        people[5] = new ImageIcon(new ImageIcon("./ressources/Portage/EDIM/EdimPeuple.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        people[0] = new ImageIcon(new ImageIcon("src/ressources/Portage/Plateau/GmcObtenu.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        people[1] = new ImageIcon(new ImageIcon("src/ressources/Portage/GMC/GmcPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        people[2] = new ImageIcon(new ImageIcon("src/ressources/Portage/Plateau/InfoObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        people[3] = new ImageIcon(new ImageIcon("src/ressources/Portage/Info/InfoPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        people[4] = new ImageIcon(new ImageIcon("src/ressources/Portage/Plateau/EdimObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        people[5] = new ImageIcon(new ImageIcon("src/ressources/Portage/EDIM/EdimPeuple.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
 
 
         for (int lineIndex = 0; lineIndex < colors.length; lineIndex++) {
@@ -721,12 +721,12 @@ public class FicheGUI extends JFrame {
 
         // Load and resize images for resources
         ImageIcon[] resourceImages = new ImageIcon[6];
-        resourceImages[0] = new ImageIcon(new ImageIcon("./ressources/Portage/GMC/RessourceGmc.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        resourceImages[1] = new ImageIcon(new ImageIcon("./ressources/Portage/GMC/RessourceGmcNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        resourceImages[2] = new ImageIcon(new ImageIcon("./ressources/Portage/Info/RessourceInfo.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        resourceImages[3] = new ImageIcon(new ImageIcon("./ressources/Portage/Info/RessourceInfoNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        resourceImages[4] = new ImageIcon(new ImageIcon("./ressources/Portage/EDIM/RessourceEdim.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        resourceImages[5] = new ImageIcon(new ImageIcon("./ressources/Portage/EDIM/RessourceEdimNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[0] = new ImageIcon(new ImageIcon("src/ressources/Portage/GMC/RessourceGmc.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[1] = new ImageIcon(new ImageIcon("src/ressources/Portage/GMC/RessourceGmcNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[2] = new ImageIcon(new ImageIcon("src/ressources/Portage/Info/RessourceInfo.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[3] = new ImageIcon(new ImageIcon("src/ressources/Portage/Info/RessourceInfoNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[4] = new ImageIcon(new ImageIcon("src/ressources/Portage/EDIM/RessourceEdim.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[5] = new ImageIcon(new ImageIcon("src/ressources/Portage/EDIM/RessourceEdimNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
 
         char[] resources = controller.getResources().get(blockIndex);
         for (int i = 0; i < resources.length; i++) {
