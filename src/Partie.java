@@ -17,6 +17,10 @@ class Partie {
         this.currentCycle = "Jour";
     }
 
+    public ArrayList<Joueur> getListeJoueurs() {
+        return listeJoueurs;
+    }
+
     public void ajouterJoueur(Joueur joueur) {
         listeJoueurs.add(joueur);
     }
@@ -166,8 +170,6 @@ class Partie {
             }
         }
     }
-    
-    
 
     public void demanderModifierDe(Joueur joueur, De de) {
         Scanner scanner = new Scanner(System.in);
@@ -201,16 +203,19 @@ class Partie {
             System.out.println("Couleur modifiée en Blanc");
             de.setCouleur(CouleurDe.BLANC);
             joueur.retirerRessource(Ressources.CONNAISSANCE, 1);
+            fenetrePrincipale.getFicheGUIPanel().updateResourcesDisplay(); // Mettre à jour l'affichage des ressources
         } else if (couleur.equalsIgnoreCase("J")) {
             // Modifier la couleur du dé en jaune
             System.out.println("Couleur modifiée en Jaune");
             de.setCouleur(CouleurDe.JAUNE);
             joueur.retirerRessource(Ressources.CONNAISSANCE, 1);
+            fenetrePrincipale.getFicheGUIPanel().updateResourcesDisplay(); // Mettre à jour l'affichage des ressources
         } else if (couleur.equalsIgnoreCase("R")) {
             // Modifier la couleur du dé en rouge
             System.out.println("Couleur modifiée en Rouge");
             de.setCouleur(CouleurDe.ROUGE);
             joueur.retirerRessource(Ressources.CONNAISSANCE, 1);
+            fenetrePrincipale.getFicheGUIPanel().updateResourcesDisplay(); // Mettre à jour l'affichage des ressources
         } else if (couleur.equalsIgnoreCase("A")) {
             demanderModifierDe(joueur, de);
         } else {
@@ -231,6 +236,7 @@ class Partie {
                 joueur.retirerRessource(Ressources.DRAPEAUX, difference);
                 System.out.println("Valeur modifiée en " + valeur);
                 de.setVal(valeur);
+                fenetrePrincipale.getFicheGUIPanel().updateResourcesDisplay(); // Mettre à jour l'affichage des ressources
             } else {
                 System.out.println("Vous n'avez pas assez de drapeaux pour effectuer cette modification.");
                 demanderModifierValeur(joueur, de);
@@ -376,7 +382,6 @@ class Partie {
             ConstruireArbitraire(typeBatiment, plateau, joueur, couleurPop);
             return;
         }
-
 
         Construire(joueur, fiche, CouleurDe.fromCouleur(couleurBatiment), place, typeBatiment);
 
