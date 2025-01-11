@@ -27,7 +27,7 @@ enum Couleur {
             case BLANC:
                 return Color.WHITE;
             default:
-                return Color.GRAY; // Default color if none match
+                throw new IllegalArgumentException("Unknown CouleurDe: " + couleurDe);
         }
     }
 }

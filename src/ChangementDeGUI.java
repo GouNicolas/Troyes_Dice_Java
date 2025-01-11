@@ -187,11 +187,20 @@ class ChangementDeGUI extends JPanel {
     }
 
     public void swapColors(Color newColor) {
+        System.out.println("Swap colors from " + squareColor + " to " + newColor);
+
         Color oldColor = squareColor;
-        squareColor = newColor;
+        if (oldColor.equals(newColor)) {
+            return;
+        }
+        else {
+            squareColor = newColor;
+        }
+
         dice.setBackground(squareColor);
 
         if (colorButton1.getBackground().equals(newColor)) {
+            System.out.println("New color is button 1" + newColor);
             colorButton1.setBackground(oldColor);
         } else {
             colorButton2.setBackground(oldColor);

@@ -25,8 +25,9 @@ public class Plateau_control {
         // Example: Update the model or perform actions based on the selected tuile
         plateauGUI.repaint(); // Repaint to update the view
 
-        System.out.println("AAA" + partie.getPlateau().getListeTuiles().get(partie.getPlateau().RangDetoRangTuile(partie.currentCycle, partie.getJours(), tuileIndex)).getCouleur());
-        partie.getFenetrePrincipale().getChangementDeGUI().setDe(plateau.getListesDes().get(0));
+        System.out.println("AAA" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getCouleur());
+        System.out.println("AAA" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getValeur());
+        partie.getFenetrePrincipale().getChangementDeGUI().setDe(partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1));
     }
 
     public void updateGUI() {

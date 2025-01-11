@@ -83,6 +83,15 @@ class Plateau {
         return rang;
     }
 
+    public De DefromRangTuile(String currentCycle, int jour, int rangTuile) {
+        for (int i = 0; i < listesDes.size(); i++) {
+            if (RangDetoRangTuile(currentCycle, jour, i) == rangTuile) {
+                return listesDes.get(i);
+            }
+        }
+        return new De();
+    }
+
     public void ModifierCouleurDeCouleurTuile(String currentCycle, int jour) {
         trierListeDes();
 
