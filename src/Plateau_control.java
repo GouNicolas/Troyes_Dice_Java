@@ -19,20 +19,12 @@ public class Plateau_control {
     }
 
     public void handleTuileSelection(int tuileIndex) {
-        // Implement the logic for handling tuile selection
-        tuileIndex = (tuileIndex+6)%9; // vrai index
+        tuileIndex = (tuileIndex + 6) % 9; // vrai index
         System.out.println("Tuile selected: " + tuileIndex);
-        // Example: Update the model or perform actions based on the selected tuile
-        plateauGUI.repaint(); // Repaint to update the view
 
-        if (partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1) != null) {
-            System.out.println("AAA" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getCouleur());
-            System.out.println("AAA" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getValeur());
-            System.out.println("B" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1));
-
-
+        if (partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex - 1) != null) {
+            De de_temp = partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex - 1);
             int rangeDe = 0;
-            De de_temp = partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1);
             for (De de : partie.getPlateau().getListesDes()) {
                 if (de == de_temp) {
                     break;
@@ -40,14 +32,50 @@ public class Plateau_control {
                 rangeDe++;
             }
             int verif = partie.getPlateau().checkRessourcesAchat(partie.getListeJoueurs().get(0), rangeDe);
-            if (partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1).getCouleur() != CouleurDe.NOIR && verif == 0 && !partie.getFenetrePrincipale().getChangementDeGUI().isLocked()) {
-                partie.getFenetrePrincipale().getChangementDeGUI().setDe(partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex-1));
+            if (de_temp.getCouleur() != CouleurDe.NOIR && verif == 0 && !partie.getFenetrePrincipale().getChangementDeGUI().isLocked()) {
+                partie.getFenetrePrincipale().getChangementDeGUI().setDe(de_temp);
+                consommeRessources(rangeDe);
+            } else {
+                if (de_temp.getCouleur() == CouleurDe.NOIR) {
+                    plateau.setErreur("Vous ne pouvez pas acheter un dé noir");
+                } else if (verif == 1) {
+                    plateau.setErreur("Vous n'avez pas assez de ressources pour acheter ce dé");
+                } else {
+                    handleAntiSoftlock();
+                }
             }
         }
+        updateGUI();
+    }
+
+    private void handleAntiSoftlock() {
+        Joueur joueur = partie.getListeJoueurs().get(0);
+        joueur.ajouterRessource(Ressources.DRAPEAUX, 1);
+        joueur.ajouterRessource(Ressources.ARGENT, 1);
+        joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().setDe(null);
+        partie.prochainTour();
+        updateGUI();
+    }
+
+    public void consommeRessources(int rangDe) {
+        Joueur joueur = partie.getListeJoueurs().get(0);
+
+        partie.getFenetrePrincipale().getChangementDeGUI().repaint();
+        partie.getFenetrePrincipale().reload_fenetre(joueur);
+        if (rangDe == 1) {
+            plateauGUI.showResourceSelectionPopup();
+        } else if (rangDe == 2) {
+            joueur.retirerRessource(Ressources.ARGENT, 1);
+        } else if (rangDe == 3) {
+            joueur.retirerRessource(Ressources.ARGENT, 2);
+        }
+        partie.getFenetrePrincipale().reload_fenetre(joueur);
     }
 
     public void updateGUI() {
         synchronizeRotation();
+        plateauGUI.updateCycleLabel(partie.currentCycle, partie.getJours());
         plateauGUI.repaint();
     }
 

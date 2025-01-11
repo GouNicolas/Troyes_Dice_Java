@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 /**
  * Classe représentant le plateau de jeu de Troyes Dice.
  * Gère les dés, les tuiles et les mécaniques de jeu principales.
@@ -192,6 +194,10 @@ class Plateau {
             }
             return de1.getValeur() - de2.getValeur();
         });
+    }
+    // fonction pour mettre une popup d'erreur
+    public void setErreur(String message) {
+        JOptionPane.showMessageDialog(null, message, "Erreur", JOptionPane.ERROR_MESSAGE);
     }
 
     /**

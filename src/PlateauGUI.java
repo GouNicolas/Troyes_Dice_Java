@@ -32,6 +32,10 @@ public class PlateauGUI extends JPanel {
     private JLabel cycleLabel;
     private static final Dimension MIN_SIZE = new Dimension(400, 400);
 
+    private static final String EDIM_IMAGE_PATH = IMAGES_PATH + "/Portage/EDIM/RessourceEdim.png";
+    private static final String INFO_IMAGE_PATH = IMAGES_PATH + "/Portage/Info/RessourceInfo.png";
+    private static final String GMC_IMAGE_PATH = IMAGES_PATH + "/Portage/GMC/RessourceGmc.png";
+
     public PlateauGUI(Plateau plateau, Partie partie) {
         this.plateau = plateau;
         this.partie = partie;
@@ -48,6 +52,7 @@ public class PlateauGUI extends JPanel {
 
         // Initialize cycle label
         cycleLabel = new JLabel("Jour - Tour 1", SwingConstants.CENTER); // Initialize with "Jour - Tour 1"
+        setLayout(new BorderLayout());
         add(cycleLabel, BorderLayout.NORTH);
 
         // Load background images
@@ -313,5 +318,69 @@ public class PlateauGUI extends JPanel {
 
     public void refreshPlateau() {
         updateGUI();
+    }
+
+    public void updateCycleLabel(String cycle, int tour) {
+        if (cycleLabel != null){
+            cycleLabel.setText(cycle + " - Tour " + tour);
+        }
+    }
+
+    public void showResourceSelectionPopup() {
+        // Create a dialog for resource selection
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Choisissez une ressource", true);
+        dialog.setLayout(new BorderLayout());
+
+        // Create a panel to hold the resource buttons
+        JPanel resourcePanel = new JPanel(new GridLayout(1, 3, 10, 10));
+        resourcePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Create buttons for each resource
+        JButton influenceButton = createResourceButton("Influence (R)", GMC_IMAGE_PATH);
+        JButton deniersButton = createResourceButton("Deniers (J)", INFO_IMAGE_PATH);
+        JButton acryliqueButton = createResourceButton("Acrylique (B)", EDIM_IMAGE_PATH);
+
+        // Add action listeners to the buttons
+        influenceButton.addActionListener(e -> {
+            handleResourceSelection(Ressources.DRAPEAUX);
+            dialog.dispose();
+        });
+
+        deniersButton.addActionListener(e -> {
+            handleResourceSelection(Ressources.ARGENT);
+            dialog.dispose();
+        });
+
+        acryliqueButton.addActionListener(e -> {
+            handleResourceSelection(Ressources.CONNAISSANCE);
+            dialog.dispose();
+        });
+
+        // Add buttons to the panel
+        resourcePanel.add(influenceButton);
+        resourcePanel.add(deniersButton);
+        resourcePanel.add(acryliqueButton);
+
+        // Add the panel to the dialog
+        dialog.add(resourcePanel, BorderLayout.CENTER);
+
+        // Set dialog properties
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    private JButton createResourceButton(String text, String imagePath) {
+        JButton button = new JButton(text);
+        button.setIcon(new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
+        button.setVerticalTextPosition(SwingConstants.BOTTOM);
+        return button;
+    }
+
+    private void handleResourceSelection(Ressources resource) {
+        Joueur joueur = partie.getListeJoueurs().get(0);
+        joueur.retirerRessource(resource, 1);
+        partie.getFenetrePrincipale().reload_fenetre(joueur);
     }
 }

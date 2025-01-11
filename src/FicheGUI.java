@@ -18,6 +18,11 @@ public class FicheGUI extends JFrame {
     private Map<String, JButton> booleanButtons;
 
     private Partie partie;
+
+    private static final String IMAGES_PATH = "src/ressources";
+    private static final String EDIM_IMAGE_PATH = IMAGES_PATH + "/Portage/EDIM/RessourceEdim.png";
+    private static final String INFO_IMAGE_PATH = IMAGES_PATH + "/Portage/Info/RessourceInfo.png";
+    private static final String GMC_IMAGE_PATH = IMAGES_PATH + "/Portage/GMC/RessourceGmc.png";
     
     public FicheGUI(FicheController controller) {
         this.controller = controller;
@@ -720,12 +725,12 @@ public class FicheGUI extends JFrame {
 
         // Load and resize images for resources
         ImageIcon[] resourceImages = new ImageIcon[6];
-        resourceImages[0] = new ImageIcon(new ImageIcon("src/ressources/Portage/GMC/RessourceGmc.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        resourceImages[1] = new ImageIcon(new ImageIcon("src/ressources/Portage/GMC/RessourceGmcNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        resourceImages[2] = new ImageIcon(new ImageIcon("src/ressources/Portage/Info/RessourceInfo.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        resourceImages[3] = new ImageIcon(new ImageIcon("src/ressources/Portage/Info/RessourceInfoNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        resourceImages[4] = new ImageIcon(new ImageIcon("src/ressources/Portage/EDIM/RessourceEdim.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        resourceImages[5] = new ImageIcon(new ImageIcon("src/ressources/Portage/EDIM/RessourceEdimNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[0] = new ImageIcon(new ImageIcon(GMC_IMAGE_PATH).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[1] = new ImageIcon(new ImageIcon(IMAGES_PATH + "/Portage/GMC/RessourceGmcNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[2] = new ImageIcon(new ImageIcon(INFO_IMAGE_PATH).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[3] = new ImageIcon(new ImageIcon(IMAGES_PATH + "/Portage/Info/RessourceInfoNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[4] = new ImageIcon(new ImageIcon(EDIM_IMAGE_PATH).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        resourceImages[5] = new ImageIcon(new ImageIcon(IMAGES_PATH + "/Portage/EDIM/RessourceEdimNonObtenue.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
 
         char[] resources = controller.getResources().get(blockIndex);
         for (int i = 0; i < resources.length; i++) {
