@@ -58,6 +58,7 @@ class Partie {
             currentCycle = "Jour";
             jours += 1;
         }
+        plateau.ModifierCouleurDeCouleurTuile(currentCycle, jours);
     }
     
     public void startGame(FenetrePrincipale fenetrePrincipale) {
