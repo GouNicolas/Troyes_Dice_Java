@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,12 +15,15 @@ public class FicheGUI extends JFrame {
     private JPanel fichePanel;
     private Map<String, JLabel> smallCaseLabels;
     private Map<String, JButton> booleanButtons;
+
+    private Partie partie;
     
     public FicheGUI(FicheController controller) {
         this.controller = controller;
         resourcesPanels = new ArrayList<>();
         smallCaseLabels = new HashMap<>();
         booleanButtons = new HashMap<>();
+        changementDeGUIPanel = new ChangementDeGUI(this);
         
         setTitle("Fiche Information");
         setSize(800, 600);
@@ -111,27 +115,35 @@ public class FicheGUI extends JFrame {
         add(fichePanel, BorderLayout.CENTER);
     }
 
+    public void setPartieJeu(Partie partie) {
+        this.partie = partie;
+    }
+
+    public ChangementDeGUI getChangementDeGUIPanel() {
+        return changementDeGUIPanel;
+    }
+
     private JPanel createColoredPanel(Color color, int rowIndex) {
         
-        final ImageIcon FortIcon = new ImageIcon("./ressources/Portage/Autre/ForteressePosee.png");
-        final ImageIcon FortNPIcon = new ImageIcon("./ressources/Portage/Autre/ForteresseNonPosee.png");
+        final ImageIcon FortIcon = new ImageIcon("src/ressources/Portage/Autre/Forteresse.png");
+        final ImageIcon FortNPIcon = new ImageIcon("src/ressources/Portage/Autre/ForteresseNonPosee.png");
         
-        final ImageIcon red11Icon = new ImageIcon("./ressources/Portage/GMC/Gmc1.png");
-        final ImageIcon red11NPIcon = new ImageIcon("./ressources/Portage/GMC/GmcPeuple.png");
-        final ImageIcon red12Icon = new ImageIcon("./ressources/Portage/GMC/Gmc2.png");
-        final ImageIcon red12NPIcon = new ImageIcon("./ressources/Portage/Info/InfoPeuple.png");
-        final ImageIcon red2Icon = new ImageIcon("./ressources/Portage/GMC/Gmc2.png");
-        final ImageIcon red2NPIcon = new ImageIcon("./ressources/Portage/Plateau/RewardGmc.png");
+        final ImageIcon red11Icon = new ImageIcon("src/ressources/Portage/GMC/Gmc1.png");
+        final ImageIcon red11NPIcon = new ImageIcon("src/ressources/Portage/GMC/GmcPeuple.png");
+        final ImageIcon red12Icon = new ImageIcon("src/ressources/Portage/GMC/Gmc2.png");
+        final ImageIcon red12NPIcon = new ImageIcon("src/ressources/Portage/Info/InfoPeuple.png");
+        final ImageIcon red2Icon = new ImageIcon("src/ressources/Portage/GMC/Gmc2.png");
+        final ImageIcon red2NPIcon = new ImageIcon("src/ressources/Portage/Plateau/RewardGmc.png");
 
-        final ImageIcon yel1Icon = new ImageIcon("./ressources/Portage/Info/Info1.png");
-        final ImageIcon yel1NPIcon = new ImageIcon("./ressources/Portage/Plateau/Case1-QuartierInfo.png");
-        final ImageIcon yel2Icon = new ImageIcon("./ressources/Portage/Info/Info2.png");
-        final ImageIcon yel2NPIcon = new ImageIcon("./ressources/Portage/Plateau/RewardInfo.png");
+        final ImageIcon yel1Icon = new ImageIcon("src/ressources/Portage/Info/Info1.png");
+        final ImageIcon yel1NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case1-QuartierInfo.png");
+        final ImageIcon yel2Icon = new ImageIcon("src/ressources/Portage/Info/Info2.png");
+        final ImageIcon yel2NPIcon = new ImageIcon("src/ressources/Portage/Plateau/RewardInfo.png");
 
-        final ImageIcon white1Icon = new ImageIcon("./ressources/Portage/Edim/Edim1.png");
-        final ImageIcon white1NPIcon = new ImageIcon("./ressources/Portage/Edim/Edim1NonPose.png");
-        final ImageIcon white2Icon = new ImageIcon("./ressources/Portage/Edim/Edim2.png");
-        final ImageIcon white2NPIcon = new ImageIcon("./ressources/Portage/Plateau/RewardEdim.png");
+        final ImageIcon white1Icon = new ImageIcon("src/ressources/Portage/Edim/Edim1.png");
+        final ImageIcon white1NPIcon = new ImageIcon("src/ressources/Portage/Edim/Edim1NonPose.png");
+        final ImageIcon white2Icon = new ImageIcon("src/ressources/Portage/Edim/Edim2.png");
+        final ImageIcon white2NPIcon = new ImageIcon("src/ressources/Portage/Plateau/RewardEdim.png");
 
         // Resize images
         Image FortImage = FortIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -226,20 +238,8 @@ public class FicheGUI extends JFrame {
                     booleanButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            controller.setValue(row, col, true);
-                            booleanButton.setIcon(trueButtonIcon);
-                            booleanButton.setText("");
-                            updateSmallCases(row, col);
-                            revalidate();
-                            repaint();
-    
-                            // Disable buttons with false value
-                            for (Map.Entry<String, JButton> entry : booleanButtons.entrySet()) {
-                                JButton button = entry.getValue();
-                                if (button != booleanButton) {
-                                    button.setEnabled(false);
-                                }
-                            }
+                            handleButtonAction(row, col); // Disable the button after it has been pressed
+                            booleanButton.setEnabled(true);
                         }
                     });
     
@@ -306,6 +306,211 @@ public class FicheGUI extends JFrame {
         return coloredPanel;
     }
 
+    private void handleButtonAction(int row, int col) {
+        // Call specific functions based on the row and col values
+        if (row == 1) {
+            switch (col) { //ROUGE PRESTIGE
+                case 0: functionForButtonRP1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonRP2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonRP3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonRP4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonRP5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonRP6(); System.out.println("row " + row + "col "+col); break;
+            }
+        } else if (row == 2) {
+            switch (col) { // ROUGE CLASSQUE
+                case 0: functionForButtonRC1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonRC2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonRC3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonRC4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonRC5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonRC6(); System.out.println("row " + row + "col "+col); break;
+            }
+        } else if (row == 4) {
+            switch (col) { // JAUNE PRESTIGE
+                case 0: functionForButtonJP1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonJP2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonJP3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonJP4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonJP5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonJP6(); System.out.println("row " + row + "col "+col); break;
+            }
+        } else if (row == 5) {
+            switch (col) { // JAUNE CLASSQUE
+                case 0: functionForButtonJC1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonJC2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonJC3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonJC4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonJC5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonJC6(); System.out.println("row " + row + "col "+col); break;
+            }
+        } else if (row == 7) {
+            switch (col) { // BLANC PRESTIGE
+                case 0: functionForButtonBP1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonBP2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonBP3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonBP4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonBP5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonBP6(); System.out.println("row " + row + "col "+col); break;
+            }
+        } else if (row == 8) {
+                switch (col) { // BLANC CLASSQUE
+                case 0: functionForButtonBC1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonBC2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonBC3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonBC4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonBC5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonBC6(); System.out.println("row " + row + "col "+col); break;
+            }
+        }
+    }
+
+    private void functionForButtonRC1() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 1, 0);
+    }
+
+    private void functionForButtonRP1() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 1, 1);
+    }
+
+    private void functionForButtonRC2() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 2, 0);
+    }
+
+    private void functionForButtonRP2() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 2, 1);
+    }
+
+    private void functionForButtonRC3() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 3, 0);
+    }
+
+    private void functionForButtonRP3() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 3, 1);
+    }
+
+    private void functionForButtonRC4() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 4, 0);
+    }
+
+    private void functionForButtonRP4() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 4, 1);
+    }
+
+    private void functionForButtonRC5() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 5, 0);
+    }
+
+    private void functionForButtonRP5() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 5, 1);
+    }
+
+    private void functionForButtonRC6() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 6, 0);
+    }
+
+    private void functionForButtonRP6() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 6, 1);
+    }
+
+    private void functionForButtonJC1() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 1, 0);
+    }
+
+    private void functionForButtonJP1() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 1, 1);
+    }
+
+    private void functionForButtonJC2() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 2, 0);
+    }
+
+    private void functionForButtonJP2() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 2, 1);
+    }
+
+    private void functionForButtonJC3() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 3, 0);
+    }
+
+    private void functionForButtonJP3() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 3, 1);
+    }
+
+    private void functionForButtonJC4() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 4, 0);
+    }
+
+    private void functionForButtonJP4() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 4, 1);
+    }
+
+    private void functionForButtonJC5() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 5, 0);
+    }
+
+    private void functionForButtonJP5() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 5, 1);
+    }
+
+    private void functionForButtonJC6() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 6, 0);
+    }
+
+    private void functionForButtonJP6() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 6, 1);
+    }
+
+    private void functionForButtonBC1() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 1, 0);        
+    }
+
+    private void functionForButtonBP1() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 1, 1);
+    }
+
+    private void functionForButtonBC2() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 2, 0);
+    }
+
+    private void functionForButtonBP2() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 2, 1);
+    }
+
+    private void functionForButtonBC3() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 3, 0);
+    }
+
+    private void functionForButtonBP3() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 3, 1);
+    }
+
+    private void functionForButtonBC4() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 4, 0);
+    }
+
+    private void functionForButtonBP4() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 4, 1);
+    }
+
+    private void functionForButtonBC5() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 5, 0);
+    }
+
+    private void functionForButtonBP5() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 5, 1);
+    }
+
+    private void functionForButtonBC6() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 6, 0);
+    }
+
+    private void functionForButtonBP6() {
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 6, 1);
+    }
+
+
+
     private void updateSmallCases(int row, int col) {
         for (int j = 0; j < 5; j++) {
             if (controller.getValue(row, j) && controller.getValue(row, j + 1)) {
@@ -318,6 +523,8 @@ public class FicheGUI extends JFrame {
             }
         }
     }
+
+
 
     private JPanel createNewRectanglePanel() {
         JPanel newRectanglePanel = new JPanel();
@@ -479,7 +686,7 @@ public class FicheGUI extends JFrame {
         int columnIndex = diceValue - 1;
         for (int rowIndex = 0; rowIndex < 9; rowIndex++) {
             JButton button = booleanButtons.get(rowIndex + "-" + columnIndex);
-            if (button != null && button.getBackground().equals(diceColor)) {
+            if ((button != null && button.getBackground().equals(diceColor))) {
                 button.setEnabled(true);
             }
         }
