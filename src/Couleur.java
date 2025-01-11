@@ -1,8 +1,9 @@
+import java.awt.Color;
 /**
  * Énumération représentant les couleurs des branches de l'UTBM.
  * ROUGE pour GMC, BLANC pour EDIM, JAUNE pour INFO.
  */
-import java.awt.Color;
+
 
 enum Couleur {
     ROUGE,  // Représente la branche GMC
