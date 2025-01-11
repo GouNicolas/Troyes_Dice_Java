@@ -21,9 +21,14 @@ public class Plateau_control {
     public void handleTuileSelection(int tuileIndex) {
         tuileIndex = (tuileIndex + 6) % 9; // vrai index
         System.out.println("Tuile selected: " + tuileIndex);
+        System.out.println("AAA" + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex - 1).getValeur() + " " + partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex - 1).getCouleur());
 
-        if (partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex - 1) != null) {
-            De de_temp = partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex - 1);
+        De de_temp = partie.getPlateau().DefromRangTuile(partie.currentCycle, partie.getJours(), tuileIndex - 1);
+
+        System.out.println("BBB" + de_temp.getValeur() + " " + de_temp.getCouleur());
+
+        if (de_temp != null) {
+            System.out.println("Tuile selected: " + tuileIndex);
             int rangeDe = 0;
             for (De de : partie.getPlateau().getListesDes()) {
                 if (de == de_temp) {
@@ -32,7 +37,9 @@ public class Plateau_control {
                 rangeDe++;
             }
             int verif = partie.getPlateau().checkRessourcesAchat(partie.getListeJoueurs().get(0), rangeDe);
+            System.out.println(partie.getFenetrePrincipale().getChangementDeGUI().isLocked());
             if (de_temp.getCouleur() != CouleurDe.NOIR && verif == 0 && !partie.getFenetrePrincipale().getChangementDeGUI().isLocked()) {
+                System.out.println("De selected: " + de_temp.getValeur() + " " + de_temp.getCouleur());
                 partie.getFenetrePrincipale().getChangementDeGUI().setDe(de_temp);
                 consommeRessources(rangeDe);
             } else {
@@ -54,7 +61,7 @@ public class Plateau_control {
         joueur.ajouterRessource(Ressources.ARGENT, 1);
         joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
         partie.getFenetrePrincipale().getChangementDeGUI().setDe(null);
-        partie.prochainTour();
+        // partie.prochainTour();
         updateGUI();
     }
 
@@ -100,7 +107,7 @@ public class Plateau_control {
     // Example method to handle next turn
     public void nextTurn() {
         String previousCycle = partie.currentCycle;
-        partie.prochainTour();
+        // partie.prochainTour();
         synchronizeRotation();
         if (!previousCycle.equals(partie.currentCycle) && partie.currentCycle.equals("Nuit")) {
             plateauGUI.flipToNight();

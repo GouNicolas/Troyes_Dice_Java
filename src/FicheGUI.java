@@ -35,6 +35,14 @@ public class FicheGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        // Ensure resourcesPanels is populated correctly
+        if (resourcesPanels.size() < 3) {
+            resourcesPanels.clear();
+            resourcesPanels.add(new JPanel());
+            resourcesPanels.add(new JPanel());
+            resourcesPanels.add(new JPanel());
+        }
+
         // Main panel for the frame
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -446,149 +454,262 @@ public class FicheGUI extends JFrame {
 
     private void functionForButtonRC1() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 1, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonRP1() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 1, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonRC2() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 2, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonRP2() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 2, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonRC3() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 3, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonRP3() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 3, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonRC4() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 4, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonRP4() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 4, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonRC5() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 5, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonRP5() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 5, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonRC6() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 6, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonRP6() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.ROUGE, 6, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJC1() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 1, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJP1() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 1, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJC2() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 2, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJP2() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 2, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJC3() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 3, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJP3() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 3, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJC4() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 4, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJP4() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 4, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJC5() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 5, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJP5() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 5, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJC6() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 6, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonJP6() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.JAUNE, 6, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBC1() {
-        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 1, 0);        
+        partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 1, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBP1() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 1, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBC2() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 2, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBP2() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 2, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBC3() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 3, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBP3() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 3, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBC4() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 4, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBP4() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 4, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBC5() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 5, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBP5() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 5, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBC6() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 6, 0);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
     private void functionForButtonBP6() {
         partie.Construire(partie.getJoueur(0), partie.getJoueur(0).getFiche(), CouleurDe.BLANC, 6, 1);
+        partie.getFenetrePrincipale().getChangementDeGUI().resetAndUnlockDice();
+        partie.prochainTour();
+        updateUI();
     }
 
-
+    private void updateUI() {
+        fichePanel.revalidate();
+        fichePanel.repaint();
+        partie.getFenetrePrincipale().reload_fenetre(partie.getJoueur(0));
+        partie.getFenetrePrincipale().getChangementDeGUI().updateScore(partie.getJoueur(0));
+    }
 
     private void updateSmallCases(int row, int col) {
         for (int j = 0; j < 5; j++) {
@@ -793,6 +914,14 @@ public class FicheGUI extends JFrame {
 
         fichePanel.revalidate();
         fichePanel.repaint();
+
+        // // Update resources display
+        updateResourcesDisplay();
+
+        // Debug println statements
+        System.out.println("updateContent called");
+        System.out.println("Fiche: " + fiche);
+        System.out.println("Joueur: " + joueur);
     }
 
     public JPanel getMainPanel() {
@@ -801,8 +930,13 @@ public class FicheGUI extends JFrame {
 
     public void updateResourcesDisplay() {
         for (int i = 0; i < resourcesPanels.size(); i++) {
-            updateResourcesPanel(resourcesPanels.get(i), i);
+            if (i < controller.getResources().size()) {
+                updateResourcesPanel(resourcesPanels.get(i), i);
+            } else {
+                System.err.println("Index " + i + " out of bounds for resourcesPanels");
+            }
         }
+        repaintResourcesPanels();
     }
 
     public void reloadButtonStates() {
@@ -857,6 +991,13 @@ public class FicheGUI extends JFrame {
                     }
                 }
             }
+        }
+    }
+
+    public void repaintResourcesPanels() {
+        for (JPanel resourcesPanel : resourcesPanels) {
+            resourcesPanel.revalidate();
+            resourcesPanel.repaint();
         }
     }
 }

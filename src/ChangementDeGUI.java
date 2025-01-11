@@ -236,6 +236,10 @@ class ChangementDeGUI extends JPanel {
     }
 
     public void setDe(De de) {
+        if (de == null) {
+            System.err.println("Error: De object is null");
+            return;
+        }
         initialNumber = de.getValeur();
         initialColor = Couleur.convertCouleurDeToColor(de.getCouleur());
 
@@ -287,6 +291,12 @@ class ChangementDeGUI extends JPanel {
         squareColor = initialColor;
         setRandomButtonColors();
         updateValueButtons(this.joueur);
+    }
+
+    public void resetAndUnlockDice() {
+        resetDice();
+        isDiceLocked = false;
+        lockButton.setEnabled(true);
     }
 
     public int getLockedDiceValue() {

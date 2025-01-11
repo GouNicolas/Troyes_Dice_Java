@@ -113,7 +113,7 @@ class Partie {
                     joueur.ajouterRessource(Ressources.DRAPEAUX, 1);
                     joueur.ajouterRessource(Ressources.ARGENT, 1);
                     joueur.ajouterRessource(Ressources.CONNAISSANCE, 1);
-                    prochainTour();
+                    // prochainTour();
                 } else {
                     if (choix == 2) {
                         Ressources paiement = plateau.choixPaiementChoix2(joueur);
@@ -165,9 +165,9 @@ class Partie {
                 }
                 return;
             }
-            if (currentCycle != "Nuit" || jours != 8){
-                prochainTour();
-            }
+            // if (currentCycle != "Nuit" || jours != 8){
+            //     prochainTour();
+            // }
         }
     }
 
