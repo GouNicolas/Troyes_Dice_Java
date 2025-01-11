@@ -55,7 +55,7 @@ public class FenetrePrincipale extends JFrame {
         columnsPanel.add(plateauGUI, gbc);
 
         // Add ChangementDeGUI to the second column
-        this.changementDeGUI = new ChangementDeGUI(ficheGUIPanel);
+        this.changementDeGUI = new ChangementDeGUI(ficheGUIPanel, partie.getListeJoueurs().get(0));
         gbc.gridx = 1;
         gbc.weightx = 0.2; // Ensure column 2 takes at least 20% of the width
         columnsPanel.add(changementDeGUI, gbc);
