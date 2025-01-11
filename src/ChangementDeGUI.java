@@ -5,6 +5,14 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 
 class ChangementDeGUI extends JPanel {
+    private static final Dimension BUTTON_SIZE = new Dimension(50, 50);
+    private static final Dimension DICE_SIZE = new Dimension(60, 60);
+    // Calculate minimum width based on 5 buttons plus padding
+    private static final int BUTTON_PADDING = 10; // Padding between buttons
+    private static final int PANEL_PADDING = 20; // Padding on panel edges
+    private static final int MIN_WIDTH = (BUTTON_SIZE.width * 5) + (BUTTON_PADDING * 4) + (PANEL_PADDING * 2);
+    private static final Dimension MIN_SIZE = new Dimension(MIN_WIDTH, 400);
+
     private JPanel dice;
     private JButton colorButton1;
     private JButton colorButton2;
