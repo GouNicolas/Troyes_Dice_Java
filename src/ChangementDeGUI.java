@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.RoundRectangle2D;
 import java.util.Random;
 
 class ChangementDeGUI extends JPanel {
@@ -35,6 +36,18 @@ class ChangementDeGUI extends JPanel {
     private FicheGUI ficheGUI;
 
     public ChangementDeGUI(FicheGUI ficheGUI, Joueur joueur_) {
+        // Apply Nimbus look and feel
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         this.ficheGUI = ficheGUI;
         this.joueur = joueur_;
         setLayout(new BorderLayout());
@@ -53,10 +66,22 @@ class ChangementDeGUI extends JPanel {
         mainPanel.add(deChoisiLabel, gbc);
 
         // Square with random number and color
-        dice = new JPanel();
-        dice.setPreferredSize(new Dimension(60, 60)); // Increased size
-        dice.setMinimumSize(new Dimension(60, 60)); // Set minimum size
-        dice.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+        dice = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setColor(getBackground());
+                g2d.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 10, 10)); // Less rounded corners
+                
+                g2d.setStroke(new BasicStroke(1));
+                g2d.draw(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 10, 10)); // Less rounded corners
+            }
+        };
+        dice.setPreferredSize(new Dimension(50, 50)); // Match the size of color buttons
+        dice.setMinimumSize(new Dimension(50, 50)); // Set minimum size
+        dice.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // Match the border style of color buttons
         numberLabel = new JLabel();
         numberLabel.setFont(new Font("Arial", Font.BOLD, 24));
         dice.add(numberLabel);
@@ -70,8 +95,8 @@ class ChangementDeGUI extends JPanel {
         lockButton = new JButton();
         lockButton.setLayout(new BorderLayout());
         lockButton.add(dice, BorderLayout.CENTER);
-        lockButton.setPreferredSize(new Dimension(60, 60)); // Increased size
-        lockButton.setMinimumSize(new Dimension(60, 60)); // Set minimum size
+        lockButton.setPreferredSize(new Dimension(50, 50)); // Match the size of color buttons
+        lockButton.setMinimumSize(new Dimension(50, 50)); // Set minimum size
         lockButton.setBorder(BorderFactory.createEmptyBorder());
         lockButton.setContentAreaFilled(false);
         lockButton.addActionListener(new ActionListener() {
@@ -142,7 +167,7 @@ class ChangementDeGUI extends JPanel {
         mainPanel.add(modifyValueLabel, gbc);
 
         // Value buttons
-        valueButtonPanel = new JPanel(new FlowLayout());
+        valueButtonPanel = new JPanel(new GridLayout(1, 6, 10, 0)); // Use GridLayout to avoid cutting buttons
         gbc.gridy = 5;
         gbc.gridwidth = 2;
         mainPanel.add(valueButtonPanel, gbc);
@@ -164,11 +189,12 @@ class ChangementDeGUI extends JPanel {
             }
         });
 
-        scoreLabel = new JLabel("Score : 0");
-        gbc.gridx = 0;
-        gbc.gridy = 10;
-        gbc.gridwidth = 2;
-        mainPanel.add(scoreLabel, gbc);
+        // Suppress the score display
+        // scoreLabel = new JLabel("Score : 0");
+        // gbc.gridx = 0;
+        // gbc.gridy = 10;
+        // gbc.gridwidth = 2;
+        // mainPanel.add(scoreLabel, gbc);
 
         add(mainPanel, BorderLayout.CENTER);
     }

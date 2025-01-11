@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -14,11 +14,11 @@ public class PlateauGUI extends JPanel {
     private Partie partie;
     private static final int PANEL_SIZE = 400;
     private static final int TUILE_SIZE = 80;
-    private ArrayList<Rectangle2D> tuileRectangles;
+    private ArrayList<RoundRectangle2D> tuileRectangles;
     private int selectedTuileIndex = -1;
     
     // New fields for background images
-    private static final String IMAGES_PATH = "src/ressources/tuiles";
+    private static final String IMAGES_PATH = "src/ressources";
     private BufferedImage backgroundImage;
     private BufferedImage tourImage;
     private double tourAngle = 0; // Reset to 0 instead of 20
@@ -81,19 +81,33 @@ public class PlateauGUI extends JPanel {
 
     private void loadImages() {
         try {
-            BufferedImage tempBackground = ImageIO.read(new File(IMAGES_PATH + "/Plateau_v1.png"));
-            BufferedImage tempTour = ImageIO.read(new File(IMAGES_PATH + "/Plateau_tour.png"));
+            BufferedImage tempBackground = ImageIO.read(new File(IMAGES_PATH + "/tuiles/Plateau_v1.png"));
+            BufferedImage tempTour = ImageIO.read(new File(IMAGES_PATH + "/tuiles/Plateau_tour.png"));
             
             // Resize images to match panel size
             backgroundImage = resizeImage(tempBackground, PANEL_SIZE, PANEL_SIZE);
             tourImage = resizeImage(tempTour, PANEL_SIZE, PANEL_SIZE);
             
+            // Apply antialiasing to images
+            backgroundImage = applyAntialiasing(backgroundImage);
+            tourImage = applyAntialiasing(tourImage);
+
             System.out.println("Images loaded successfully from: " + IMAGES_PATH);
         } catch (IOException e) {
             System.err.println("Error loading images from: " + IMAGES_PATH);
             e.printStackTrace();
             errorLabel.setVisible(true);
         }
+    }
+
+    private BufferedImage applyAntialiasing(BufferedImage image) {
+        BufferedImage antialiasedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = antialiasedImage.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.drawImage(image, 0, 0, null);
+        g2d.dispose();
+        return antialiasedImage;
     }
 
     private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
@@ -177,17 +191,19 @@ public class PlateauGUI extends JPanel {
         int squareX = x + (size - diceSquareSize) / 2; // Center the dice horizontally
         int squareY = y + (size - diceSquareSize) / 2; // Center the dice vertically
 
+        RoundRectangle2D roundedDice = new RoundRectangle2D.Double(squareX, squareY, diceSquareSize, diceSquareSize, 10, 10); // Less rounded corners
+
         if (de.getCouleur() == CouleurDe.NOIR) {
             g2d.setColor(Color.BLACK);
-            g2d.fillRect(squareX, squareY, diceSquareSize, diceSquareSize);
+            g2d.fill(roundedDice);
             g2d.setColor(Color.WHITE); // White text for black background
         } else if (de.getCouleur() == CouleurDe.TRANSPARENT) {
             g2d.setColor(new Color(255, 255, 255, 128)); // Semi-transparent white
-            g2d.fillRect(squareX, squareY, diceSquareSize, diceSquareSize);
+            g2d.fill(roundedDice);
             g2d.setColor(Color.BLACK);
         } else {
             g2d.setColor(getCouleurFromEnum(Couleur.fromCouleurDe(de.getCouleur())));
-            g2d.fillRect(squareX, squareY, diceSquareSize, diceSquareSize);
+            g2d.fill(roundedDice);
             g2d.setColor(Color.BLACK);
         }
 
@@ -199,10 +215,10 @@ public class PlateauGUI extends JPanel {
         int textY = squareY + (diceSquareSize + fm.getAscent()) / 2;
         g2d.drawString(diceValue, textX, textY);
 
-        // Draw square border
+        // Draw rounded border
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(1));
-        g2d.drawRect(squareX, squareY, diceSquareSize, diceSquareSize);
+        g2d.draw(roundedDice);
     }
 
     private void drawNonagonAndTuiles(Graphics2D g2d, int panelSize) {
@@ -245,15 +261,15 @@ public class PlateauGUI extends JPanel {
             int x = (int)(points[i].x - scaledTuileSize/2);
             int y = (int)(points[i].y - scaledTuileSize/2);
 
-            Rectangle2D rect = new Rectangle2D.Double(x, y, scaledTuileSize, scaledTuileSize);
-            tuileRectangles.add(rect);
+            RoundRectangle2D roundedRect = new RoundRectangle2D.Double(x, y, scaledTuileSize, scaledTuileSize, 20, 20);
+            tuileRectangles.add(roundedRect);
 
             // Draw tuile with shadow effect
             g2d.setColor(new Color(0, 0, 0, 32));
-            g2d.fillRect(x + 2, y + 2, scaledTuileSize, scaledTuileSize);
+            g2d.fill(new RoundRectangle2D.Double(x + 2, y + 2, scaledTuileSize, scaledTuileSize, 20, 20));
 
             g2d.setColor(getCouleurFromEnum(tuile.getCouleur()));
-            g2d.fill(rect);
+            g2d.fill(roundedRect);
 
             // Draw dice indicator in the center of the tile
             for (int j = 0; j < plateau.getListesDes().size(); j++) {
@@ -272,7 +288,7 @@ public class PlateauGUI extends JPanel {
                 g2d.setColor(new Color(0, 0, 0, 128));
                 g2d.setStroke(new BasicStroke(Math.max(1, panelSize/600)));
             }
-            g2d.draw(rect);
+            g2d.draw(roundedRect);
 
             // Improved text rendering
             g2d.setColor(Color.BLACK);
