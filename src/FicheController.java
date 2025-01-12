@@ -136,27 +136,6 @@ public class FicheController {
         }
     }
 
-    public void ajouterRessource(Color color) {
-        int index = -1;
-        if (Color.RED.equals(color)) {
-            index = 0;
-        } else if (Color.YELLOW.equals(color)) {
-            index = 1;
-        } else if (Color.WHITE.equals(color)) {
-            index = 2;
-        }
-    
-        if (index != -1) {
-            char[] resourceArray = resources.get(index);
-            for (int i = 0; i < resourceArray.length; i++) {
-                if (resourceArray[i] == '0') {
-                    resourceArray[i] = '1';
-                    break;
-                }
-            }
-        }
-    }
-
     public boolean getValue(int row, int col) {
         return matrix[row][col];
     }

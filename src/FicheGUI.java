@@ -155,6 +155,7 @@ public class FicheGUI extends JFrame {
          // Fort icons
         final ImageIcon FortIcon = new ImageIcon(AUTRE_PATH + "/Forteresse.png");
         final ImageIcon FortNPIcon = new ImageIcon(AUTRE_PATH + "/ForteresseNonPosee.png");
+        final ImageIcon BatDestroyIcon = new ImageIcon(AUTRE_PATH + "/bat_destroy.png");
 
         // Red icons
         final ImageIcon red11Icon = new ImageIcon(GMC_ICONS_PATH + "/Gmc1.png");
@@ -186,6 +187,7 @@ public class FicheGUI extends JFrame {
         // Resize images
         Image FortImage = FortIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         Image FortNPImage = FortNPIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image BatDestroyImage = BatDestroyIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 
         Image red11Image = red11Icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         Image red11NPImage = red11NPIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -214,6 +216,7 @@ public class FicheGUI extends JFrame {
         // Create resized icons
         final ImageIcon resizedFortIcon = new ImageIcon(FortImage);
         final ImageIcon resizedFortNPIcon = new ImageIcon(FortNPImage);
+        final ImageIcon resizedBatDestroyIcon = new ImageIcon(BatDestroyImage);
 
         final ImageIcon resizedred11Icon = new ImageIcon(red11Image);
         final ImageIcon resizedred11NPIcon = new ImageIcon(red11NPImage);
@@ -304,13 +307,23 @@ public class FicheGUI extends JFrame {
                 if (i == 0) {
                     // Add JLabel for text display
                     boolean value = controller.getValue(rowIndex * 3 + i, j);
-                    JLabel imageLabel = new JLabel(value ? resizedFortIcon : resizedFortNPIcon);
+                    if (partie == null){
+                        boolean isProtected = false;
+                        boolean isDestroyed = false;
+                    }
+                    else{
+                        boolean isProtected = partie.getJoueur(0).getFiche().isColumnProtected(j);
+                        boolean isDestroyed = partie.getJoueur(0).getFiche().isColumnDestroyed(j);
+                    
+                    JLabel imageLabel = new JLabel(isDestroyed ? resizedBatDestroyIcon : (isProtected ? resizedFortIcon : resizedFortNPIcon));
                     imageLabel.setOpaque(true);
                     imageLabel.setBackground(color);
+                
     
                     gbc.gridx = j * 2;
                     gbc.weightx = 1.0;
                     linePanel.add(imageLabel, gbc);
+                    }
                 }else {
 
                     if (color.equals(Color.RED)) {
@@ -399,7 +412,7 @@ public class FicheGUI extends JFrame {
                         }
                     }
                 }
-                controller.ajouterRessource(color);
+                ajouterRessource(color);
                 updateResourcesPanel(resourcesPanel, rowIndex);
                 resourcesPanel.add(plusButton); // Re-add the + button after updating the panel
                 resourcesPanel.revalidate();
@@ -462,6 +475,47 @@ public class FicheGUI extends JFrame {
             actions[row][col].run();
             System.out.println("row " + row + " col " + col);
         }
+
+        // Check if dice is 6 and color is white
+        if (row == 8 && col == 5) {
+            partie.getJoueur(0).ajouterRessource(Ressources.CONNAISSANCE, 6);
+            updateResourcesDisplay();
+        }
+    }
+
+    public void ajouterRessource(Color color) {
+        int index = -1;
+        if (Color.RED.equals(color)) {
+            index = 0;
+        } else if (Color.YELLOW.equals(color)) {
+            index = 1;
+        } else if (Color.WHITE.equals(color)) {
+            index = 2;
+        }
+    
+        if (index != -1) {
+            char[] resourceArray = controller.getResources().get(index);
+            for (int i = 0; i < resourceArray.length; i++) {
+                if (resourceArray[i] == '0') {
+                    resourceArray[i] = '1';
+                    break;
+                }
+            }
+        }
+
+        // Add resources to joueur index 0
+        Joueur joueur = partie.getListeJoueurs().get(0);
+        int diceValue = partie.getFenetrePrincipale().getChangementDeGUI().getLockedDiceValue();
+        if (color.equals(Color.RED)) {
+            joueur.ajouterRessource(Ressources.DRAPEAUX, diceValue);
+        } else if (color.equals(Color.YELLOW)) {
+            joueur.ajouterRessource(Ressources.ARGENT, diceValue);
+        } else if (color.equals(Color.WHITE)) {
+            joueur.ajouterRessource(Ressources.CONNAISSANCE, diceValue);
+        }
+
+        // Trigger next turn
+        partie.prochainTour();
     }
 
     private void functionForButtonRC1() {
@@ -721,6 +775,7 @@ public class FicheGUI extends JFrame {
         fichePanel.repaint();
         partie.getFenetrePrincipale().reload_fenetre(partie.getJoueur(0));
         partie.getFenetrePrincipale().getChangementDeGUI().updateScore(partie.getJoueur(0));
+        partie.getFenetrePrincipale().getPlateauGUI().updateGUI();
     }
 
     private void updateSmallCases(int row, int col) {
@@ -745,18 +800,24 @@ public class FicheGUI extends JFrame {
 
         // Create the 3 lines with different colors
         Color[] colors = {Color.RED, Color.YELLOW, Color.WHITE};
-        //Score à edit selon la methode du code
-        int[] scores = {0, 3, 18};
+        if (partie == null) {
+            return newRectanglePanel;
+        }
+        Joueur joueur = partie.getListeJoueurs().get(0);
+        int[] scores = {
+            joueur.getFiche().getNombreHab(Couleur.ROUGE),
+            joueur.getFiche().getNombreHab(Couleur.JAUNE),
+            joueur.getFiche().getNombreHab(Couleur.BLANC)
+        };
 
         // Load and resize images
         ImageIcon[] people = new ImageIcon[6];
-        people[0] = new ImageIcon(new ImageIcon("src/ressources/Portage/Plateau/GmcObtenu.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        people[1] = new ImageIcon(new ImageIcon("src/ressources/Portage/GMC/GmcPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        people[2] = new ImageIcon(new ImageIcon("src/ressources/Portage/Plateau/InfoObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        people[3] = new ImageIcon(new ImageIcon("src/ressources/Portage/Info/InfoPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        people[4] = new ImageIcon(new ImageIcon("src/ressources/Portage/Plateau/EdimObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        people[5] = new ImageIcon(new ImageIcon("src/ressources/Portage/EDIM/EdimPeuple.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-
+        people[0] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/Plateau/GmcObtenu.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        people[1] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/GMC/GmcPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        people[2] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/Plateau/InfoObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        people[3] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/Info/InfoPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        people[4] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/Plateau/EdimObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        people[5] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/EDIM/EdimPeuple.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
 
         for (int lineIndex = 0; lineIndex < colors.length; lineIndex++) {
             JPanel linePanel = new JPanel();

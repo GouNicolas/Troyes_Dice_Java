@@ -270,4 +270,60 @@ class Fiche {
         }
     }
 
+    public void ajouterRessource(Joueur joueur, Ressources ressource, int quantite) {
+        System.out.println("Ajout de " + quantite + " " + ressource);
+        joueur.getInventaireRes().put(ressource, joueur.getInventaireRes().getOrDefault(ressource, 0) + quantite);
+
+        int totalRessource = joueur.getInventaireRes().get(ressource);
+        if (totalRessource >= 3 && totalRessource < 6) {
+            ajouterHab(ressource, 1);
+        } else if (totalRessource >= 6 && totalRessource < 12) {
+            ajouterHab(ressource, 1);
+        } else if (totalRessource >= 12 && totalRessource < 18) {
+            ajouterHab(ressource, 1);
+        } else if (totalRessource >= 18) {
+            ajouterHab(ressource, 1);
+        }
+
+        System.out.println("Inventaire de " + ressource + " : " + joueur.getInventaireRes().get(ressource));
+    }
+
+    private void ajouterHab(Ressources ressource, int nombre) {
+        Couleur couleur = null;
+        switch (ressource) {
+            case DRAPEAUX:
+                couleur = Couleur.ROUGE;
+                break;
+            case ARGENT:
+                couleur = Couleur.JAUNE;
+                break;
+            case CONNAISSANCE:
+                couleur = Couleur.BLANC;
+                break;
+        }
+        if (couleur != null) {
+            listeHab.put(couleur, listeHab.getOrDefault(couleur, 0) + nombre);
+        }
+    }
+
+    public boolean isColumnProtected(int colIndex) {
+        int index = colIndex * 2; // Each column has two buildings
+        if (index < listeBatiments.size()) {
+            Batiment batiment1 = listeBatiments.get(index);
+            Batiment batiment2 = listeBatiments.get(index + 1);
+            return batiment1.isConstruit() || batiment2.isConstruit();
+        }
+        return false;
+    }
+
+    public boolean isColumnDestroyed(int colIndex) {
+        int index = colIndex * 2; // Each column has two buildings
+        if (index < listeBatiments.size()) {
+            Batiment batiment1 = listeBatiments.get(index);
+            Batiment batiment2 = listeBatiments.get(index + 1);
+            return batiment1.isDetruit() || batiment2.isDetruit();
+        }
+        return false;
+    }
+
 }
