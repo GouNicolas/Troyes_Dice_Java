@@ -77,6 +77,14 @@ class ChangementDeGUI extends JPanel {
                 
                 g2d.setStroke(new BasicStroke(1));
                 g2d.draw(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 10, 10)); // Less rounded corners
+
+                // Draw dice value
+                g2d.setFont(new Font("Arial", Font.BOLD, getWidth() / 2));
+                String diceValue = numberLabel.getText();
+                FontMetrics fm = g2d.getFontMetrics();
+                int textX = (getWidth() - fm.stringWidth(diceValue)) / 2;
+                int textY = (getHeight() + fm.getAscent()) / 2;
+                g2d.drawString(diceValue, textX, textY);
             }
         };
         dice.setPreferredSize(new Dimension(50, 50)); // Match the size of color buttons
@@ -214,6 +222,7 @@ class ChangementDeGUI extends JPanel {
         initialColor = colors[rand.nextInt(colors.length)];
         squareColor = initialColor;
         dice.setBackground(squareColor);
+        dice.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // Match the border style of color buttons
     }
 
     private void setRandomButtonColors() {

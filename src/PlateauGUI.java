@@ -31,10 +31,11 @@ public class PlateauGUI extends JPanel {
     private Plateau_control controller;
     private JLabel cycleLabel;
     private static final Dimension MIN_SIZE = new Dimension(400, 400);
-
+    private JPanel resourcesPanel;
     private static final String EDIM_IMAGE_PATH = IMAGES_PATH + "/Portage/EDIM/RessourceEdim.png";
     private static final String INFO_IMAGE_PATH = IMAGES_PATH + "/Portage/Info/RessourceInfo.png";
     private static final String GMC_IMAGE_PATH = IMAGES_PATH + "/Portage/GMC/RessourceGmc.png";
+    private JPanel cyclePanel;
 
     public PlateauGUI(Plateau plateau, Partie partie) {
         this.plateau = plateau;
@@ -50,10 +51,26 @@ public class PlateauGUI extends JPanel {
         errorLabel.setVisible(false);
         add(errorLabel);
 
+        // Initialize cycle panel
+        cyclePanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Add margin to the panel
+
         // Initialize cycle label
-        cycleLabel = new JLabel("Jour - Tour 1", SwingConstants.CENTER); // Initialize with "Jour - Tour 1"
+        cycleLabel = new JLabel("Jour - Tour 1", SwingConstants.CENTER);
+        cycleLabel.setFont(new Font("Serif", Font.BOLD, 24)); // Match the style of "Fiche" in FicheGUI
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        cyclePanel.add(cycleLabel, gbc);
+
+        // Initialize resources panel
+        resourcesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        updateResourcesDisplay();
+        gbc.gridy = 1;
+        cyclePanel.add(resourcesPanel, gbc);
+
         setLayout(new BorderLayout());
-        add(cycleLabel, BorderLayout.NORTH);
+        add(cyclePanel, BorderLayout.NORTH);
 
         // Load background images
         loadImages();
@@ -330,6 +347,7 @@ public class PlateauGUI extends JPanel {
     public void updateGUI() {
         controller.updateGUI();
         cycleLabel.setText(partie.currentCycle + " - Tour " + partie.getJours());
+        updateResourcesDisplay();
     }
 
     public void refreshPlateau() {
@@ -398,5 +416,29 @@ public class PlateauGUI extends JPanel {
         Joueur joueur = partie.getListeJoueurs().get(0);
         joueur.retirerRessource(resource, 1);
         partie.getFenetrePrincipale().reload_fenetre(joueur);
+    }
+
+    private void updateResourcesDisplay() {
+        resourcesPanel.removeAll();
+
+        Joueur joueur = partie.getListeJoueurs().get(0);
+        int nb_RessD = joueur.getInventaireRes().get(Ressources.DRAPEAUX);
+        int nb_RessO = joueur.getInventaireRes().get(Ressources.ARGENT);
+        int nb_RessC = joueur.getInventaireRes().get(Ressources.CONNAISSANCE);
+
+        resourcesPanel.add(createResourceLabel(GMC_IMAGE_PATH, nb_RessD));
+        resourcesPanel.add(createResourceLabel(INFO_IMAGE_PATH, nb_RessO));
+        resourcesPanel.add(createResourceLabel(EDIM_IMAGE_PATH, nb_RessC));
+
+        resourcesPanel.revalidate();
+        resourcesPanel.repaint();
+    }
+
+    private JLabel createResourceLabel(String imagePath, int count) {
+        ImageIcon icon = new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+        JLabel label = new JLabel(String.valueOf(count), icon, SwingConstants.CENTER);
+        label.setHorizontalTextPosition(SwingConstants.RIGHT);
+        label.setVerticalTextPosition(SwingConstants.CENTER);
+        return label;
     }
 }

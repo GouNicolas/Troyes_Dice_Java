@@ -12,7 +12,6 @@ public class FenetrePrincipale extends JFrame {
     private Partie partie;
     private BorderLayout mainLayout;
     private JPanel scorePanel;
-    private JLabel scoreLabel;
 
     public PlateauGUI getPlateauGUI() {
         return plateauGUI;
@@ -41,7 +40,6 @@ public class FenetrePrincipale extends JFrame {
         // Create main panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(new JLabel("Panel_principale"), BorderLayout.NORTH);
 
         // Create columns panel
         JPanel columnsPanel = new JPanel(new GridBagLayout());
@@ -73,9 +71,6 @@ public class FenetrePrincipale extends JFrame {
 
         // Create and setup the score panel
         scorePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
-        scoreLabel = new JLabel("Score: 0");
-        scoreLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        scorePanel.add(scoreLabel);
 
         mainPanel.add(scorePanel, BorderLayout.SOUTH);
 
@@ -105,9 +100,6 @@ public class FenetrePrincipale extends JFrame {
         } else {
             System.err.println("PlateauGUI is null");
         }
-
-        // Update score label
-        scoreLabel.setText("Score: " + joueur.calculerScore());
     }
 
     // fonction pour mettre une popup d'erreur

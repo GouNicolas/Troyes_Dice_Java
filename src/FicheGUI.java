@@ -23,6 +23,11 @@ public class FicheGUI extends JFrame {
     private static final String EDIM_IMAGE_PATH = IMAGES_PATH + "/Portage/EDIM/RessourceEdim.png";
     private static final String INFO_IMAGE_PATH = IMAGES_PATH + "/Portage/Info/RessourceInfo.png";
     private static final String GMC_IMAGE_PATH = IMAGES_PATH + "/Portage/GMC/RessourceGmc.png";
+    private static final String GMC_ICONS_PATH = IMAGES_PATH + "/Portage/GMC";
+    private static final String INFO_ICONS_PATH = IMAGES_PATH + "/Portage/Info"; 
+    private static final String EDIM_ICONS_PATH = IMAGES_PATH + "/Portage/EDIM";
+    private static final String PLATEAU_PATH = IMAGES_PATH + "/Portage/Plateau";
+    private static final String AUTRE_PATH = IMAGES_PATH + "/Portage/Autre";
     
     public FicheGUI(FicheController controller) {
         // Apply Nimbus look and feel
@@ -48,12 +53,10 @@ public class FicheGUI extends JFrame {
         setLayout(new BorderLayout());
 
         // Ensure resourcesPanels is populated correctly
-        if (resourcesPanels.size() < 3) {
-            resourcesPanels.clear();
-            resourcesPanels.add(new JPanel());
-            resourcesPanels.add(new JPanel());
-            resourcesPanels.add(new JPanel());
-        }
+        resourcesPanels.clear();
+        resourcesPanels.add(new JPanel());
+        resourcesPanels.add(new JPanel());
+        resourcesPanels.add(new JPanel());
 
         // Main panel for the frame
         JPanel mainPanel = new JPanel();
@@ -149,33 +152,36 @@ public class FicheGUI extends JFrame {
     }
 
     private JPanel createColoredPanel(Color color, int rowIndex) {
-        
-        final ImageIcon FortIcon = new ImageIcon("src/ressources/Portage/Autre/Forteresse.png");
-        final ImageIcon FortNPIcon = new ImageIcon("src/ressources/Portage/Autre/ForteresseNonPosee.png");
-        
-        final ImageIcon red11Icon = new ImageIcon("src/ressources/Portage/GMC/Gmc1.png");
-        final ImageIcon red11NPIcon = new ImageIcon("src/ressources/Portage/GMC/GmcPeuple.png");
-        final ImageIcon red12Icon = new ImageIcon("src/ressources/Portage/GMC/Gmc1.png");
-        final ImageIcon red12NPIcon = new ImageIcon("src/ressources/Portage/Info/InfoPeuple.png");
-        final ImageIcon red13Icon = new ImageIcon("src/ressources/Portage/GMC/Gmc1.png");
-        final ImageIcon red13NPIcon = new ImageIcon("src/ressources/Portage/Edim/EdimPeuple.png");
-        final ImageIcon red2Icon = new ImageIcon("src/ressources/Portage/GMC/Gmc2.png");
-        final ImageIcon red2NPIcon = new ImageIcon("src/ressources/Portage/Plateau/RewardGmc.png");
+         // Fort icons
+        final ImageIcon FortIcon = new ImageIcon(AUTRE_PATH + "/Forteresse.png");
+        final ImageIcon FortNPIcon = new ImageIcon(AUTRE_PATH + "/ForteresseNonPosee.png");
 
-        final ImageIcon yel1Icon = new ImageIcon("src/ressources/Portage/Info/Info1.png");
-        final ImageIcon yel11NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case1-QuartierInfo.png");
-        final ImageIcon yel12NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case2-QuartierInfo.png");
-        final ImageIcon yel13NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case3-QuartierInfo.png");
-        final ImageIcon yel14NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case4-QuartierInfo.png");
-        final ImageIcon yel15NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case5-QuartierInfo.png");
-        final ImageIcon yel16NPIcon = new ImageIcon("src/ressources/Portage/Plateau/Case6-QuartierInfo.png");
-        final ImageIcon yel2Icon = new ImageIcon("src/ressources/Portage/Info/Info2.png");
-        final ImageIcon yel2NPIcon = new ImageIcon("src/ressources/Portage/Plateau/RewardInfo.png");
+        // Red icons
+        final ImageIcon red11Icon = new ImageIcon(GMC_ICONS_PATH + "/Gmc1.png");
+        final ImageIcon red11NPIcon = new ImageIcon(GMC_ICONS_PATH + "/GmcPeuple.png");
+        final ImageIcon red12Icon = new ImageIcon(GMC_ICONS_PATH + "/Gmc1.png");
+        final ImageIcon red12NPIcon = new ImageIcon(INFO_ICONS_PATH + "/InfoPeuple.png");
+        final ImageIcon red13Icon = new ImageIcon(GMC_ICONS_PATH + "/Gmc1.png");
+        final ImageIcon red13NPIcon = new ImageIcon(EDIM_ICONS_PATH + "/EdimPeuple.png");
+        final ImageIcon red2Icon = new ImageIcon(GMC_ICONS_PATH + "/Gmc2.png");
+        final ImageIcon red2NPIcon = new ImageIcon(PLATEAU_PATH + "/RewardGmc.png");
 
-        final ImageIcon white1Icon = new ImageIcon("src/ressources/Portage/Edim/Edim1.png");
-        final ImageIcon white1NPIcon = new ImageIcon("src/ressources/Portage/Edim/Edim1NonPose.png");
-        final ImageIcon white2Icon = new ImageIcon("src/ressources/Portage/Edim/Edim2.png");
-        final ImageIcon white2NPIcon = new ImageIcon("src/ressources/Portage/Plateau/RewardEdim.png");
+        // Yellow icons
+        final ImageIcon yel1Icon = new ImageIcon(INFO_ICONS_PATH + "/Info1.png");
+        final ImageIcon yel11NPIcon = new ImageIcon(PLATEAU_PATH + "/Case1-QuartierInfo.png");
+        final ImageIcon yel12NPIcon = new ImageIcon(PLATEAU_PATH + "/Case2-QuartierInfo.png");
+        final ImageIcon yel13NPIcon = new ImageIcon(PLATEAU_PATH + "/Case3-QuartierInfo.png");
+        final ImageIcon yel14NPIcon = new ImageIcon(PLATEAU_PATH + "/Case4-QuartierInfo.png");
+        final ImageIcon yel15NPIcon = new ImageIcon(PLATEAU_PATH + "/Case5-QuartierInfo.png");
+        final ImageIcon yel16NPIcon = new ImageIcon(PLATEAU_PATH + "/Case6-QuartierInfo.png");
+        final ImageIcon yel2Icon = new ImageIcon(INFO_ICONS_PATH + "/Info2.png");
+        final ImageIcon yel2NPIcon = new ImageIcon(PLATEAU_PATH + "/RewardInfo.png");
+
+        // White icons
+        final ImageIcon white1Icon = new ImageIcon(EDIM_ICONS_PATH + "/Edim1.png");
+        final ImageIcon white1NPIcon = new ImageIcon(EDIM_ICONS_PATH + "/Edim1NonPose.png");
+        final ImageIcon white2Icon = new ImageIcon(EDIM_ICONS_PATH + "/Edim2.png");
+        final ImageIcon white2NPIcon = new ImageIcon(PLATEAU_PATH + "/RewardEdim.png");
 
         // Resize images
         Image FortImage = FortIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -406,61 +412,55 @@ public class FicheGUI extends JFrame {
     }
 
     private void handleButtonAction(int row, int col) {
-        // Call specific functions based on the row and col values
-        if (row == 1) {
-            switch (col) { //ROUGE PRESTIGE
-                case 0: functionForButtonRP1(); System.out.println("row " + row + "col "+col); break;
-                case 1: functionForButtonRP2(); System.out.println("row " + row + "col "+col); break;
-                case 2: functionForButtonRP3(); System.out.println("row " + row + "col "+col); break;
-                case 3: functionForButtonRP4(); System.out.println("row " + row + "col "+col); break;
-                case 4: functionForButtonRP5(); System.out.println("row " + row + "col "+col); break;
-                case 5: functionForButtonRP6(); System.out.println("row " + row + "col "+col); break;
-            }
-        } else if (row == 2) {
-            switch (col) { // ROUGE CLASSQUE
-                case 0: functionForButtonRC1(); System.out.println("row " + row + "col "+col); break;
-                case 1: functionForButtonRC2(); System.out.println("row " + row + "col "+col); break;
-                case 2: functionForButtonRC3(); System.out.println("row " + row + "col "+col); break;
-                case 3: functionForButtonRC4(); System.out.println("row " + row + "col "+col); break;
-                case 4: functionForButtonRC5(); System.out.println("row " + row + "col "+col); break;
-                case 5: functionForButtonRC6(); System.out.println("row " + row + "col "+col); break;
-            }
-        } else if (row == 4) {
-            switch (col) { // JAUNE PRESTIGE
-                case 0: functionForButtonJP1(); System.out.println("row " + row + "col "+col); break;
-                case 1: functionForButtonJP2(); System.out.println("row " + row + "col "+col); break;
-                case 2: functionForButtonJP3(); System.out.println("row " + row + "col "+col); break;
-                case 3: functionForButtonJP4(); System.out.println("row " + row + "col "+col); break;
-                case 4: functionForButtonJP5(); System.out.println("row " + row + "col "+col); break;
-                case 5: functionForButtonJP6(); System.out.println("row " + row + "col "+col); break;
-            }
-        } else if (row == 5) {
-            switch (col) { // JAUNE CLASSQUE
-                case 0: functionForButtonJC1(); System.out.println("row " + row + "col "+col); break;
-                case 1: functionForButtonJC2(); System.out.println("row " + row + "col "+col); break;
-                case 2: functionForButtonJC3(); System.out.println("row " + row + "col "+col); break;
-                case 3: functionForButtonJC4(); System.out.println("row " + row + "col "+col); break;
-                case 4: functionForButtonJC5(); System.out.println("row " + row + "col "+col); break;
-                case 5: functionForButtonJC6(); System.out.println("row " + row + "col "+col); break;
-            }
-        } else if (row == 7) {
-            switch (col) { // BLANC PRESTIGE
-                case 0: functionForButtonBP1(); System.out.println("row " + row + "col "+col); break;
-                case 1: functionForButtonBP2(); System.out.println("row " + row + "col "+col); break;
-                case 2: functionForButtonBP3(); System.out.println("row " + row + "col "+col); break;
-                case 3: functionForButtonBP4(); System.out.println("row " + row + "col "+col); break;
-                case 4: functionForButtonBP5(); System.out.println("row " + row + "col "+col); break;
-                case 5: functionForButtonBP6(); System.out.println("row " + row + "col "+col); break;
-            }
-        } else if (row == 8) {
-                switch (col) { // BLANC CLASSQUE
-                case 0: functionForButtonBC1(); System.out.println("row " + row + "col "+col); break;
-                case 1: functionForButtonBC2(); System.out.println("row " + row + "col "+col); break;
-                case 2: functionForButtonBC3(); System.out.println("row " + row + "col "+col); break;
-                case 3: functionForButtonBC4(); System.out.println("row " + row + "col "+col); break;
-                case 4: functionForButtonBC5(); System.out.println("row " + row + "col "+col); break;
-                case 5: functionForButtonBC6(); System.out.println("row " + row + "col "+col); break;
-            }
+        Runnable[][] actions = new Runnable[9][6];
+
+        // Initialize actions for each button
+        actions[1][0] = () -> functionForButtonRP1();
+        actions[1][1] = () -> functionForButtonRP2();
+        actions[1][2] = () -> functionForButtonRP3();
+        actions[1][3] = () -> functionForButtonRP4();
+        actions[1][4] = () -> functionForButtonRP5();
+        actions[1][5] = () -> functionForButtonRP6();
+
+        actions[2][0] = () -> functionForButtonRC1();
+        actions[2][1] = () -> functionForButtonRC2();
+        actions[2][2] = () -> functionForButtonRC3();
+        actions[2][3] = () -> functionForButtonRC4();
+        actions[2][4] = () -> functionForButtonRC5();
+        actions[2][5] = () -> functionForButtonRC6();
+
+        actions[4][0] = () -> functionForButtonJP1();
+        actions[4][1] = () -> functionForButtonJP2();
+        actions[4][2] = () -> functionForButtonJP3();
+        actions[4][3] = () -> functionForButtonJP4();
+        actions[4][4] = () -> functionForButtonJP5();
+        actions[4][5] = () -> functionForButtonJP6();
+
+        actions[5][0] = () -> functionForButtonJC1();
+        actions[5][1] = () -> functionForButtonJC2();
+        actions[5][2] = () -> functionForButtonJC3();
+        actions[5][3] = () -> functionForButtonJC4();
+        actions[5][4] = () -> functionForButtonJC5();
+        actions[5][5] = () -> functionForButtonJC6();
+
+        actions[7][0] = () -> functionForButtonBP1();
+        actions[7][1] = () -> functionForButtonBP2();
+        actions[7][2] = () -> functionForButtonBP3();
+        actions[7][3] = () -> functionForButtonBP4();
+        actions[7][4] = () -> functionForButtonBP5();
+        actions[7][5] = () -> functionForButtonBP6();
+
+        actions[8][0] = () -> functionForButtonBC1();
+        actions[8][1] = () -> functionForButtonBC2();
+        actions[8][2] = () -> functionForButtonBC3();
+        actions[8][3] = () -> functionForButtonBC4();
+        actions[8][4] = () -> functionForButtonBC5();
+        actions[8][5] = () -> functionForButtonBC6();
+
+        // Execute the corresponding action
+        if (actions[row][col] != null) {
+            actions[row][col].run();
+            System.out.println("row " + row + " col " + col);
         }
     }
 
