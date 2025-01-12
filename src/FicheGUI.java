@@ -269,6 +269,17 @@ public class FicheGUI extends JFrame {
             {resizedWhite2NPIcon, resizedWhite2NPIcon, resizedWhite2NPIcon, resizedWhite2NPIcon, resizedWhite2NPIcon, resizedWhite2NPIcon}
         };
 
+        // Load icons for protected and destroyed buildings
+        final ImageIcon protectedIcon = new ImageIcon(AUTRE_PATH + "/ForteresseNonPosee.png");
+        final ImageIcon destroyedIcon = new ImageIcon(AUTRE_PATH + "/bat_dest.png");
+
+        // Resize icons
+        Image protectedImage = protectedIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image destroyedImage = destroyedIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+
+        final ImageIcon resizedProtectedIcon = new ImageIcon(protectedImage);
+        final ImageIcon resizedDestroyedIcon = new ImageIcon(destroyedImage);
+
         JPanel coloredPanel = new JPanel();
         coloredPanel.setBackground(color);
         coloredPanel.setOpaque(true);
@@ -309,7 +320,16 @@ public class FicheGUI extends JFrame {
                     JLabel imageLabel = new JLabel(value ? resizedFortIcon : resizedFortNPIcon);
                     imageLabel.setOpaque(true);
                     imageLabel.setBackground(color);
-    
+
+                    // Check for protected or destroyed status
+                    if (partie!=null){
+                        if (partie.getListeJoueurs().get(0).getFiche().isBatimentProtected(rowIndex * 3 + i, j)
+                    ) {
+                        imageLabel.setIcon(resizedProtectedIcon);
+                    } else if (partie.getListeJoueurs().get(0).getFiche().isBatimentDestroyed(rowIndex * 3 + i, j)) {
+                        imageLabel.setIcon(resizedDestroyedIcon);
+                    }
+                }
                     gbc.gridx = j * 2;
                     gbc.weightx = 1.0;
                     linePanel.add(imageLabel, gbc);
@@ -753,8 +773,15 @@ public class FicheGUI extends JFrame {
 
         // Create the 3 lines with different colors
         Color[] colors = {Color.RED, Color.YELLOW, Color.WHITE};
-        //Score à edit selon la methode du code
-        int[] scores = {0, 3, 18};
+        if (partie==null) {
+            return newRectanglePanel;
+        }
+        Joueur joueur = partie.getListeJoueurs().get(0);
+        int[] scores = {
+            joueur.getFiche().getNombreHab(Couleur.ROUGE),
+            joueur.getFiche().getNombreHab(Couleur.JAUNE),
+            joueur.getFiche().getNombreHab(Couleur.BLANC)
+        };
 
         // Load and resize images
         ImageIcon[] people = new ImageIcon[6];
@@ -764,7 +791,6 @@ public class FicheGUI extends JFrame {
         people[3] = new ImageIcon(new ImageIcon("src/ressources/Portage/Info/InfoPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         people[4] = new ImageIcon(new ImageIcon("src/ressources/Portage/Plateau/EdimObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
         people[5] = new ImageIcon(new ImageIcon("src/ressources/Portage/EDIM/EdimPeuple.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-
 
         for (int lineIndex = 0; lineIndex < colors.length; lineIndex++) {
             JPanel linePanel = new JPanel();

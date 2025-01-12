@@ -281,8 +281,7 @@ class Partie {
                 
                 if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment)) && !batiment.isConstruit() && !batiment.isDetruit()) {
                     batiment.construire();
-                    // si bat rouge et index (index) * 2 + typeBatiment == 1
-                    // ajouter 1 habitant rouge si index<5 , 1 habitant jaune si index<9, et 1 blanc sinon
+                    // si bat rouge et index (index) 
                     if (batiment instanceof BatimentPrestige && couleurDe == CouleurDe.ROUGE) {
                         if (index<3) {
                             fiche.ajouterHab(Couleur.ROUGE, 1);

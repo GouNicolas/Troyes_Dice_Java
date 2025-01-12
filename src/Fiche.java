@@ -270,4 +270,23 @@ class Fiche {
         }
     }
 
+    public boolean isBatimentProtected(int row, int col) {
+        int index = row * 6 + col;
+        if (index < listeBatiments.size() - 1) {
+            Batiment batiment = listeBatiments.get(index);
+            Batiment nextBatiment = listeBatiments.get(index + 1);
+            return batiment.construit && nextBatiment.construit;
+        }
+        return false;
+    }
+
+    public boolean isBatimentDestroyed(int row, int col) {
+        int index = row * 6 + col;
+        if (index < listeBatiments.size()) {
+            Batiment batiment = listeBatiments.get(index);
+            return batiment.isDetruit();
+        }
+        return false;
+    }
+
 }
