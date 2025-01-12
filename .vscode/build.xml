@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Troyes_Dice_Java" default="jar" basedir=".">
+    <description>
+        Build file for Troyes Dice Java game
+    </description>
+
+    <!-- Define project properties -->
+    <property name="src.dir" location="src"/>
+    <property name="build.dir" location="bin"/>
+    <property name="dist.dir" location="dist"/>
+    <property name="resources.dir" location="src/ressources"/>
+    <property name="main.class" value="Main"/>
+
+    <!-- Clean target to remove build and dist directories -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <!-- Init target to create build and dist directories -->
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <!-- Compile target to compile source files -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+            <compilerarg value="-Xlint:unchecked"/>
+        </javac>
+    </target>
+
+    <!-- Jar target to create executable jar -->
+    <target name="jar" depends="compile">
+        <jar destfile="${dist.dir}/${ant.project.name}.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+            <!-- Include resources -->
+            <fileset dir="${src.dir}">
+                <include name="ressources/**"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Run target to execute the application -->
+    <target name="run" depends="jar">
+        <java jar="${dist.dir}/${ant.project.name}.jar" fork="true"/>
+    </target>
+</project>
