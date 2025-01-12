@@ -23,11 +23,11 @@ public class FicheGUI extends JFrame {
     private static final String EDIM_IMAGE_PATH = IMAGES_PATH + "/Portage/EDIM/RessourceEdim.png";
     private static final String INFO_IMAGE_PATH = IMAGES_PATH + "/Portage/Info/RessourceInfo.png";
     private static final String GMC_IMAGE_PATH = IMAGES_PATH + "/Portage/GMC/RessourceGmc.png";
+    private static final String AUTRE_PATH = IMAGES_PATH + "/Portage/Autre";
     private static final String GMC_ICONS_PATH = IMAGES_PATH + "/Portage/GMC";
-    private static final String INFO_ICONS_PATH = IMAGES_PATH + "/Portage/Info"; 
+    private static final String INFO_ICONS_PATH = IMAGES_PATH + "/Portage/Info";
     private static final String EDIM_ICONS_PATH = IMAGES_PATH + "/Portage/EDIM";
     private static final String PLATEAU_PATH = IMAGES_PATH + "/Portage/Plateau";
-    private static final String AUTRE_PATH = IMAGES_PATH + "/Portage/Autre";
     
     public FicheGUI(FicheController controller) {
         // Apply Nimbus look and feel
@@ -53,10 +53,12 @@ public class FicheGUI extends JFrame {
         setLayout(new BorderLayout());
 
         // Ensure resourcesPanels is populated correctly
-        resourcesPanels.clear();
-        resourcesPanels.add(new JPanel());
-        resourcesPanels.add(new JPanel());
-        resourcesPanels.add(new JPanel());
+        if (resourcesPanels.size() < 3) {
+            resourcesPanels.clear();
+            resourcesPanels.add(new JPanel());
+            resourcesPanels.add(new JPanel());
+            resourcesPanels.add(new JPanel());
+        }
 
         // Main panel for the frame
         JPanel mainPanel = new JPanel();
@@ -152,10 +154,9 @@ public class FicheGUI extends JFrame {
     }
 
     private JPanel createColoredPanel(Color color, int rowIndex) {
-         // Fort icons
+        // Fort icons
         final ImageIcon FortIcon = new ImageIcon(AUTRE_PATH + "/Forteresse.png");
         final ImageIcon FortNPIcon = new ImageIcon(AUTRE_PATH + "/ForteresseNonPosee.png");
-        final ImageIcon BatDestroyIcon = new ImageIcon(AUTRE_PATH + "/bat_destroy.png");
 
         // Red icons
         final ImageIcon red11Icon = new ImageIcon(GMC_ICONS_PATH + "/Gmc1.png");
@@ -187,7 +188,6 @@ public class FicheGUI extends JFrame {
         // Resize images
         Image FortImage = FortIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         Image FortNPImage = FortNPIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        Image BatDestroyImage = BatDestroyIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 
         Image red11Image = red11Icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         Image red11NPImage = red11NPIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -216,7 +216,6 @@ public class FicheGUI extends JFrame {
         // Create resized icons
         final ImageIcon resizedFortIcon = new ImageIcon(FortImage);
         final ImageIcon resizedFortNPIcon = new ImageIcon(FortNPImage);
-        final ImageIcon resizedBatDestroyIcon = new ImageIcon(BatDestroyImage);
 
         final ImageIcon resizedred11Icon = new ImageIcon(red11Image);
         final ImageIcon resizedred11NPIcon = new ImageIcon(red11NPImage);
@@ -307,23 +306,13 @@ public class FicheGUI extends JFrame {
                 if (i == 0) {
                     // Add JLabel for text display
                     boolean value = controller.getValue(rowIndex * 3 + i, j);
-                    if (partie == null){
-                        boolean isProtected = false;
-                        boolean isDestroyed = false;
-                    }
-                    else{
-                        boolean isProtected = partie.getJoueur(0).getFiche().isColumnProtected(j);
-                        boolean isDestroyed = partie.getJoueur(0).getFiche().isColumnDestroyed(j);
-                    
-                    JLabel imageLabel = new JLabel(isDestroyed ? resizedBatDestroyIcon : (isProtected ? resizedFortIcon : resizedFortNPIcon));
+                    JLabel imageLabel = new JLabel(value ? resizedFortIcon : resizedFortNPIcon);
                     imageLabel.setOpaque(true);
                     imageLabel.setBackground(color);
-                
     
                     gbc.gridx = j * 2;
                     gbc.weightx = 1.0;
                     linePanel.add(imageLabel, gbc);
-                    }
                 }else {
 
                     if (color.equals(Color.RED)) {
@@ -425,97 +414,62 @@ public class FicheGUI extends JFrame {
     }
 
     private void handleButtonAction(int row, int col) {
-        Runnable[][] actions = new Runnable[9][6];
-
-        // Initialize actions for each button
-        actions[1][0] = () -> functionForButtonRP1();
-        actions[1][1] = () -> functionForButtonRP2();
-        actions[1][2] = () -> functionForButtonRP3();
-        actions[1][3] = () -> functionForButtonRP4();
-        actions[1][4] = () -> functionForButtonRP5();
-        actions[1][5] = () -> functionForButtonRP6();
-
-        actions[2][0] = () -> functionForButtonRC1();
-        actions[2][1] = () -> functionForButtonRC2();
-        actions[2][2] = () -> functionForButtonRC3();
-        actions[2][3] = () -> functionForButtonRC4();
-        actions[2][4] = () -> functionForButtonRC5();
-        actions[2][5] = () -> functionForButtonRC6();
-
-        actions[4][0] = () -> functionForButtonJP1();
-        actions[4][1] = () -> functionForButtonJP2();
-        actions[4][2] = () -> functionForButtonJP3();
-        actions[4][3] = () -> functionForButtonJP4();
-        actions[4][4] = () -> functionForButtonJP5();
-        actions[4][5] = () -> functionForButtonJP6();
-
-        actions[5][0] = () -> functionForButtonJC1();
-        actions[5][1] = () -> functionForButtonJC2();
-        actions[5][2] = () -> functionForButtonJC3();
-        actions[5][3] = () -> functionForButtonJC4();
-        actions[5][4] = () -> functionForButtonJC5();
-        actions[5][5] = () -> functionForButtonJC6();
-
-        actions[7][0] = () -> functionForButtonBP1();
-        actions[7][1] = () -> functionForButtonBP2();
-        actions[7][2] = () -> functionForButtonBP3();
-        actions[7][3] = () -> functionForButtonBP4();
-        actions[7][4] = () -> functionForButtonBP5();
-        actions[7][5] = () -> functionForButtonBP6();
-
-        actions[8][0] = () -> functionForButtonBC1();
-        actions[8][1] = () -> functionForButtonBC2();
-        actions[8][2] = () -> functionForButtonBC3();
-        actions[8][3] = () -> functionForButtonBC4();
-        actions[8][4] = () -> functionForButtonBC5();
-        actions[8][5] = () -> functionForButtonBC6();
-
-        // Execute the corresponding action
-        if (actions[row][col] != null) {
-            actions[row][col].run();
-            System.out.println("row " + row + " col " + col);
-        }
-
-        // Check if dice is 6 and color is white
-        if (row == 8 && col == 5) {
-            partie.getJoueur(0).ajouterRessource(Ressources.CONNAISSANCE, 6);
-            updateResourcesDisplay();
-        }
-    }
-
-    public void ajouterRessource(Color color) {
-        int index = -1;
-        if (Color.RED.equals(color)) {
-            index = 0;
-        } else if (Color.YELLOW.equals(color)) {
-            index = 1;
-        } else if (Color.WHITE.equals(color)) {
-            index = 2;
-        }
-    
-        if (index != -1) {
-            char[] resourceArray = controller.getResources().get(index);
-            for (int i = 0; i < resourceArray.length; i++) {
-                if (resourceArray[i] == '0') {
-                    resourceArray[i] = '1';
-                    break;
-                }
+        // Call specific functions based on the row and col values
+        if (row == 1) {
+            switch (col) { //ROUGE PRESTIGE
+                case 0: functionForButtonRP1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonRP2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonRP3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonRP4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonRP5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonRP6(); System.out.println("row " + row + "col "+col); break;
+            }
+        } else if (row == 2) {
+            switch (col) { // ROUGE CLASSQUE
+                case 0: functionForButtonRC1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonRC2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonRC3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonRC4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonRC5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonRC6(); System.out.println("row " + row + "col "+col); break;
+            }
+        } else if (row == 4) {
+            switch (col) { // JAUNE PRESTIGE
+                case 0: functionForButtonJP1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonJP2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonJP3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonJP4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonJP5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonJP6(); System.out.println("row " + row + "col "+col); break;
+            }
+        } else if (row == 5) {
+            switch (col) { // JAUNE CLASSQUE
+                case 0: functionForButtonJC1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonJC2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonJC3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonJC4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonJC5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonJC6(); System.out.println("row " + row + "col "+col); break;
+            }
+        } else if (row == 7) {
+            switch (col) { // BLANC PRESTIGE
+                case 0: functionForButtonBP1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonBP2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonBP3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonBP4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonBP5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonBP6(); System.out.println("row " + row + "col "+col); break;
+            }
+        } else if (row == 8) {
+                switch (col) { // BLANC CLASSQUE
+                case 0: functionForButtonBC1(); System.out.println("row " + row + "col "+col); break;
+                case 1: functionForButtonBC2(); System.out.println("row " + row + "col "+col); break;
+                case 2: functionForButtonBC3(); System.out.println("row " + row + "col "+col); break;
+                case 3: functionForButtonBC4(); System.out.println("row " + row + "col "+col); break;
+                case 4: functionForButtonBC5(); System.out.println("row " + row + "col "+col); break;
+                case 5: functionForButtonBC6(); System.out.println("row " + row + "col "+col); break;
             }
         }
-
-        // Add resources to joueur index 0
-        Joueur joueur = partie.getListeJoueurs().get(0);
-        int diceValue = partie.getFenetrePrincipale().getChangementDeGUI().getLockedDiceValue();
-        if (color.equals(Color.RED)) {
-            joueur.ajouterRessource(Ressources.DRAPEAUX, diceValue);
-        } else if (color.equals(Color.YELLOW)) {
-            joueur.ajouterRessource(Ressources.ARGENT, diceValue);
-        } else if (color.equals(Color.WHITE)) {
-            joueur.ajouterRessource(Ressources.CONNAISSANCE, diceValue);
-        }
-
-        // Trigger next turn
-        partie.prochainTour();
     }
 
     private void functionForButtonRC1() {
@@ -775,7 +729,6 @@ public class FicheGUI extends JFrame {
         fichePanel.repaint();
         partie.getFenetrePrincipale().reload_fenetre(partie.getJoueur(0));
         partie.getFenetrePrincipale().getChangementDeGUI().updateScore(partie.getJoueur(0));
-        partie.getFenetrePrincipale().getPlateauGUI().updateGUI();
     }
 
     private void updateSmallCases(int row, int col) {
@@ -800,24 +753,18 @@ public class FicheGUI extends JFrame {
 
         // Create the 3 lines with different colors
         Color[] colors = {Color.RED, Color.YELLOW, Color.WHITE};
-        if (partie == null) {
-            return newRectanglePanel;
-        }
-        Joueur joueur = partie.getListeJoueurs().get(0);
-        int[] scores = {
-            joueur.getFiche().getNombreHab(Couleur.ROUGE),
-            joueur.getFiche().getNombreHab(Couleur.JAUNE),
-            joueur.getFiche().getNombreHab(Couleur.BLANC)
-        };
+        //Score à edit selon la methode du code
+        int[] scores = {0, 3, 18};
 
         // Load and resize images
         ImageIcon[] people = new ImageIcon[6];
-        people[0] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/Plateau/GmcObtenu.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        people[1] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/GMC/GmcPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        people[2] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/Plateau/InfoObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        people[3] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/Info/InfoPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        people[4] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/Plateau/EdimObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-        people[5] = new ImageIcon(new ImageIcon(IMAGES_PATH+"/Portage/EDIM/EdimPeuple.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        people[0] = new ImageIcon(new ImageIcon("src/ressources/Portage/Plateau/GmcObtenu.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        people[1] = new ImageIcon(new ImageIcon("src/ressources/Portage/GMC/GmcPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        people[2] = new ImageIcon(new ImageIcon("src/ressources/Portage/Plateau/InfoObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        people[3] = new ImageIcon(new ImageIcon("src/ressources/Portage/Info/InfoPeuple.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        people[4] = new ImageIcon(new ImageIcon("src/ressources/Portage/Plateau/EdimObtenu.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        people[5] = new ImageIcon(new ImageIcon("src/ressources/Portage/EDIM/EdimPeuple.png").getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+
 
         for (int lineIndex = 0; lineIndex < colors.length; lineIndex++) {
             JPanel linePanel = new JPanel();
@@ -1072,5 +1019,40 @@ public class FicheGUI extends JFrame {
             resourcesPanel.revalidate();
             resourcesPanel.repaint();
         }
+    }
+
+    public void ajouterRessource(Color color) {
+        int index = -1;
+        if (Color.RED.equals(color)) {
+            index = 0;
+        } else if (Color.YELLOW.equals(color)) {
+            index = 1;
+        } else if (Color.WHITE.equals(color)) {
+            index = 2;
+        }
+    
+        if (index != -1) {
+            char[] resourceArray = controller.getResources().get(index);
+            for (int i = 0; i < resourceArray.length; i++) {
+                if (resourceArray[i] == '0') {
+                    resourceArray[i] = '1';
+                    break;
+                }
+            }
+        }
+
+        // Add resources to joueur index 0
+        Joueur joueur = partie.getListeJoueurs().get(0);
+        int diceValue = partie.getFenetrePrincipale().getChangementDeGUI().getLockedDiceValue();
+        if (color.equals(Color.RED)) {
+            joueur.ajouterRessource(Ressources.DRAPEAUX, diceValue);
+        } else if (color.equals(Color.YELLOW)) {
+            joueur.ajouterRessource(Ressources.ARGENT, diceValue);
+        } else if (color.equals(Color.WHITE)) {
+            joueur.ajouterRessource(Ressources.CONNAISSANCE, diceValue);
+        }
+
+        // Trigger next turn
+        partie.prochainTour();
     }
 }

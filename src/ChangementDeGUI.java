@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
 import java.util.Random;
 
 class ChangementDeGUI extends JPanel {
@@ -65,28 +64,8 @@ class ChangementDeGUI extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(deChoisiLabel, gbc);
 
-        // Square with random number and color
-        dice = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2d.setColor(getBackground());
-                g2d.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 10, 10)); // Less rounded corners
-                
-                g2d.setStroke(new BasicStroke(1));
-                g2d.draw(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 10, 10)); // Less rounded corners
-
-                // Draw dice value
-                g2d.setFont(new Font("Arial", Font.BOLD, getWidth() / 2));
-                String diceValue = numberLabel.getText();
-                FontMetrics fm = g2d.getFontMetrics();
-                int textX = (getWidth() - fm.stringWidth(diceValue)) / 2;
-                int textY = (getHeight() + fm.getAscent()) / 2;
-                g2d.drawString(diceValue, textX, textY);
-            }
-        };
+        // Dice button with random number and color
+        dice = new JPanel();
         dice.setPreferredSize(new Dimension(50, 50)); // Match the size of color buttons
         dice.setMinimumSize(new Dimension(50, 50)); // Set minimum size
         dice.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // Match the border style of color buttons
@@ -105,8 +84,16 @@ class ChangementDeGUI extends JPanel {
         lockButton.add(dice, BorderLayout.CENTER);
         lockButton.setPreferredSize(new Dimension(50, 50)); // Match the size of color buttons
         lockButton.setMinimumSize(new Dimension(50, 50)); // Set minimum size
-        lockButton.setBorder(BorderFactory.createEmptyBorder());
-        lockButton.setContentAreaFilled(false);
+        // Apply Nimbus look and feel to lockButton
+        lockButton.putClientProperty("Nimbus.Overrides", new UIDefaults() {{
+            put("Button[Enabled].backgroundPainter", new Painter<JComponent>() {
+                @Override
+                public void paint(Graphics2D g, JComponent c, int w, int h) {
+                    g.setColor(UIManager.getColor("control"));
+                    g.fillRect(0, 0, w, h);
+                }
+            });
+        }});
         lockButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

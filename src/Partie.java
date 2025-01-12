@@ -276,56 +276,56 @@ class Partie {
                 if (batimentCouleurDe == couleurDe) {
                     place++;
                 }
+                
+                
+                
                 if (batimentCouleurDe == couleurDe && place == (((index) * 2 + typeBatiment)) && !batiment.isConstruit() && !batiment.isDetruit()) {
                     batiment.construire();
-                    // si le batiment construit est un batiment prestige jaune
-                    if (batiment.getCouleur()==Couleur.JAUNE && place%2==1){
-                        switch (index) {
-                            case 1:
-                                // ajoute 3 influence
-                                joueur.ajouterRessource(Ressources.DRAPEAUX, 3);
-                                break;
-                            case 2:
-                                //ajoute 2 habitannts rouges
-                                fiche.ajouterHab(Couleur.ROUGE, 2);
-                                break;
-                            case 3:
-                                //ajoute 3 argent
-                                joueur.ajouterRessource(Ressources.ARGENT, 3);
-                                break;
-                            case 4:
-                                //ajoute 2 habitants jaunes
-                                fiche.ajouterHab(Couleur.JAUNE, 2);
-                                break;
-                            case 5:
-                                //ajoute 3 connaissance
-                                joueur.ajouterRessource(Ressources.CONNAISSANCE, 3);
-                                break;
-                            case 6:
-                                //ajoute 2 habitants blancs
-                                fiche.ajouterHab(Couleur.BLANC, 2);
-                                break;
-                            default:
-                                break;
+                    // si bat rouge et index (index) * 2 + typeBatiment == 1
+                    // ajouter 1 habitant rouge si index<5 , 1 habitant jaune si index<9, et 1 blanc sinon
+                    if (batiment instanceof BatimentPrestige && couleurDe == CouleurDe.ROUGE) {
+                        if (index<3) {
+                            fiche.ajouterHab(Couleur.ROUGE, 1);
+                        } else if (index<5) {
+                            fiche.ajouterHab(Couleur.JAUNE, 1);
+                        } else {
+                            fiche.ajouterHab(Couleur.BLANC, 1);
                         }
                     }
-                    // si le batiment est un bat peon 
-                    if (batiment instanceof BatimentPeon){
-                        switch(couleurDe){
-                            case ROUGE:
-                                //ajoute 2 habitants 
-                                fiche.ajouterHab(Couleur.ROUGE, 2);
-                                break;
-                            case JAUNE:
-                                //ajoute 2 habitants 
-                                fiche.ajouterHab(Couleur.JAUNE, 2);
-                                break;
-                            case BLANC:
-                                //ajoute 2 habitants 
-                                fiche.ajouterHab(Couleur.BLANC, 2);
-                                break;
-                        }
+                    // si batiment de type peon
+                // ajoute 2 habitants de la couleur du batiment
+                if (batiment instanceof BatimentPeon) {
+                    if (couleurDe == CouleurDe.ROUGE) {
+                        fiche.ajouterHab(Couleur.ROUGE, 2);
+                    } else if (couleurDe == CouleurDe.JAUNE) {
+                        fiche.ajouterHab(Couleur.JAUNE, 2);
+                    } else if (couleurDe == CouleurDe.BLANC) {
+                        fiche.ajouterHab(Couleur.BLANC, 2);
                     }
+                }
+                if (batiment instanceof BatimentPrestige || couleurDe ==CouleurDe.JAUNE) {
+                    switch (index) {
+                        // si 1: 3 drapeaux, 2: 2 hab rouge, 3: 3 argent, 4: 2 hab jaune, 5: 3 connaissance, 6: 2 hab blanc
+                        case 1:
+                            joueur.ajouterRessource(Ressources.DRAPEAUX, 3);
+                            break;
+                        case 2:
+                            fiche.ajouterHab(Couleur.ROUGE, 2);
+                            break;
+                        case 3:
+                            joueur.ajouterRessource(Ressources.ARGENT, 3);
+                            break;
+                        case 4:
+                            fiche.ajouterHab(Couleur.JAUNE, 2);
+                            break;
+                        case 5:
+                            joueur.ajouterRessource(Ressources.CONNAISSANCE, 3);
+                            break;
+                        case 6:
+                            fiche.ajouterHab(Couleur.BLANC, 2);
+                            break;
+                    }
+                }
                     if (batiment.getCouleur()==Couleur.BLANC && place%2==1){//le batiment construit est une cathedrale
                         int nb_cat=fiche.getNBCathedrales();
                         fiche.ajouterCathedrale(index-1, nb_cat+1);
